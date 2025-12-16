@@ -1,0 +1,124 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: simple
+
+media_folder: "assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+collections:
+  - name: "texts"
+    label: "Texte"
+    files:
+      - file: "assets/content/texts.json"
+        label: "Startseite"
+        name: "home"
+        fields:
+          - { label: "Hero Titel", name: "hero_title", widget: "string", required: false }
+          - { label: "Hero Text", name: "hero_text", widget: "text", required: false }
+
+          - { label: "Über uns Text", name: "about_text", widget: "text", required: false }
+
+          - { label: "USP Kicker", name: "usp_kicker", widget: "string", required: false }
+          - { label: "USP Überschrift", name: "usp_title", widget: "string", required: false }
+          - { label: "USP Ghost-Wort", name: "usp_ghost", widget: "string", required: false }
+
+          - { label: "USP 1 Titel", name: "usp1_title", widget: "string", required: false }
+          - { label: "USP 1 Text", name: "usp1_text", widget: "text", required: false }
+          - { label: "USP 1 Icon", name: "usp1_icon", widget: "image", required: false }
+
+          - { label: "USP 2 Titel", name: "usp2_title", widget: "string", required: false }
+          - { label: "USP 2 Text", name: "usp2_text", widget: "text", required: false }
+          - { label: "USP 2 Icon", name: "usp2_icon", widget: "image", required: false }
+
+          - { label: "USP 3 Titel", name: "usp3_title", widget: "string", required: false }
+          - { label: "USP 3 Text", name: "usp3_text", widget: "text", required: false }
+          - { label: "USP 3 Icon", name: "usp3_icon", widget: "image", required: false }
+
+  - name: "links"
+    label: "Links & Buttons"
+    files:
+      - file: "assets/content/links.json"
+        label: "Externe Links"
+        name: "links"
+        fields:
+          - { label: "Anmeldung / Buchung", name: "booking", widget: "string", required: false }
+          - { label: "Feriencamps", name: "camps", widget: "string", required: false }
+          - { label: "WhatsApp Community", name: "whatsapp", widget: "string", required: false }
+
+          - { label: "Hero Video Link (Fallback)", name: "hero_video", widget: "string", required: false }
+          - { label: "Hero Video Embed URL (YouTube/Vimeo)", name: "hero_video_embed", widget: "string", required: false }
+
+          - { label: "Hero Video MP4 (self-hosted)", name: "hero_video_mp4", widget: "string", required: false, hint: "z.B. /assets/video/hero.mp4 (oder leer lassen für Default)" }
+          - { label: "Hero Video Poster (Bild)", name: "hero_video_poster", widget: "image", required: false, hint: "Posterbild für das MP4-Video" }
+
+          - { label: "Powerkurs 18/19", name: "power1819", widget: "string", required: false }
+          - { label: "Powerkurs 16/17", name: "power1617", widget: "string", required: false }
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+
+  - name: "gallery"
+    label: "Galerie"
+    files:
+      - file: "assets/content/gallery.json"
+        label: "Galeriebilder"
+        name: "gallery"
+        fields:
+          - label: "Bilder"
+            name: "images"
+            widget: "list"
+            allow_add: true
+            fields:
+              - { label: "Bild", name: "image", widget: "image" }
+              - { label: "Alt-Text", name: "alt", widget: "string", required: false }
+
+  - name: "theme"
+    label: "Design / Theme"
+    files:
+      - file: "assets/content/theme.json"
+        label: "Theme Einstellungen"
+        name: "theme"
+        format: "json"
+        editor:
+          preview: false
+        fields:
+          - label: "Farben"
+            name: "colors"
+            widget: "object"
+            fields:
+              - { label: "Background", name: "bg", widget: "color", required: false }
+              - { label: "Text (Ink)", name: "ink", widget: "color", required: false }
+              - { label: "Muted Text", name: "muted", widget: "color", required: false }
+              - { label: "Line / Borders", name: "line", widget: "color", required: false }
+
+              - { label: "Primary (Navy)", name: "primary", widget: "color", required: false }
+              - { label: "Accent (Red)", name: "accent", widget: "color", required: false }
+
+              - { label: "Card Background", name: "card_bg", widget: "color", required: false }
+              - { label: "Card Border", name: "card_border", widget: "color", required: false }
+
+          - label: "Typografie"
+            name: "type"
+            widget: "object"
+            fields:
+              - { label: "Body Font Size (px)", name: "body_size", widget: "number", min: 12, max: 18, step: 1, required: false }
+              - { label: "Hero Title Size (px)", name: "hero_title_size", widget: "number", min: 44, max: 84, step: 2, required: false }
+              - { label: "Section Title Size (px)", name: "section_title_size", widget: "number", min: 18, max: 34, step: 1, required: false }
+              - { label: "Card Title Size (px)", name: "card_title_size", widget: "number", min: 12, max: 20, step: 1, required: false }
+
+          - label: "Layout"
+            name: "layout"
+            widget: "object"
+            fields:
+              - { label: "Content Width (px)", name: "content_width", widget: "number", min: 980, max: 1320, step: 20, required: false }
+              - { label: "Corner Radius (px)", name: "radius", widget: "number", min: 0, max: 28, step: 2, required: false }
+              - { label: "Shadow Strength (0..0.30)", name: "shadow_strength", widget: "number", value_type: "float", min: 0, max: 0.3, step: 0.02, required: false }
+
+          - label: "Hintergrund Pattern"
+            name: "pattern"
+            widget: "object"
+            fields:
+              - { label: "Pattern aktiv", name: "enabled", widget: "boolean", default: true, required: false }
+              - { label: "Dot Color (CSS, z.B. rgba(11,16,32,.075))", name: "dot", widget: "string", required: false }
+              - { label: "Opacity (0..1)", name: "opacity", widget: "number", value_type: "float", min: 0, max: 1, step: 0.05, required: false }
+              - { label: "Pattern Size (px)", name: "size", widget: "number", min: 10, max: 40, step: 1, required: false }
