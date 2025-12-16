@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movemania FS – Admin</title>
+
+  <!-- Netlify Identity Widget (Login/Logout + Token handling) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0}
+    .debug{
+      padding:10px 14px;
+      border-bottom:1px solid #e6e8ee;
+      background:#fff;
+      font-size:12px;
+      color:#0b1020;
+    }
+    .debug code{background:#f6f7fb;padding:2px 6px}
+  </style>
+</head>
+<body>
+  <div class="debug">
+    Admin lädt… Wenn du hier hängen bleibst, prüfe: <code>/admin/config.yml</code> erreichbar?
+  </div>
+
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@latest/dist/decap-cms.js"></script>
+
+  <script>
+    // Optional: nach Login wieder sauber auf /admin bleiben
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("logout", () => location.href = "/");
+    }
+  </script>
+</body>
+</html>
