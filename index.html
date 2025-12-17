@@ -250,15 +250,6 @@
       flex-wrap:wrap;
     }
 
-    .videoBadge{
-      border: var(--bw) solid var(--line);
-      padding: 4px 8px;
-      box-shadow: 3px 3px 0 var(--shadowInk);
-      background: #fff;
-      white-space:nowrap;
-    }
-    .videoBadge.red{ background: var(--hi); color: var(--paper); }
-
     /* Brutalist video buttons */
     .videoBtn{
       border: var(--bw) solid var(--line);
@@ -293,41 +284,6 @@
       background:#000;
     }
 
-    /* Faux control bar overlay (visual only, real controls below) */
-    .videoBar{
-      position:absolute;
-      left:10px;
-      right:10px;
-      bottom:10px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      pointer-events:none; /* so user can still use native controls */
-      opacity:.95;
-    }
-    .videoBar .chip{
-      border: var(--bw) solid var(--line);
-      background:#fff;
-      box-shadow: 3px 3px 0 var(--shadowInk);
-      padding: 4px 8px;
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      white-space:nowrap;
-    }
-    .videoBar .led{
-      width:10px;height:10px;
-      border: var(--bw) solid var(--line);
-      background: var(--hi3);
-      box-shadow: 3px 3px 0 var(--shadowInk);
-    }
-    .videoBar .led.red{ background: var(--hi); }
-
     /* Native controls: keep them usable + readable */
     video::-webkit-media-controls-panel{
       background: rgba(255,255,255,.95);
@@ -350,43 +306,6 @@
       max-width: 78ch;
     }
 
-    .roleLine{
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: var(--bw) dashed var(--line);
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.04em;
-    }
-
-    .ctaRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 14px;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border: var(--bw) solid var(--line);
-      background: #fff;
-      text-decoration:none;
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      box-shadow: 5px 5px 0 var(--shadowInk);
-      transition: transform .12s ease;
-      white-space:nowrap;
-      cursor:pointer;
-    }
-    .btn:hover{ transform: translate(-2px,-2px); }
-    .btn.red{ background: var(--hi); color: var(--paper); }
-    .btn.blue{ background: var(--hi2); color: var(--paper); }
-    .btn.green{ background: var(--hi3); color: var(--paper); }
-
     /* Right: Poster */
     .poster{
       display:flex;
@@ -404,20 +323,6 @@
       text-transform:uppercase;
       letter-spacing:.08em;
     }
-    .stamps{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .stamp{
-      border: var(--bw) solid var(--line);
-      padding: 5px 8px;
-      box-shadow: 3px 3px 0 var(--shadowInk);
-      background:#fff;
-      white-space:nowrap;
-    }
-    .stamp.red{ background: var(--hi); color: var(--paper); }
-    .stamp.blue{ background: var(--hi2); color: var(--paper); }
 
     .posterBody{
       font-family: var(--mono);
@@ -914,10 +819,6 @@
               <div class="videoHead">
                 <div>Hero Video</div>
                 <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                  <span class="videoBadge red">AUTOPLAY</span>
-                  <span class="videoBadge" id="muteState">MUTED</span>
-                  <span class="videoBadge">LOOP</span>
-
                   <button class="videoBtn" id="vidToggle" type="button">Pause</button>
                   <button class="videoBtn" id="muteToggle" type="button">Unmute</button>
                 </div>
@@ -937,44 +838,20 @@
                   <source src="/assets/video/hero.mp4" type="video/mp4">
                   Dein Browser unterstützt das Video-Tag nicht.
                 </video>
-
-                <!-- brutale "player"-chips (nur Optik) -->
-                <div class="videoBar" aria-hidden="true">
-                  <span class="chip"><span class="led" id="playLed"></span> PLAY</span>
-                  <span class="chip"><span class="led red" id="soundLed"></span> SOUND</span>
-                </div>
               </div>
             </div>
-
 
             <h1>Informatik für den Schulalltag.</h1>
 
             <p class="lead">
               CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy –
               Materialien, die im Unterricht und in Fortbildungen genutzt werden können.
-              <br><br>
-              Für Kolleg:innen, Fachkonferenzen und Schulleitung – im Aufbau, aber dauerhaft nutzbar.
             </p>
-
-            <div class="roleLine">
-              <b>Fachberatung Informatik Sek I</b> · Fortbildungen · Vorträge
-            </div>
-
-            <div class="ctaRow">
-              <a class="btn blue" href="https://node-xejd.onrender.com/index.html" target="_blank" rel="noopener noreferrer">CyberDefense Lab ↗</a>
-              <a class="btn red" href="https://node-xejd.onrender.com/unterrichtsbeispiele.html" target="_blank" rel="noopener noreferrer">Unterrichtsbeispiele ↗</a>
-              <a class="btn green" href="https://node-xejd.onrender.com/lehrplan.html" target="_blank" rel="noopener noreferrer">Lehrplan ↗</a>
-              <a class="btn" href="https://node-xejd.onrender.com/lernbuddy.html" target="_blank" rel="noopener noreferrer">Lernbuddy ↗</a>
-            </div>
           </div>
 
           <aside class="poster" aria-label="Hinweis">
             <div class="posterTop">
               <div>Notice Board</div>
-              <div class="stamps">
-                <span class="stamp red">LIVE</span>
-                <span class="stamp blue">NO TRACKING</span>
-              </div>
             </div>
 
             <div class="posterBody">
@@ -1343,24 +1220,16 @@
       });
     })();
 
-    // Hero video: play/pause + mute/unmute + LED/chip state
+    // Hero video: play/pause + mute/unmute
     (function(){
       const v = document.getElementById("heroVideo");
       const btnPlay = document.getElementById("vidToggle");
       const btnMute = document.getElementById("muteToggle");
-      const muteState = document.getElementById("muteState");
-      const playLed = document.getElementById("playLed");
-      const soundLed = document.getElementById("soundLed");
       if(!v) return;
 
       const sync = () => {
-        if(muteState) muteState.textContent = v.muted ? "MUTED" : "SOUND";
         if(btnMute) btnMute.textContent = v.muted ? "Unmute" : "Mute";
         if(btnPlay) btnPlay.textContent = v.paused ? "Play" : "Pause";
-
-        // LEDs: grün = aktiv, rot = aus/blocked
-        if(playLed) playLed.classList.toggle("red", v.paused);
-        if(soundLed) soundLed.classList.toggle("red", v.muted);
       };
 
       const tryPlay = () => {
@@ -1379,7 +1248,6 @@
       if(btnMute){
         btnMute.addEventListener("click", () => {
           v.muted = !v.muted;
-          // wenn unmute und video pausiert: play versuchen (User-Gesture hilft Browsern)
           if(!v.muted && v.paused) tryPlay();
           sync();
         });
