@@ -4,38 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ramon Berghorn — Informatik & CyberDefense Lab</title>
-  <meta name="description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy.">
+  <meta name="description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik.">
 
-  <!-- Canonical (bitte auf deine finale Domain setzen) -->
   <link rel="canonical" href="https://example.de/">
 
-  <!-- Open Graph (Sharing) -->
   <meta property="og:title" content="Ramon Berghorn — Informatik & CyberDefense Lab">
   <meta property="og:description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_DE">
   <meta property="og:url" content="https://example.de/">
-  <!-- OG Image (bitte bereitstellen) -->
   <meta property="og:image" content="https://example.de/assets/og/og-card.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 
-  <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ramon Berghorn — Informatik & CyberDefense Lab">
   <meta name="twitter:description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik.">
   <meta name="twitter:image" content="https://example.de/assets/og/og-card.jpg">
 
-  <!-- Privacy / Referrer -->
   <meta name="referrer" content="no-referrer">
 
-  <!-- Favicons (optional, aber empfohlen) -->
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Hinweis: Wenn du "NO TRACKING" maximal ernst meinst, self-hoste die Fonts statt Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -47,18 +40,18 @@
       --line: #111111;
 
       /* Accents */
-      --hi: #ff3b30;     /* signal red */
-      --hi2:#0057ff;     /* hard blue */
-      --hi3:#00c853;     /* hard green */
+      --hi: #ff3b30;
+      --hi2:#0057ff;
+      --hi3:#00c853;
       --paper:#fffdf8;
 
       /* Layout */
       --max: 1120px;
       --pad: 18px;
       --gap: 14px;
-      --bw: 2px;         /* border width */
+      --bw: 2px;
       --shadowInk: rgba(17,17,17,.95);
-      --shadow: 8px 8px 0 var(--shadowInk); /* hard shadow */
+      --shadow: 8px 8px 0 var(--shadowInk);
       --shadow2: 6px 6px 0 var(--shadowInk);
 
       --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
@@ -80,8 +73,8 @@
     a{ color: inherit; }
     .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
 
-    /* Focus visibility (accessibility) */
-    .tab:focus-visible, .btn:focus-visible, .cmdBtn:focus-visible, .modalClose:focus-visible, #navToggle:focus-visible{
+    .tab:focus-visible, .btn:focus-visible, .cmdBtn:focus-visible, .modalClose:focus-visible,
+    #navToggle:focus-visible, .chToggle:focus-visible, .posterToggle:focus-visible, .videoBtn:focus-visible{
       outline: 3px solid var(--hi2);
       outline-offset: 3px;
     }
@@ -183,7 +176,6 @@
 
     /* Mobile Nav Toggle */
     #navToggle{ display:none; }
-
     @media (max-width: 980px){
       #navToggle{ display:inline-flex; }
       .menu{
@@ -236,9 +228,10 @@
       border: var(--bw) solid var(--line);
     }
 
-    /* Hero Video (self-hosted) */
+    /* Hero Video */
     .videoFrame{
       margin-top: 12px;
+      margin-bottom: 22px;
       border: var(--bw) solid var(--line);
       background:#fff;
       box-shadow: var(--shadow2);
@@ -254,7 +247,9 @@
       font-size: 12px;
       text-transform:uppercase;
       letter-spacing:.08em;
+      flex-wrap:wrap;
     }
+
     .videoBadge{
       border: var(--bw) solid var(--line);
       padding: 4px 8px;
@@ -263,6 +258,22 @@
       white-space:nowrap;
     }
     .videoBadge.red{ background: var(--hi); color: var(--paper); }
+
+    /* Brutalist video buttons */
+    .videoBtn{
+      border: var(--bw) solid var(--line);
+      padding: 4px 8px;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background: #fff;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .videoBtn:hover{ filter: brightness(1.02); }
+
     .videoWrap{
       position:relative;
       width:100%;
@@ -279,10 +290,51 @@
       height:100%;
       object-fit: cover;
       display:block;
+      background:#000;
+    }
+
+    /* Faux control bar overlay (visual only, real controls below) */
+    .videoBar{
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      pointer-events:none; /* so user can still use native controls */
+      opacity:.95;
+    }
+    .videoBar .chip{
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 4px 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .videoBar .led{
+      width:10px;height:10px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi3);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+    }
+    .videoBar .led.red{ background: var(--hi); }
+
+    /* Native controls: keep them usable + readable */
+    video::-webkit-media-controls-panel{
+      background: rgba(255,255,255,.95);
     }
 
     h1{
-      margin: 14px 0 10px;
+      margin: 22px 0 10px;
       font-size: clamp(28px, 3.2vw, 46px);
       line-height:1.02;
       letter-spacing:-0.02em;
@@ -335,7 +387,7 @@
     .btn.blue{ background: var(--hi2); color: var(--paper); }
     .btn.green{ background: var(--hi3); color: var(--paper); }
 
-    /* Right: Poster/notice */
+    /* Right: Poster */
     .poster{
       display:flex;
       flex-direction:column;
@@ -404,25 +456,53 @@
     .posterBody .ok{ color: var(--hi3); font-weight:700; }
     .posterBody .warn{ color: var(--hi); font-weight:700; }
 
-    /* clickable commands */
-    .cmdBtn{
-      background: transparent;
-      border: 0;
-      padding: 0;
-      margin: 0;
-      font: inherit;
-      color: inherit;
-      cursor: pointer;
-      text-align:left;
+    /* Poster collapsibles */
+    .posterDetails{ border:0; margin:0 0 10px; padding:0; }
+    .posterDetails:last-child{ margin-bottom:0; }
+    .posterDetails summary{ list-style:none; cursor:pointer; user-select:none; }
+    .posterDetails summary::-webkit-details-marker{ display:none; }
+
+    .posterToggle{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size: 12px;
+      font-family: var(--mono);
     }
-    .cmdBtn .cmd{ color: var(--hi2); font-weight:700; }
-    .cmdBtn:hover{ text-decoration: underline; text-underline-offset: 3px; }
+    .posterCaret{
+      width:10px;
+      height:10px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi2);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      flex-shrink:0;
+    }
+    .posterDetails[open] .posterCaret{ background: var(--hi3); }
+    .posterOut{
+      margin-top: 10px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      padding: 10px;
+      white-space:pre-wrap;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+    }
 
     /* Sections */
     section{
       padding: 16px 0;
       border-bottom: var(--bw) solid var(--line);
-      scroll-margin-top: 92px; /* sticky header anchor fix */
+      scroll-margin-top: 92px;
     }
     .sectionHead{
       display:flex;
@@ -467,7 +547,6 @@
 
     .card{
       border: var(--bw) solid var(--line);
-      background: var(--paper);
       box-shadow: var(--shadow2);
       padding: 14px;
       display:flex;
@@ -476,16 +555,17 @@
       min-height: 180px;
       position:relative;
       overflow:hidden;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.035) 1px, transparent 1px) 0 0/ 16px 16px,
+        var(--paper);
     }
-
-    /* Ecke darf Content nicht überdecken -> in den Hintergrund */
     .card::before{
       content:"";
       position:absolute;
-      left:-18px;
-      top:-18px;
-      width:68px;
-      height:68px;
+      left:-30px;
+      top:-30px;
+      width:58px;
+      height:58px;
       background: #fff;
       border: var(--bw) solid var(--line);
       transform: rotate(-12deg);
@@ -493,10 +573,7 @@
       z-index:0;
       pointer-events:none;
     }
-    .card > *{
-      position:relative;
-      z-index:1;
-    }
+    .card > *{ position:relative; z-index:1; }
 
     .labelRow{
       display:flex;
@@ -550,7 +627,6 @@
       font-size: 13px;
       line-height: 1.75;
     }
-
     .actions{
       margin-top:auto;
       display:flex;
@@ -560,7 +636,95 @@
       border-top: var(--bw) dashed var(--line);
     }
 
-    /* Changelog block */
+    /* Gallery */
+    .galleryGrid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+    @media (max-width: 1100px){
+      .galleryGrid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px){
+      .galleryGrid{ grid-template-columns: 1fr; }
+    }
+    .gItem{
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      padding: 10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .gItem::before{
+      content:"";
+      position:absolute;
+      right:-18px;
+      top:-18px;
+      width:62px;height:62px;
+      background: var(--hi);
+      border: var(--bw) solid var(--line);
+      transform: rotate(12deg);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .gMedia{
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+      background: #fff;
+      aspect-ratio: 4 / 3;
+    }
+    .gMedia img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    .gCap{
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Changelog (ausklappbar) */
+    .chWrap{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow2);
+      padding: 12px;
+    }
+    .chWrap summary{ list-style:none; cursor:pointer; user-select:none; }
+    .chWrap summary::-webkit-details-marker{ display:none; }
+    .chToggle{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      text-decoration:none;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      box-shadow: 5px 5px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      white-space:nowrap;
+    }
+    .chWrap summary:hover .chToggle{ transform: translate(-2px,-2px); }
+    .chCaret{
+      width:10px;
+      height:10px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi2);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      display:inline-block;
+    }
+    .chWrap[open] .chCaret{ background: var(--hi3); }
+
     .changelog{
       border: var(--bw) solid var(--line);
       background: #111;
@@ -570,6 +734,7 @@
       font-family: var(--mono);
       font-size: 12px;
       line-height: 1.75;
+      margin-top: 10px;
     }
     .chTop{
       display:flex;
@@ -590,12 +755,7 @@
       background: rgba(255,255,255,.08);
       white-space:nowrap;
     }
-    .log{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin-top:10px;
-    }
+    .log{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
     .entry{
       border: 1px dashed rgba(255,255,255,.25);
       padding: 10px;
@@ -647,19 +807,10 @@
       color: var(--muted);
     }
 
-    /* Console Modal */
-    .modal{
-      position:fixed;
-      inset:0;
-      display:none;
-      z-index:10000;
-    }
+    /* Console Modal (falls du es später wieder nutzt) */
+    .modal{ position:fixed; inset:0; display:none; z-index:10000; }
     .modal.open{ display:block; }
-    .modalBackdrop{
-      position:absolute;
-      inset:0;
-      background: rgba(0,0,0,.55);
-    }
+    .modalBackdrop{ position:absolute; inset:0; background: rgba(0,0,0,.55); }
     .modalDialog{
       position:relative;
       width: min(860px, calc(100vw - 36px));
@@ -682,11 +833,7 @@
       font-size: 12px;
       background: rgba(255,255,255,.06);
     }
-    .modalTop .title{
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+    .modalTop .title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .modalClose{
       border: 1px solid rgba(255,255,255,.35);
       background: rgba(255,255,255,.08);
@@ -699,7 +846,6 @@
       font-weight:700;
       font-size: 11px;
     }
-    .modalClose:hover{ filter: brightness(1.1); }
     .modalBody{
       padding: 12px;
       font-size: 12px;
@@ -709,14 +855,12 @@
       white-space:pre-wrap;
     }
 
-    /* Smooth anchors */
     html{ scroll-behavior:smooth; }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior: auto; }
-      .tab, .btn{ transition: none; }
-      .tab:hover, .btn:hover{ transform: none; }
+      .tab, .btn, .chToggle{ transition: none; }
+      .tab:hover, .btn:hover, .chWrap summary:hover .chToggle{ transform: none; }
     }
   </style>
 </head>
@@ -748,6 +892,7 @@
         <nav class="menu" id="mobileNav" aria-label="Hauptnavigation">
           <a class="tab active" href="#home">Home</a>
           <a class="tab" href="#bereiche">Bereiche</a>
+          <a class="tab" href="#gallery">Gallery</a>
           <a class="tab" href="#changelog">Changelog</a>
           <a class="tab" href="#kontakt">Kontakt</a>
         </nav>
@@ -768,10 +913,13 @@
             <div class="videoFrame" aria-label="Hero Video">
               <div class="videoHead">
                 <div>Hero Video</div>
-                <div style="display:flex; gap:8px; align-items:center;">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                   <span class="videoBadge red">AUTOPLAY</span>
-                  <span class="videoBadge">MUTED</span>
+                  <span class="videoBadge" id="muteState">MUTED</span>
                   <span class="videoBadge">LOOP</span>
+
+                  <button class="videoBtn" id="vidToggle" type="button">Pause</button>
+                  <button class="videoBtn" id="muteToggle" type="button">Unmute</button>
                 </div>
               </div>
 
@@ -784,17 +932,25 @@
                   playsinline
                   preload="metadata"
                   poster="/assets/video/hero-poster.jpg"
-                  aria-hidden="true">
+                  controls>
                   <source src="/assets/video/hero.webm" type="video/webm">
                   <source src="/assets/video/hero.mp4" type="video/mp4">
                   Dein Browser unterstützt das Video-Tag nicht.
                 </video>
+
+                <!-- brutale "player"-chips (nur Optik) -->
+                <div class="videoBar" aria-hidden="true">
+                  <span class="chip"><span class="led" id="playLed"></span> PLAY</span>
+                  <span class="chip"><span class="led red" id="soundLed"></span> SOUND</span>
+                </div>
               </div>
             </div>
 
+            <h1>Informatik für den Schulalltag.<br>Harte Kante, klare Abläufe.</h1>
+
             <p class="lead">
               CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy –
-              Materialien, die im Unterricht und in Fortbildungen tatsächlich genutzt werden können.
+              Materialien, die im Unterricht und in Fortbildungen genutzt werden können.
               <br><br>
               Für Kolleg:innen, Fachkonferenzen und Schulleitung – im Aufbau, aber dauerhaft nutzbar.
             </p>
@@ -821,43 +977,60 @@
             </div>
 
             <div class="posterBody">
-              <button class="cmdBtn" type="button" data-cmd="whoami">
-                <span class="cmd">$</span> whoami
-              </button>
-              <div><b>ramon</b></div>
+              <details class="posterDetails" open>
+                <summary>
+                  <span class="posterToggle">
+                    <span><span class="cmd">$</span> whoami</span>
+                    <span class="posterCaret" aria-hidden="true"></span>
+                  </span>
+                </summary>
+                <div class="posterOut"><b>Ramon Berghorn; Lehrer, Papa, Ultraläufer.</b></div>
+              </details>
 
-              <div style="margin-top:10px;">
-                <button class="cmdBtn" type="button" data-cmd="about">
-                  <span class="cmd">$</span> cat about.txt
-                </button>
-              </div>
-              <div>• <b>Lehrer</b> (Informatik · Englisch · Geschichte)</div>
-              <div>• <b>Fachberatung</b> Informatik Sek I (seit 02/2022)</div>
-              <div>• <b>Cybersecurity</b> / Ethical Hacking (legal, didaktisch)</div>
-              <div>• <b>Region</b>: Niedersachsen (DE)</div>
+              <details class="posterDetails">
+                <summary>
+                  <span class="posterToggle">
+                    <span><span class="cmd">$</span> cat about.txt</span>
+                    <span class="posterCaret" aria-hidden="true"></span>
+                  </span>
+                </summary>
+                <div class="posterOut">• <b>Lehrer</b> (Informatik · Englisch · Geschichte)
+• <b>Fachberatung</b> Informatik Sek I (seit 02/2022)
+• <b>Cybersecurity</b> / Ethical Hacking (legal, didaktisch)
+• <b>Region</b>: Niedersachsen (DE)</div>
+              </details>
 
-              <div style="margin-top:10px;">
-                <button class="cmdBtn" type="button" data-cmd="scope">
-                  <span class="cmd">$</span> cat scope.txt
-                </button>
-              </div>
-              <div>• <b>CyberDefense Lab</b> — legal, schul-tauglich</div>
-              <div>• <b>Unterrichtsbeispiele</b> — sofort einsetzbar</div>
-              <div>• <b>Lehrplan</b> — Jahrgänge + Kompetenzbezug</div>
-              <div>• <b>Lernbuddy</b> — selbstgesteuertes Programmieren</div>
+              <details class="posterDetails">
+                <summary>
+                  <span class="posterToggle">
+                    <span><span class="cmd">$</span> cat scope.txt</span>
+                    <span class="posterCaret" aria-hidden="true"></span>
+                  </span>
+                </summary>
+                <div class="posterOut">• <b>CyberDefense Lab</b> — legal, schul-tauglich
+• <b>Unterrichtsbeispiele</b> — sofort einsetzbar
+• <b>Lehrplan</b> — Jahrgänge + Kompetenzbezug
+• <b>Lernbuddy</b> — selbstgesteuertes Programmieren</div>
+              </details>
 
-              <div style="margin-top:10px;">
-                <button class="cmdBtn" type="button" data-cmd="status">
-                  <span class="cmd">$</span> status
-                </button>
-              </div>
-              <div><span class="ok">OK</span> / iterativer Ausbau / Kernmodule stabil</div>
+              <details class="posterDetails">
+                <summary>
+                  <span class="posterToggle">
+                    <span><span class="cmd">$</span> status</span>
+                    <span class="posterCaret" aria-hidden="true"></span>
+                  </span>
+                </summary>
+                <div class="posterOut"><span class="ok">OK</span> / iterativer Ausbau / Kernmodule stabil</div>
+              </details>
 
-              <div style="margin-top:10px;">
-                <button class="cmdBtn" type="button" data-cmd="hint">
-                  <span class="cmd">$</span> hint
-                </button>
-              </div>
+              <details class="posterDetails">
+                <summary>
+                  <span class="posterToggle">
+                    <span><span class="cmd">$</span> hint</span>
+                    <span class="posterCaret" aria-hidden="true"></span>
+                  </span>
+                </summary>
+              </details>
             </div>
           </aside>
         </div>
@@ -869,7 +1042,6 @@
       <div class="wrap">
         <div class="sectionHead">
           <h2>Bereiche</h2>
-          <p>Vier Module als “Baukasten” für Unterricht, Fortbildung und schulinterne Umsetzung.</p>
         </div>
 
         <div class="grid">
@@ -900,7 +1072,6 @@
               <li><b>Von Wenn-Dann zur KI:</b> Einstieg in KI-Modelle</li>
             </ul>
             <div class="actions">
-              <a class="btn red" href="https://node-xejd.onrender.com/unterrichtsbeispiele.html" target="_blank" rel="noopener noreferrer">Alle Beispiele ↗</a>
               <a class="btn" href="https://node-xejd.onrender.com/new.html" target="_blank" rel="noopener noreferrer">Beispiel 1 ↗</a>
               <span class="btn" aria-disabled="true" title="Platzhalter" style="opacity:.6; cursor:not-allowed;">
                 Beispiel 2 (bald)
@@ -941,6 +1112,45 @@
       </div>
     </section>
 
+    <!-- GALLERY -->
+    <section id="gallery">
+      <div class="wrap">
+        <div class="sectionHead">
+          <h2>Gallery</h2>
+        </div>
+
+        <div class="galleryGrid">
+          <div class="gItem">
+            <div class="gMedia">
+              <img src="/assets/img/img1.jpg" alt="Gallery Bild 1 (Platzhalter)">
+            </div>
+            <div class="gCap">assets/img/img1.jpg</div>
+          </div>
+
+          <div class="gItem">
+            <div class="gMedia">
+              <img src="/assets/img/img2.jpg" alt="Gallery Bild 2 (Platzhalter)">
+            </div>
+            <div class="gCap">assets/img/img2.jpg</div>
+          </div>
+
+          <div class="gItem">
+            <div class="gMedia">
+              <img src="/assets/img/img3.jpg" alt="Gallery Bild 3 (Platzhalter)">
+            </div>
+            <div class="gCap">assets/img/img3.jpg</div>
+          </div>
+
+          <div class="gItem">
+            <div class="gMedia">
+              <img src="/assets/img/img4.jpg" alt="Gallery Bild 4 (Platzhalter)">
+            </div>
+            <div class="gCap">assets/img/img4.jpg</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CHANGELOG -->
     <section id="changelog">
       <div class="wrap">
@@ -948,38 +1158,47 @@
           <h2>Changelog</h2>
         </div>
 
-        <div class="changelog" role="region" aria-label="Änderungsprotokoll">
-          <div class="chTop">
-            <div>ramon@school-lab:~/cyberdefense-site$ <b>python</b> changelog.py</div>
-            <span class="pill">tail(6)</span>
-          </div>
+        <details class="chWrap" open>
+          <summary>
+            <span class="chToggle" role="button" aria-label="Changelog ein- oder ausklappen">
+              <span class="chCaret" aria-hidden="true"></span>
+              Changelog anzeigen / verbergen
+            </span>
+          </summary>
 
-          <div>>> from ramon_site import changelog</div>
-          <div>>> changelog.tail(6)</div>
+          <div class="changelog" role="region" aria-label="Änderungsprotokoll">
+            <div class="chTop">
+              <div>ramon@school-lab:~/cyberdefense-site$ <b>python</b> changelog.py</div>
+              <span class="pill">tail(6)</span>
+            </div>
 
-          <div class="log">
-            <div class="entry">
-              <span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
-              <div>Layout für Smartphones und Tablets überarbeitet – Abschnitte neu strukturiert, bessere Lesbarkeit.</div>
-            </div>
-            <div class="entry">
-              <span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
-              <div>Scratch-Preview mit Projekt-Embed, Editor-Link und lokalem Autosave (localStorage) ergänzt.</div>
-            </div>
-            <div class="entry">
-              <span class="date">2025-12-05</span><span class="tag">lehrplan</span>
-              <div>Schulinterner Lehrplan in Karten-/Timeline-Ansicht aufgebaut und optisch an die Landing Page angepasst.</div>
-            </div>
-            <div class="entry">
-              <span class="date">2025-12-05</span><span class="tag">landing</span>
-              <div>Startseite mit vier Hauptkacheln (CyberDefense Lab, Unterrichtsbeispiele, Lehrplan, Lernbuddy) neu gestaltet.</div>
-            </div>
-            <div class="entry">
-              <span class="date">2025-12-05</span><span class="tag">unterricht</span>
-              <div>Unterrichtsbeispiele-Kachel mit Dummy-Links für einzelne Beispiele vorbereitet.</div>
+            <div>>> from ramon_site import changelog</div>
+            <div>>> changelog.tail(6)</div>
+
+            <div class="log">
+              <div class="entry">
+                <span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
+                <div>Layout für Smartphones und Tablets überarbeitet – Abschnitte neu strukturiert, bessere Lesbarkeit.</div>
+              </div>
+              <div class="entry">
+                <span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
+                <div>Scratch-Preview mit Projekt-Embed, Editor-Link und lokalem Autosave (localStorage) ergänzt.</div>
+              </div>
+              <div class="entry">
+                <span class="date">2025-12-05</span><span class="tag">lehrplan</span>
+                <div>Schulinterner Lehrplan in Karten-/Timeline-Ansicht aufgebaut und optisch an die Landing Page angepasst.</div>
+              </div>
+              <div class="entry">
+                <span class="date">2025-12-05</span><span class="tag">landing</span>
+                <div>Startseite mit vier Hauptkacheln (CyberDefense Lab, Unterrichtsbeispiele, Lehrplan, Lernbuddy) neu gestaltet.</div>
+              </div>
+              <div class="entry">
+                <span class="date">2025-12-05</span><span class="tag">unterricht</span>
+                <div>Unterrichtsbeispiele-Kachel mit Dummy-Links für einzelne Beispiele vorbereitet.</div>
+              </div>
             </div>
           </div>
-        </div>
+        </details>
       </div>
     </section>
 
@@ -1030,7 +1249,7 @@
     </div>
   </div>
 
-  <!-- Console Modal -->
+  <!-- (Optional) Console Modal bleibt im Code, wird aktuell nicht genutzt -->
   <div class="modal" id="consoleModal" aria-hidden="true">
     <div class="modalBackdrop" data-close="1"></div>
 
@@ -1051,9 +1270,7 @@
       const menu = document.querySelector("#mobileNav");
       if(!menu) return;
       const links = Array.from(menu.querySelectorAll("a.tab"));
-      const targets = links
-        .map(a => document.querySelector(a.getAttribute("href")))
-        .filter(Boolean);
+      const targets = links.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
 
       const setActive = (id) => {
         links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
@@ -1062,9 +1279,7 @@
       if(!("IntersectionObserver" in window) || targets.length === 0) return;
 
       const io = new IntersectionObserver((entries) => {
-        const hit = entries
-          .filter(e => e.isIntersecting)
-          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const hit = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
         if(hit && hit.target && hit.target.id) setActive(hit.target.id);
       }, { threshold: [0.2, 0.35, 0.5] });
 
@@ -1084,24 +1299,17 @@
         btn.setAttribute("aria-expanded","false");
       };
 
-      const openNav = () => {
-        nav.classList.add("open");
-        btn.setAttribute("aria-expanded","true");
-      };
-
       btn.addEventListener("click", () => {
         const open = nav.classList.toggle("open");
         btn.setAttribute("aria-expanded", open ? "true" : "false");
       });
 
-      // close on link click (mobile)
       nav.addEventListener("click", (e) => {
         const a = e.target.closest("a");
         if(!a) return;
         closeNav();
       });
 
-      // click outside closes (mobile only)
       document.addEventListener("click", (e) => {
         if(!isMobile()) return;
         const open = nav.classList.contains("open");
@@ -1112,13 +1320,11 @@
         if(!withinNav && !withinBtn) closeNav();
       });
 
-      // ESC closes (mobile only)
       document.addEventListener("keydown", (e) => {
         if(!isMobile()) return;
         if(e.key === "Escape" && nav.classList.contains("open")) closeNav();
       });
 
-      // if resizing to desktop, ensure nav is not stuck "open"
       window.addEventListener("resize", () => {
         if(!isMobile()) closeNav();
       });
@@ -1136,81 +1342,56 @@
       });
     })();
 
-    // autoplay fallback (Safari/iOS can be picky -> play attempt)
+    // Hero video: play/pause + mute/unmute + LED/chip state
     (function(){
       const v = document.getElementById("heroVideo");
+      const btnPlay = document.getElementById("vidToggle");
+      const btnMute = document.getElementById("muteToggle");
+      const muteState = document.getElementById("muteState");
+      const playLed = document.getElementById("playLed");
+      const soundLed = document.getElementById("soundLed");
       if(!v) return;
+
+      const sync = () => {
+        if(muteState) muteState.textContent = v.muted ? "MUTED" : "SOUND";
+        if(btnMute) btnMute.textContent = v.muted ? "Unmute" : "Mute";
+        if(btnPlay) btnPlay.textContent = v.paused ? "Play" : "Pause";
+
+        // LEDs: grün = aktiv, rot = aus/blocked
+        if(playLed) playLed.classList.toggle("red", v.paused);
+        if(soundLed) soundLed.classList.toggle("red", v.muted);
+      };
 
       const tryPlay = () => {
         const p = v.play();
         if(p && typeof p.catch === "function") p.catch(() => {});
       };
 
+      if(btnPlay){
+        btnPlay.addEventListener("click", () => {
+          if(v.paused) tryPlay();
+          else v.pause();
+          sync();
+        });
+      }
+
+      if(btnMute){
+        btnMute.addEventListener("click", () => {
+          v.muted = !v.muted;
+          // wenn unmute und video pausiert: play versuchen (User-Gesture hilft Browsern)
+          if(!v.muted && v.paused) tryPlay();
+          sync();
+        });
+      }
+
+      v.addEventListener("play", sync);
+      v.addEventListener("pause", sync);
+      v.addEventListener("volumechange", sync);
+
+      window.addEventListener("load", () => { tryPlay(); sync(); });
       document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
-      window.addEventListener("load", tryPlay);
-    })();
-
-    // Console modal: command -> output mapping (+ focus restore)
-    (function(){
-      const modal = document.getElementById("consoleModal");
-      const body = document.getElementById("consoleBody");
-      const title = document.getElementById("consoleTitle");
-      const closeBtn = document.getElementById("consoleClose");
-
-      if(!modal || !body || !title || !closeBtn) return;
-
-      const PROMPT = "ramon@school-lab:~$";
-      let lastTrigger = null;
-
-      const outputs = {
-        whoami: `${PROMPT} whoami\nramon`,
-        about: `${PROMPT} cat about.txt\n` +
-              `Lehrer (Informatik · Englisch · Geschichte)\n` +
-              `Fachberatung Informatik Sek I (seit 02/2022)\n` +
-              `Cybersecurity / Ethical Hacking (legal, didaktisch)\n` +
-              `Ultramarathon (Ausdauer, Mindset, Methodik)\n` +
-              `Region: Niedersachsen (DE)`,
-        scope: `${PROMPT} cat scope.txt\n` +
-               `CyberDefense Lab — legal, schul-tauglich\n` +
-               `Unterrichtsbeispiele — sofort einsetzbar\n` +
-               `Lehrplan — Jahrgänge + Kompetenzbezug\n` +
-               `Lernbuddy — selbstgesteuertes Programmieren`,
-        status: `${PROMPT} status\nOK — iterativer Ausbau / Kernmodule stabil`,
-      };
-
-      const open = (cmdKey) => {
-        const out = outputs[cmdKey] || `${PROMPT} ${cmdKey}\ncommand not found`;
-        title.textContent = `console / ${cmdKey}`;
-        body.textContent = out;
-        modal.classList.add("open");
-        modal.setAttribute("aria-hidden","false");
-        closeBtn.focus();
-      };
-
-      const close = () => {
-        modal.classList.remove("open");
-        modal.setAttribute("aria-hidden","true");
-        if(lastTrigger && typeof lastTrigger.focus === "function") lastTrigger.focus();
-        lastTrigger = null;
-      };
-
-      document.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-cmd]");
-        if(btn){
-          lastTrigger = btn;
-          open(btn.getAttribute("data-cmd"));
-          return;
-        }
-        if(e.target && e.target.getAttribute && e.target.getAttribute("data-close") === "1") close();
-      });
-
-      closeBtn.addEventListener("click", close);
-
-      // ESC closes
-      document.addEventListener("keydown", (e) => {
-        if(e.key === "Escape" && modal.classList.contains("open")) close();
-      });
     })();
   </script>
 </body>
 </html>
+
