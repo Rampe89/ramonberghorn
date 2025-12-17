@@ -915,6 +915,7 @@
                 <div>Hero Video</div>
                 <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                   <span class="videoBadge red">AUTOPLAY</span>
+                  <span class="videoBadge" id="muteState">MUTED</span>
                   <span class="videoBadge">LOOP</span>
 
                   <button class="videoBtn" id="vidToggle" type="button">Pause</button>
@@ -936,6 +937,14 @@
                   <source src="/assets/video/hero.mp4" type="video/mp4">
                   Dein Browser unterstützt das Video-Tag nicht.
                 </video>
+
+                <!-- brutale "player"-chips (nur Optik) -->
+                <div class="videoBar" aria-hidden="true">
+                  <span class="chip"><span class="led" id="playLed"></span> PLAY</span>
+                  <span class="chip"><span class="led red" id="soundLed"></span> SOUND</span>
+                </div>
+              </div>
+            </div>
 
 
             <h1>Informatik für den Schulalltag.</h1>
