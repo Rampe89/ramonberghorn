@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ramon Berghorn — Informatik & CyberDefense Lab</title>
+  <meta name="description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy.">
+
+  <!-- Canonical (bitte auf deine finale Domain setzen) -->
+  <link rel="canonical" href="https://example.de/">
+
+  <!-- Open Graph (Sharing) -->
+  <meta property="og:title" content="Ramon Berghorn — Informatik & CyberDefense Lab">
+  <meta property="og:description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:url" content="https://example.de/">
+  <!-- OG Image (bitte bereitstellen) -->
+  <meta property="og:image" content="https://example.de/assets/og/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ramon Berghorn — Informatik & CyberDefense Lab">
+  <meta name="twitter:description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik.">
+  <meta name="twitter:image" content="https://example.de/assets/og/og-card.jpg">
+
+  <!-- Privacy / Referrer -->
+  <meta name="referrer" content="no-referrer">
+
+  <!-- Favicons (optional, aber empfohlen) -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Hinweis: Wenn du "NO TRACKING" maximal ernst meinst, self-hoste die Fonts statt Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Brutalist core */
+      --bg: #f6f4ef;
+      --ink: #111111;
+      --muted: #333333;
+      --line: #111111;
+
+      /* Accents */
+      --hi: #ff3b30;     /* signal red */
+      --hi2:#0057ff;     /* hard blue */
+      --hi3:#00c853;     /* hard green */
+      --paper:#fffdf8;
+
+      /* Layout */
+      --max: 1120px;
+      --pad: 18px;
+      --gap: 14px;
+      --bw: 2px;         /* border width */
+      --shadowInk: rgba(17,17,17,.95);
+      --shadow: 8px 8px 0 var(--shadowInk); /* hard shadow */
+      --shadow2: 6px 6px 0 var(--shadowInk);
+
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+
+    a{ color: inherit; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
+
+    /* Focus visibility (accessibility) */
+    .tab:focus-visible, .btn:focus-visible, .cmdBtn:focus-visible, .modalClose:focus-visible, #navToggle:focus-visible{
+      outline: 3px solid var(--hi2);
+      outline-offset: 3px;
+    }
+
+    /* Top strip */
+    .strip{
+      background: var(--ink);
+      color: var(--paper);
+      border-bottom: var(--bw) solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+    }
+    .strip .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px var(--pad);
+    }
+    .strip b{ font-weight:700; }
+    .strip span{ opacity:.85; }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: var(--bg);
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 0;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-width: 260px;
+    }
+    .mark{
+      width:44px;height:44px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      letter-spacing:.02em;
+      user-select:none;
+      box-shadow: var(--shadow2);
+    }
+    .brandText b{
+      display:block;
+      font-weight:900;
+      letter-spacing:.01em;
+      font-size: 14px;
+    }
+    .brandText span{
+      display:block;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      margin-top:2px;
+    }
+
+    .menu{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .tab{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      text-decoration:none;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      white-space:nowrap;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+    }
+    .tab:hover{ transform: translate(-2px, -2px); }
+    .tab.active{
+      background: var(--hi);
+      color: var(--paper);
+    }
+
+    /* Mobile Nav Toggle */
+    #navToggle{ display:none; }
+
+    @media (max-width: 980px){
+      #navToggle{ display:inline-flex; }
+      .menu{
+        display:none;
+        width:100%;
+        justify-content:flex-start;
+        padding-bottom: 12px;
+      }
+      .menu.open{ display:flex; }
+    }
+
+    /* Hero */
+    .hero{
+      padding: 18px 0 12px;
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: var(--gap);
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .heroGrid{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+    }
+    .dot{
+      width:10px;height:10px;
+      background: var(--hi3);
+      border: var(--bw) solid var(--line);
+    }
+
+    /* Hero Video (self-hosted) */
+    .videoFrame{
+      margin-top: 12px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      padding: 10px;
+    }
+    .videoHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .videoBadge{
+      border: var(--bw) solid var(--line);
+      padding: 4px 8px;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background: #fff;
+      white-space:nowrap;
+    }
+    .videoBadge.red{ background: var(--hi); color: var(--paper); }
+    .videoWrap{
+      position:relative;
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+      background:#000;
+    }
+    .videoWrap video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 3.2vw, 46px);
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight: 900;
+      text-transform:uppercase;
+    }
+
+    .lead{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+      max-width: 78ch;
+    }
+
+    .roleLine{
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: var(--bw) dashed var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.04em;
+    }
+
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      text-decoration:none;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      box-shadow: 5px 5px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translate(-2px,-2px); }
+    .btn.red{ background: var(--hi); color: var(--paper); }
+    .btn.blue{ background: var(--hi2); color: var(--paper); }
+    .btn.green{ background: var(--hi3); color: var(--paper); }
+
+    /* Right: Poster/notice */
+    .poster{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      height:100%;
+    }
+    .posterTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .stamps{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .stamp{
+      border: var(--bw) solid var(--line);
+      padding: 5px 8px;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background:#fff;
+      white-space:nowrap;
+    }
+    .stamp.red{ background: var(--hi); color: var(--paper); }
+    .stamp.blue{ background: var(--hi2); color: var(--paper); }
+
+    .posterBody{
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: #222;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,0,0,.06) 0,
+          rgba(0,0,0,.06) 1px,
+          transparent 1px,
+          transparent 24px
+        ),
+        #fff;
+      padding: 14px;
+      border: var(--bw) solid var(--line);
+      box-shadow: var(--shadow2);
+      min-height: 240px;
+      position:relative;
+      overflow:hidden;
+    }
+    .posterBody::after{
+      content:"";
+      position:absolute;
+      right:-14px;
+      top:-14px;
+      width:80px;height:80px;
+      background: var(--hi);
+      border: var(--bw) solid var(--line);
+      transform: rotate(15deg);
+      opacity:.9;
+    }
+    .posterBody b{ font-weight:700; }
+    .posterBody .cmd{ color: var(--hi2); font-weight:700; }
+    .posterBody .ok{ color: var(--hi3); font-weight:700; }
+    .posterBody .warn{ color: var(--hi); font-weight:700; }
+
+    /* clickable commands */
+    .cmdBtn{
+      background: transparent;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-align:left;
+    }
+    .cmdBtn .cmd{ color: var(--hi2); font-weight:700; }
+    .cmdBtn:hover{ text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Sections */
+    section{
+      padding: 16px 0;
+      border-bottom: var(--bw) solid var(--line);
+      scroll-margin-top: 92px; /* sticky header anchor fix */
+    }
+    .sectionHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .sectionHead h2{
+      margin:0;
+      font-size: 18px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
+    .sectionHead p{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      max-width: 72ch;
+    }
+
+    /* Brutalist cards */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+      :root{
+        --shadow: 6px 6px 0 var(--shadowInk);
+        --shadow2: 5px 5px 0 var(--shadowInk);
+      }
+    }
+
+    .card{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 180px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Ecke darf Content nicht überdecken -> in den Hintergrund */
+    .card::before{
+      content:"";
+      position:absolute;
+      left:-18px;
+      top:-18px;
+      width:68px;
+      height:68px;
+      background: #fff;
+      border: var(--bw) solid var(--line);
+      transform: rotate(-12deg);
+      opacity:.95;
+      z-index:0;
+      pointer-events:none;
+    }
+    .card > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .labelRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .label{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      padding: 6px 8px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      white-space:nowrap;
+    }
+    .label.cyan{ background: #e8f6ff; }
+    .label.violet{ background: #f0eaff; }
+    .label.green{ background: #eafff1; }
+    .label.orange{ background: #fff0e6; }
+
+    .icon{
+      font-size: 18px;
+      border: var(--bw) solid var(--line);
+      width:34px;height:34px;
+      display:grid; place-items:center;
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      flex-shrink:0;
+    }
+
+    .card h3{
+      margin:0;
+      font-size: 15px;
+      font-weight:900;
+      letter-spacing:.01em;
+      text-transform:uppercase;
+    }
+    .card p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .card ul{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .actions{
+      margin-top:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding-top:10px;
+      border-top: var(--bw) dashed var(--line);
+    }
+
+    /* Changelog block */
+    .changelog{
+      border: var(--bw) solid var(--line);
+      background: #111;
+      color: #f5f5f5;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+    .chTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      padding-bottom:10px;
+      border-bottom: 1px dashed rgba(255,255,255,.25);
+    }
+    .pill{
+      border: 1px solid rgba(255,255,255,.35);
+      padding: 4px 8px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-weight:700;
+      font-size: 10px;
+      background: rgba(255,255,255,.08);
+      white-space:nowrap;
+    }
+    .log{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:10px;
+    }
+    .entry{
+      border: 1px dashed rgba(255,255,255,.25);
+      padding: 10px;
+      background: rgba(255,255,255,.05);
+    }
+    .entry .date{ color: #7dd3fc; font-weight:700; }
+    .entry .tag{ color: #86efac; font-weight:700; text-transform:uppercase; letter-spacing:.10em; font-size: 10px; margin-left:8px; }
+
+    /* Footer */
+    footer{
+      padding: 18px 0 34px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .foot{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* Cookie */
+    .cc{
+      position:fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index:9999;
+      width: min(480px, calc(100vw - 36px));
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display:none;
+    }
+    .cc h4{
+      margin:0 0 8px;
+      font-size: 14px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
+    .cc p{
+      margin:0 0 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    /* Console Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      z-index:10000;
+    }
+    .modal.open{ display:block; }
+    .modalBackdrop{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,.55);
+    }
+    .modalDialog{
+      position:relative;
+      width: min(860px, calc(100vw - 36px));
+      margin: 8vh auto;
+      border: var(--bw) solid var(--line);
+      background: #111;
+      color: #f5f5f5;
+      box-shadow: var(--shadow);
+      font-family: var(--mono);
+    }
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border-bottom: 1px dashed rgba(255,255,255,.25);
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size: 12px;
+      background: rgba(255,255,255,.06);
+    }
+    .modalTop .title{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .modalClose{
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      font-family: var(--mono);
+      padding: 6px 10px;
+      cursor:pointer;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-weight:700;
+      font-size: 11px;
+    }
+    .modalClose:hover{ filter: brightness(1.1); }
+    .modalBody{
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.75;
+      max-height: 62vh;
+      overflow:auto;
+      white-space:pre-wrap;
+    }
+
+    /* Smooth anchors */
+    html{ scroll-behavior:smooth; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .tab, .btn{ transition: none; }
+      .tab:hover, .btn:hover{ transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="strip" aria-hidden="true">
+    <div class="wrap">
+      <div><b>RB</b> / Informatik Sek I / CyberDefense Lab</div>
+      <div><span>BUILD:</span> <b id="buildDate">2025-12-16</b></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">RB</div>
+          <div class="brandText">
+            <b>Ramon Berghorn</b>
+            <span>Informatik Sek I · CyberDefense Lab</span>
+          </div>
+        </div>
+
+        <button class="tab" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileNav">
+          Menu
+        </button>
+
+        <nav class="menu" id="mobileNav" aria-label="Hauptnavigation">
+          <a class="tab active" href="#home">Home</a>
+          <a class="tab" href="#bereiche">Bereiche</a>
+          <a class="tab" href="#changelog">Changelog</a>
+          <a class="tab" href="#kontakt">Kontakt</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="wrap">
+        <div class="heroGrid">
+          <div class="panel">
+            <div class="kicker">
+              <span class="dot"></span>
+              <span>Unterricht · Informatik · Praxis</span>
+            </div>
+
+            <div class="videoFrame" aria-label="Hero Video">
+              <div class="videoHead">
+                <div>Hero Video</div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <span class="videoBadge red">AUTOPLAY</span>
+                  <span class="videoBadge">MUTED</span>
+                  <span class="videoBadge">LOOP</span>
+                </div>
+              </div>
+
+              <div class="videoWrap">
+                <video
+                  id="heroVideo"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  poster="/assets/video/hero-poster.jpg"
+                  aria-hidden="true">
+                  <source src="/assets/video/hero.webm" type="video/webm">
+                  <source src="/assets/video/hero.mp4" type="video/mp4">
+                  Dein Browser unterstützt das Video-Tag nicht.
+                </video>
+              </div>
+            </div>
+
+            <p class="lead">
+              CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy –
+              Materialien, die im Unterricht und in Fortbildungen tatsächlich genutzt werden können.
+              <br><br>
+              Für Kolleg:innen, Fachkonferenzen und Schulleitung – im Aufbau, aber dauerhaft nutzbar.
+            </p>
+
+            <div class="roleLine">
+              <b>Fachberatung Informatik Sek I</b> · Fortbildungen · Vorträge
+            </div>
+
+            <div class="ctaRow">
+              <a class="btn blue" href="https://node-xejd.onrender.com/index.html" target="_blank" rel="noopener noreferrer">CyberDefense Lab ↗</a>
+              <a class="btn red" href="https://node-xejd.onrender.com/unterrichtsbeispiele.html" target="_blank" rel="noopener noreferrer">Unterrichtsbeispiele ↗</a>
+              <a class="btn green" href="https://node-xejd.onrender.com/lehrplan.html" target="_blank" rel="noopener noreferrer">Lehrplan ↗</a>
+              <a class="btn" href="https://node-xejd.onrender.com/lernbuddy.html" target="_blank" rel="noopener noreferrer">Lernbuddy ↗</a>
+            </div>
+          </div>
+
+          <aside class="poster" aria-label="Hinweis">
+            <div class="posterTop">
+              <div>Notice Board</div>
+              <div class="stamps">
+                <span class="stamp red">LIVE</span>
+                <span class="stamp blue">NO TRACKING</span>
+              </div>
+            </div>
+
+            <div class="posterBody">
+              <button class="cmdBtn" type="button" data-cmd="whoami">
+                <span class="cmd">$</span> whoami
+              </button>
+              <div><b>ramon</b></div>
+
+              <div style="margin-top:10px;">
+                <button class="cmdBtn" type="button" data-cmd="about">
+                  <span class="cmd">$</span> cat about.txt
+                </button>
+              </div>
+              <div>• <b>Lehrer</b> (Informatik · Englisch · Geschichte)</div>
+              <div>• <b>Fachberatung</b> Informatik Sek I (seit 02/2022)</div>
+              <div>• <b>Cybersecurity</b> / Ethical Hacking (legal, didaktisch)</div>
+              <div>• <b>Region</b>: Niedersachsen (DE)</div>
+
+              <div style="margin-top:10px;">
+                <button class="cmdBtn" type="button" data-cmd="scope">
+                  <span class="cmd">$</span> cat scope.txt
+                </button>
+              </div>
+              <div>• <b>CyberDefense Lab</b> — legal, schul-tauglich</div>
+              <div>• <b>Unterrichtsbeispiele</b> — sofort einsetzbar</div>
+              <div>• <b>Lehrplan</b> — Jahrgänge + Kompetenzbezug</div>
+              <div>• <b>Lernbuddy</b> — selbstgesteuertes Programmieren</div>
+
+              <div style="margin-top:10px;">
+                <button class="cmdBtn" type="button" data-cmd="status">
+                  <span class="cmd">$</span> status
+                </button>
+              </div>
+              <div><span class="ok">OK</span> / iterativer Ausbau / Kernmodule stabil</div>
+
+              <div style="margin-top:10px;">
+                <button class="cmdBtn" type="button" data-cmd="hint">
+                  <span class="cmd">$</span> hint
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEREICHE -->
+    <section id="bereiche">
+      <div class="wrap">
+        <div class="sectionHead">
+          <h2>Bereiche</h2>
+          <p>Vier Module als “Baukasten” für Unterricht, Fortbildung und schulinterne Umsetzung.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="labelRow">
+              <span class="label cyan">CyberDefense Lab</span>
+              <span class="icon">🛡️</span>
+            </div>
+            <h3>Angriff & Verteidigung im Unterricht</h3>
+            <p>
+              Technische Umgebung für legale Angriffs- und Verteidigungsszenarien,
+              angelehnt an TryHackMe und auf Schulbetrieb angepasst.
+            </p>
+            <div class="actions">
+              <a class="btn blue" href="https://node-xejd.onrender.com/index.html" target="_blank" rel="noopener noreferrer">Zum Lab ↗</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="labelRow">
+              <span class="label violet">Unterrichtsbeispiele</span>
+              <span class="icon">💡</span>
+            </div>
+            <h3>Konkrete Stunden & Reihen</h3>
+            <p>Beispiele, die direkt im Unterricht funktionieren.</p>
+            <ul>
+              <li><b>Algorithmisches Problemlösen:</b> Mission Schulkiosk</li>
+              <li><b>Von Wenn-Dann zur KI:</b> Einstieg in KI-Modelle</li>
+            </ul>
+            <div class="actions">
+              <a class="btn red" href="https://node-xejd.onrender.com/unterrichtsbeispiele.html" target="_blank" rel="noopener noreferrer">Alle Beispiele ↗</a>
+              <a class="btn" href="https://node-xejd.onrender.com/new.html" target="_blank" rel="noopener noreferrer">Beispiel 1 ↗</a>
+              <span class="btn" aria-disabled="true" title="Platzhalter" style="opacity:.6; cursor:not-allowed;">
+                Beispiel 2 (bald)
+              </span>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="labelRow">
+              <span class="label green">Lehrplan</span>
+              <span class="icon">📘</span>
+            </div>
+            <h3>Schulinterner Lehrplan Informatik</h3>
+            <p>
+              Vorschlag für einen schulinternen Lehrplan für das Pflichtfach Informatik Sek I
+              mit Jahrgangsstruktur und Kompetenzbezug.
+            </p>
+            <div class="actions">
+              <a class="btn green" href="https://node-xejd.onrender.com/lehrplan.html" target="_blank" rel="noopener noreferrer">Zum Lehrplan ↗</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="labelRow">
+              <span class="label orange">Lernbuddy</span>
+              <span class="icon">✨</span>
+            </div>
+            <h3>Begleitung beim Programmieren</h3>
+            <p>
+              Digitales Arbeitsblatt für selbstgesteuertes Lernen beim Programmieren (z. B. Scratch):
+              Planung, Zwischenschritte und Reflexion.
+            </p>
+            <div class="actions">
+              <a class="btn" href="https://node-xejd.onrender.com/lernbuddy.html" target="_blank" rel="noopener noreferrer">Zum Lernbuddy ↗</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHANGELOG -->
+    <section id="changelog">
+      <div class="wrap">
+        <div class="sectionHead">
+          <h2>Changelog</h2>
+        </div>
+
+        <div class="changelog" role="region" aria-label="Änderungsprotokoll">
+          <div class="chTop">
+            <div>ramon@school-lab:~/cyberdefense-site$ <b>python</b> changelog.py</div>
+            <span class="pill">tail(6)</span>
+          </div>
+
+          <div>>> from ramon_site import changelog</div>
+          <div>>> changelog.tail(6)</div>
+
+          <div class="log">
+            <div class="entry">
+              <span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
+              <div>Layout für Smartphones und Tablets überarbeitet – Abschnitte neu strukturiert, bessere Lesbarkeit.</div>
+            </div>
+            <div class="entry">
+              <span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
+              <div>Scratch-Preview mit Projekt-Embed, Editor-Link und lokalem Autosave (localStorage) ergänzt.</div>
+            </div>
+            <div class="entry">
+              <span class="date">2025-12-05</span><span class="tag">lehrplan</span>
+              <div>Schulinterner Lehrplan in Karten-/Timeline-Ansicht aufgebaut und optisch an die Landing Page angepasst.</div>
+            </div>
+            <div class="entry">
+              <span class="date">2025-12-05</span><span class="tag">landing</span>
+              <div>Startseite mit vier Hauptkacheln (CyberDefense Lab, Unterrichtsbeispiele, Lehrplan, Lernbuddy) neu gestaltet.</div>
+            </div>
+            <div class="entry">
+              <span class="date">2025-12-05</span><span class="tag">unterricht</span>
+              <div>Unterrichtsbeispiele-Kachel mit Dummy-Links für einzelne Beispiele vorbereitet.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section id="kontakt">
+      <div class="wrap">
+        <div class="sectionHead">
+          <h2>Kontakt</h2>
+          <p>Für schulinterne Fortbildungen oder Fachkonferenz: Schulform, Jg., Ausstattung, Ziel — kurz reicht.</p>
+        </div>
+
+        <div class="panel">
+          <div style="font-family: var(--mono); font-size: 12px; line-height: 1.8;">
+            <div><span style="opacity:.75;">E-Mail:</span></div>
+            <div style="margin-top:6px;">
+              <a class="tab" href="mailto:ramon.berghorn@hsklunkau.de" style="display:inline-block;">
+                ramon.berghorn@hsklunkau.de
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <b style="color:var(--ink);">Ramon Berghorn</b><br>
+          Informatik Sek I · CyberDefense Lab<br>
+          &copy; <span id="year"></span> Ramon Berghorn
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="tab" href="https://node-xejd.onrender.com/impressum.html" target="_blank" rel="noopener noreferrer">Impressum</a>
+          <a class="tab" href="https://node-xejd.onrender.com/datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Minimaler Cookie-Hinweis -->
+  <div class="cc" id="cc">
+    <h4>Hinweis</h4>
+    <p>Kein Tracking. Dieses Banner speichert nur lokal (localStorage), dass du es bestätigt hast.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn red" id="ccOk" type="button">OK</button>
+    </div>
+  </div>
+
+  <!-- Console Modal -->
+  <div class="modal" id="consoleModal" aria-hidden="true">
+    <div class="modalBackdrop" data-close="1"></div>
+
+    <div class="modalDialog" role="dialog" aria-modal="true" aria-labelledby="consoleTitle">
+      <div class="modalTop">
+        <div class="title" id="consoleTitle">console</div>
+        <button class="modalClose" type="button" id="consoleClose">close</button>
+      </div>
+      <div class="modalBody" id="consoleBody"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // active tabs (IntersectionObserver)
+    (function(){
+      const menu = document.querySelector("#mobileNav");
+      if(!menu) return;
+      const links = Array.from(menu.querySelectorAll("a.tab"));
+      const targets = links
+        .map(a => document.querySelector(a.getAttribute("href")))
+        .filter(Boolean);
+
+      const setActive = (id) => {
+        links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+      };
+
+      if(!("IntersectionObserver" in window) || targets.length === 0) return;
+
+      const io = new IntersectionObserver((entries) => {
+        const hit = entries
+          .filter(e => e.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if(hit && hit.target && hit.target.id) setActive(hit.target.id);
+      }, { threshold: [0.2, 0.35, 0.5] });
+
+      targets.forEach(t => io.observe(t));
+    })();
+
+    // mobile nav toggle (+ ESC + click outside)
+    (function(){
+      const btn = document.getElementById("navToggle");
+      const nav = document.getElementById("mobileNav");
+      if(!btn || !nav) return;
+
+      const isMobile = () => window.matchMedia("(max-width: 980px)").matches;
+
+      const closeNav = () => {
+        nav.classList.remove("open");
+        btn.setAttribute("aria-expanded","false");
+      };
+
+      const openNav = () => {
+        nav.classList.add("open");
+        btn.setAttribute("aria-expanded","true");
+      };
+
+      btn.addEventListener("click", () => {
+        const open = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      // close on link click (mobile)
+      nav.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if(!a) return;
+        closeNav();
+      });
+
+      // click outside closes (mobile only)
+      document.addEventListener("click", (e) => {
+        if(!isMobile()) return;
+        const open = nav.classList.contains("open");
+        if(!open) return;
+
+        const withinNav = nav.contains(e.target);
+        const withinBtn = btn.contains(e.target);
+        if(!withinNav && !withinBtn) closeNav();
+      });
+
+      // ESC closes (mobile only)
+      document.addEventListener("keydown", (e) => {
+        if(!isMobile()) return;
+        if(e.key === "Escape" && nav.classList.contains("open")) closeNav();
+      });
+
+      // if resizing to desktop, ensure nav is not stuck "open"
+      window.addEventListener("resize", () => {
+        if(!isMobile()) closeNav();
+      });
+    })();
+
+    // cookie notice
+    (function(){
+      const cc = document.getElementById("cc");
+      const ok = document.getElementById("ccOk");
+      const KEY = "ramon_cookie_notice_ok";
+      if(cc && !localStorage.getItem(KEY)) cc.style.display = "block";
+      if(ok) ok.addEventListener("click", () => {
+        localStorage.setItem(KEY, "1");
+        if(cc) cc.style.display = "none";
+      });
+    })();
+
+    // autoplay fallback (Safari/iOS can be picky -> play attempt)
+    (function(){
+      const v = document.getElementById("heroVideo");
+      if(!v) return;
+
+      const tryPlay = () => {
+        const p = v.play();
+        if(p && typeof p.catch === "function") p.catch(() => {});
+      };
+
+      document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
+      window.addEventListener("load", tryPlay);
+    })();
+
+    // Console modal: command -> output mapping (+ focus restore)
+    (function(){
+      const modal = document.getElementById("consoleModal");
+      const body = document.getElementById("consoleBody");
+      const title = document.getElementById("consoleTitle");
+      const closeBtn = document.getElementById("consoleClose");
+
+      if(!modal || !body || !title || !closeBtn) return;
+
+      const PROMPT = "ramon@school-lab:~$";
+      let lastTrigger = null;
+
+      const outputs = {
+        whoami: `${PROMPT} whoami\nramon`,
+        about: `${PROMPT} cat about.txt\n` +
+              `Lehrer (Informatik · Englisch · Geschichte)\n` +
+              `Fachberatung Informatik Sek I (seit 02/2022)\n` +
+              `Cybersecurity / Ethical Hacking (legal, didaktisch)\n` +
+              `Ultramarathon (Ausdauer, Mindset, Methodik)\n` +
+              `Region: Niedersachsen (DE)`,
+        scope: `${PROMPT} cat scope.txt\n` +
+               `CyberDefense Lab — legal, schul-tauglich\n` +
+               `Unterrichtsbeispiele — sofort einsetzbar\n` +
+               `Lehrplan — Jahrgänge + Kompetenzbezug\n` +
+               `Lernbuddy — selbstgesteuertes Programmieren`,
+        status: `${PROMPT} status\nOK — iterativer Ausbau / Kernmodule stabil`,
+      };
+
+      const open = (cmdKey) => {
+        const out = outputs[cmdKey] || `${PROMPT} ${cmdKey}\ncommand not found`;
+        title.textContent = `console / ${cmdKey}`;
+        body.textContent = out;
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden","false");
+        closeBtn.focus();
+      };
+
+      const close = () => {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden","true");
+        if(lastTrigger && typeof lastTrigger.focus === "function") lastTrigger.focus();
+        lastTrigger = null;
+      };
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-cmd]");
+        if(btn){
+          lastTrigger = btn;
+          open(btn.getAttribute("data-cmd"));
+          return;
+        }
+        if(e.target && e.target.getAttribute && e.target.getAttribute("data-close") === "1") close();
+      });
+
+      closeBtn.addEventListener("click", close);
+
+      // ESC closes
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape" && modal.classList.contains("open")) close();
+      });
+    })();
+  </script>
+</body>
+</html>
