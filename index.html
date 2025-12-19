@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Ramon Berghorn — Informatik &amp; CyberDefense Lab</title>
+<meta content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik." name="description"/>
+<link href="https://example.de/" rel="canonical"/>
+<meta content="Ramon Berghorn — Informatik &amp; CyberDefense Lab" property="og:title"/>
+<meta content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="de_DE" property="og:locale"/>
+<meta content="https://example.de/" property="og:url"/>
+<meta content="https://example.de/assets/og/og-card.jpg" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Ramon Berghorn — Informatik &amp; CyberDefense Lab" name="twitter:title"/>
+<meta content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik." name="twitter:description"/>
+<meta content="https://example.de/assets/og/og-card.jpg" name="twitter:image"/>
+<meta content="no-referrer" name="referrer"/>
+<link href="/favicon.ico" rel="icon"/>
+<link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root{
+      /* Brutalist core */
+      --bg: #f6f4ef;
+      --ink: #111111;
+      --muted: #333333;
+      --line: #111111;
+
+      /* Accents */
+      --hi: #ff3b30;
+      --hi2:#0057ff;
+      --hi3:#00c853;
+      --paper:#fffdf8;
+
+      /* Layout */
+      --max: 1120px;
+      --pad: 18px;
+      --gap: 14px;
+      --bw: 2px;
+      --shadowInk: rgba(17,17,17,.95);
+      --shadow: 8px 8px 0 var(--shadowInk);
+      --shadow2: 6px 6px 0 var(--shadowInk);
+
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+
+    a{ color: inherit; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
+
+    .tab:focus-visible, .btn:focus-visible, .cmdBtn:focus-visible, .modalClose:focus-visible,
+    #navToggle:focus-visible, .chToggle:focus-visible, .posterToggle:focus-visible, .videoBtn:focus-visible{
+      outline: 3px solid var(--hi2);
+      outline-offset: 3px;
+    }
+
+    /* Top strip */
+    .strip{
+      background: var(--ink);
+      color: var(--paper);
+      border-bottom: var(--bw) solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+    }
+    .strip .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px var(--pad);
+    }
+    .strip b{ font-weight:700; }
+    .strip span{ opacity:.85; }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: var(--bg);
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 0;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-width: 260px;
+    }
+    .mark{
+      width:44px;height:44px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      letter-spacing:.02em;
+      user-select:none;
+      box-shadow: var(--shadow2);
+    }
+    .brandText b{
+      display:block;
+      font-weight:900;
+      letter-spacing:.01em;
+      font-size: 14px;
+    }
+    .brandText span{
+      display:block;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      margin-top:2px;
+    }
+
+    .menu{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .tab{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      text-decoration:none;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      white-space:nowrap;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+    }
+    .tab:hover{ transform: translate(-2px, -2px); }
+    .tab.active{
+      background: var(--hi);
+      color: var(--paper);
+    }
+
+    /* Mobile Nav Toggle */
+    #navToggle{ display:none; }
+    @media (max-width: 980px){
+      #navToggle{ display:inline-flex; }
+      .menu{
+        display:none;
+        width:100%;
+        justify-content:flex-start;
+        padding-bottom: 12px;
+      }
+      .menu.open{ display:flex; }
+    }
+
+    /* Hero */
+    .hero{
+      padding: 18px 0 12px;
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: var(--gap);
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .heroGrid{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+    }
+    .dot{
+      width:10px;height:10px;
+      background: var(--hi3);
+      border: var(--bw) solid var(--line);
+    }
+
+    /* Hero Video */
+    .videoFrame{
+      margin-top: 12px;
+      margin-bottom: 22px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      padding: 10px;
+    }
+    .videoHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      flex-wrap:wrap;
+    }
+
+    /* Brutalist video buttons */
+    .videoBtn{
+      border: var(--bw) solid var(--line);
+      padding: 4px 8px;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background: #fff;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .videoBtn:hover{ filter: brightness(1.02); }
+
+    .videoWrap{
+      position:relative;
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+      background:#000;
+    }
+    .videoWrap video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      background:#000;
+    }
+
+    /* Native controls: keep them usable + readable */
+    video::-webkit-media-controls-panel{
+      background: rgba(255,255,255,.95);
+    }
+
+    h1{
+      margin: 22px 0 10px;
+      font-size: clamp(28px, 3.2vw, 46px);
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight: 900;
+      text-transform:uppercase;
+    }
+
+    .lead{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+      max-width: 78ch;
+    }
+
+    /* Right: Poster */
+    .poster{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      height:100%;
+    }
+    .posterTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .posterBody{
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: #222;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,0,0,.06) 0,
+          rgba(0,0,0,.06) 1px,
+          transparent 1px,
+          transparent 24px
+        ),
+        #fff;
+      padding: 14px;
+      border: var(--bw) solid var(--line);
+      box-shadow: var(--shadow2);
+      min-height: 240px;
+      position:relative;
+      overflow:hidden;
+    }
+    .posterBody::after{
+      content:"";
+      position:absolute;
+      right:-14px;
+      top:-14px;
+      width:80px;height:80px;
+      background: var(--hi);
+      border: var(--bw) solid var(--line);
+      transform: rotate(15deg);
+      opacity:.9;
+    }
+    .posterBody b{ font-weight:700; }
+    .posterBody .cmd{ color: var(--hi2); font-weight:700; }
+    .posterBody .ok{ color: var(--hi3); font-weight:700; }
+    .posterBody .warn{ color: var(--hi); font-weight:700; }
+
+    /* Poster collapsibles */
+    .posterDetails{ border:0; margin:0 0 10px; padding:0; }
+    .posterDetails:last-child{ margin-bottom:0; }
+    .posterDetails summary{ list-style:none; cursor:pointer; user-select:none; }
+    .posterDetails summary::-webkit-details-marker{ display:none; }
+
+    .posterToggle{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size: 12px;
+      font-family: var(--mono);
+    }
+    .posterCaret{
+      width:10px;
+      height:10px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi2);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      flex-shrink:0;
+    }
+    .posterDetails[open] .posterCaret{ background: var(--hi3); }
+    .posterOut{
+      margin-top: 10px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      padding: 10px;
+      white-space:pre-wrap;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* Sections */
+    section{
+      padding: 16px 0;
+      border-bottom: var(--bw) solid var(--line);
+      scroll-margin-top: 92px;
+    }
+
+    /* Anchor inside hero (notice panel) */
+    #notice{ scroll-margin-top: 92px; }
+    .sectionHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .sectionHead h2{
+      margin:0;
+      font-size: 18px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
+    .sectionHead p{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      max-width: 72ch;
+    }
+
+    /* Brutalist cards */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+      :root{
+        --shadow: 6px 6px 0 var(--shadowInk);
+        --shadow2: 5px 5px 0 var(--shadowInk);
+      }
+    }
+
+    .card{
+      border: var(--bw) solid var(--line);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 180px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.035) 1px, transparent 1px) 0 0/ 16px 16px,
+        var(--paper);
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      left:-30px;
+      top:-30px;
+      width:58px;
+      height:58px;
+      background: #fff;
+      border: var(--bw) solid var(--line);
+      transform: rotate(-12deg);
+      opacity:.95;
+      z-index:0;
+      pointer-events:none;
+    }
+    .card > *{ position:relative; z-index:1; }
+
+    .labelRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .label{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      padding: 6px 8px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      white-space:nowrap;
+    }
+    .label.cyan{ background: #e8f6ff; }
+    .label.violet{ background: #f0eaff; }
+    .label.green{ background: #eafff1; }
+    .label.orange{ background: #fff0e6; }
+
+    .icon{
+      font-size: 18px;
+      border: var(--bw) solid var(--line);
+      width:34px;height:34px;
+      display:grid; place-items:center;
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      flex-shrink:0;
+    }
+
+    .card h3{
+      margin:0;
+      font-size: 15px;
+      font-weight:900;
+      letter-spacing:.01em;
+      text-transform:uppercase;
+    }
+    .card p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .card ul{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .actions{
+      margin-top:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding-top:10px;
+      border-top: var(--bw) dashed var(--line);
+    }
+
+    /* Gallery */
+    .galleryGrid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+    @media (max-width: 1100px){
+      .galleryGrid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px){
+      .galleryGrid{ grid-template-columns: 1fr; }
+    }
+    .gItem{
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      padding: 10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .gItem::before{
+      content:"";
+      position:absolute;
+      right:-18px;
+      top:-18px;
+      width:62px;height:62px;
+      background: var(--hi);
+      border: var(--bw) solid var(--line);
+      transform: rotate(12deg);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .gMedia{
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+      background: #fff;
+      aspect-ratio: 4 / 3;
+    }
+    .gMedia img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    .gCap{
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Changelog (ausklappbar) */
+    .chWrap{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow2);
+      padding: 12px;
+    }
+    .chWrap summary{ list-style:none; cursor:pointer; user-select:none; }
+    .chWrap summary::-webkit-details-marker{ display:none; }
+    .chToggle{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      text-decoration:none;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      box-shadow: 5px 5px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      white-space:nowrap;
+    }
+    .chWrap summary:hover .chToggle{ transform: translate(-2px,-2px); }
+    .chCaret{
+      width:10px;
+      height:10px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi2);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      display:inline-block;
+    }
+    .chWrap[open] .chCaret{ background: var(--hi3); }
+
+    .changelog{
+      border: var(--bw) solid var(--line);
+      background: #111;
+      color: #f5f5f5;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.75;
+      margin-top: 10px;
+    }
+    .chTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      padding-bottom:10px;
+      border-bottom: 1px dashed rgba(255,255,255,.25);
+    }
+    .pill{
+      border: 1px solid rgba(255,255,255,.35);
+      padding: 4px 8px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-weight:700;
+      font-size: 10px;
+      background: rgba(255,255,255,.08);
+      white-space:nowrap;
+    }
+    .log{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .entry{
+      border: 1px dashed rgba(255,255,255,.25);
+      padding: 10px;
+      background: rgba(255,255,255,.05);
+    }
+    .entry .date{ color: #7dd3fc; font-weight:700; }
+    .entry .tag{ color: #86efac; font-weight:700; text-transform:uppercase; letter-spacing:.10em; font-size: 10px; margin-left:8px; }
+
+    /* Footer */
+    footer{
+      padding: 18px 0 34px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .foot{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* Cookie */
+    .cc{
+      position:fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index:9999;
+      width: min(480px, calc(100vw - 36px));
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display:none;
+    }
+    .cc h4{
+      margin:0 0 8px;
+      font-size: 14px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
+    .cc p{
+      margin:0 0 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    /* Console Modal (falls du es später wieder nutzt) */
+    .modal{ position:fixed; inset:0; display:none; z-index:10000; }
+    .modal.open{ display:block; }
+    .modalBackdrop{ position:absolute; inset:0; background: rgba(0,0,0,.55); }
+    .modalDialog{
+      position:relative;
+      width: min(860px, calc(100vw - 36px));
+      margin: 8vh auto;
+      border: var(--bw) solid var(--line);
+      background: #111;
+      color: #f5f5f5;
+      box-shadow: var(--shadow);
+      font-family: var(--mono);
+    }
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border-bottom: 1px dashed rgba(255,255,255,.25);
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size: 12px;
+      background: rgba(255,255,255,.06);
+    }
+    .modalTop .title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .modalClose{
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      font-family: var(--mono);
+      padding: 6px 10px;
+      cursor:pointer;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-weight:700;
+      font-size: 11px;
+    }
+    .modalBody{
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.75;
+      max-height: 62vh;
+      overflow:auto;
+      white-space:pre-wrap;
+    }
+
+    html{ scroll-behavior:smooth; }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .tab, .btn, .chToggle{ transition: none; }
+      .tab:hover, .btn:hover, .chWrap summary:hover .chToggle{ transform: none; }
+    }
+  </style>
+</head>
+<body>
+<div aria-hidden="true" class="strip">
+<div class="wrap">
+<div><b>RB</b> / Informatik Sek I / CyberDefense Lab</div>
+<div><span>BUILD:</span> <b id="buildDate">2025-12-16</b></div>
+</div>
+</div>
+<header>
+<div class="wrap">
+<div class="nav">
+<div class="brand">
+<div aria-hidden="true" class="mark">RB</div>
+<div class="brandText">
+<b>Ramon Berghorn</b>
+<span>Informatik Sek I · CyberDefense Lab</span>
+</div>
+</div>
+<button aria-controls="mobileNav" aria-expanded="false" class="tab" id="navToggle" type="button">
+          Menu
+        </button>
+<nav aria-label="Hauptnavigation" class="menu" id="mobileNav">
+<a class="tab active" href="#home">Home</a>
+<a class="tab" href="#bereiche">Bereiche</a>
+<a class="tab" href="#notice">Notice</a>
+<a class="tab" href="#gallery">Gallery</a>
+<a class="tab" href="#changelog">Changelog</a>
+<a class="tab" href="#kontakt">Kontakt</a>
+</nav>
+</div>
+</div>
+</header>
+<main id="home">
+<section class="hero">
+<div class="wrap">
+<div class="heroGrid">
+<div class="panel">
+<div class="kicker" data-cms="hero_kicker">
+<span class="dot"></span>
+<span>Unterricht · Informatik · Praxis</span>
+</div>
+<div aria-label="Hero Video" class="videoFrame">
+<div class="videoHead">
+<div>Hero Video</div>
+<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+<button class="videoBtn" id="vidToggle" type="button">Pause</button>
+<button class="videoBtn" id="muteToggle" type="button">Unmute</button>
+</div>
+</div>
+<div class="videoWrap">
+<video autoplay="" controls="" id="heroVideo" loop="" muted="" playsinline="" poster="/assets/video/hero-poster.jpg" preload="metadata">
+<source src="/assets/video/hero.webm" type="video/webm"/>
+<source src="/assets/video/hero.mp4" type="video/mp4"/>
+                  Dein Browser unterstützt das Video-Tag nicht.
+                </video>
+</div>
+</div>
+<h1 data-cms="hero_title">Informatik für den Schulalltag.</h1>
+<p class="lead" data-cms="hero_text">
+              CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy –
+              Materialien, die im Unterricht und in Fortbildungen genutzt werden können.
+            </p>
+</div>
+
+<div class="panel" id="notice">
+<div class="poster">
+<div class="posterTop">
+<div data-cms="notice_title">Notice Board</div>
+</div>
+<div class="posterBody">
+<details class="posterDetails" open="">
+<summary>
+<span class="posterToggle">
+<span><span class="cmd">$</span> whoami</span>
+<span aria-hidden="true" class="posterCaret"></span>
+</span>
+</summary>
+<div class="posterOut" data-cms="notice_whoami"><b>Ramon Berghorn; Lehrer, Papa, Ultraläufer.</b></div>
+</details>
+<details class="posterDetails">
+<summary>
+<span class="posterToggle">
+<span><span class="cmd">$</span> cat about.txt</span>
+<span aria-hidden="true" class="posterCaret"></span>
+</span>
+</summary>
+<div class="posterOut" data-cms-list="notice_about">• <b>Lehrer</b> (Informatik · Englisch · Geschichte)
+• <b>Fachberatung</b> Informatik Sek I (seit 02/2022)
+• <b>Cybersecurity</b> / Ethical Hacking (legal, didaktisch)
+• <b>Region</b>: Niedersachsen (DE)</div>
+</details>
+<details class="posterDetails">
+<summary>
+<span class="posterToggle">
+<span><span class="cmd">$</span> cat scope.txt</span>
+<span aria-hidden="true" class="posterCaret"></span>
+</span>
+</summary>
+<div class="posterOut" data-cms-list="notice_focus">• <b>CyberDefense Lab</b> — legal, schul-tauglich
+• <b>Unterrichtsbeispiele</b> — sofort einsetzbar
+• <b>Lehrplan</b> — Jahrgänge + Kompetenzbezug
+• <b>Lernbuddy</b> — selbstgesteuertes Programmieren</div>
+</details>
+<details class="posterDetails">
+<summary>
+<span class="posterToggle">
+<span><span class="cmd">$</span> status</span>
+<span aria-hidden="true" class="posterCaret"></span>
+</span>
+</summary>
+<div class="posterOut" data-cms-list="notice_status"><span class="ok">OK</span> / iterativer Ausbau / Kernmodule stabil</div>
+</details>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+<!-- BEREICHE -->
+<section id="bereiche">
+<div class="wrap">
+<div class="sectionHead">
+<h2>Bereiche</h2>
+</div>
+<div class="grid">
+<article class="card">
+<div class="labelRow">
+<span class="label cyan">CyberDefense Lab</span>
+<span class="icon">🛡️</span>
+</div>
+<h3>Angriff &amp; Verteidigung im Unterricht</h3>
+<p>
+              Technische Umgebung für legale Angriffs- und Verteidigungsszenarien,
+              angelehnt an TryHackMe und auf Schulbetrieb angepasst.
+            </p>
+<div class="actions">
+<a class="btn blue" href="https://node-xejd.onrender.com/index.html" rel="noopener noreferrer" target="_blank">Zum Lab ↗</a>
+</div>
+</article>
+<article class="card">
+<div class="labelRow">
+<span class="label violet">Unterrichtsbeispiele</span>
+<span class="icon">💡</span>
+</div>
+<h3>Konkrete Stunden &amp; Reihen</h3>
+<p>Beispiele, die direkt im Unterricht funktionieren.</p>
+<ul>
+<li><b>Algorithmisches Problemlösen:</b> Mission Schulkiosk</li>
+<li><b>Von Wenn-Dann zur KI:</b> Einstieg in KI-Modelle</li>
+</ul>
+<div class="actions">
+<a class="btn" href="https://node-xejd.onrender.com/new.html" rel="noopener noreferrer" target="_blank">Beispiel 1 ↗</a>
+<span aria-disabled="true" class="btn" style="opacity:.6; cursor:not-allowed;" title="Platzhalter">
+                Beispiel 2 (bald)
+              </span>
+</div>
+</article>
+<article class="card">
+<div class="labelRow">
+<span class="label green">Lehrplan</span>
+<span class="icon">📘</span>
+</div>
+<h3>Schulinterner Lehrplan Informatik</h3>
+<p>
+              Vorschlag für einen schulinternen Lehrplan für das Pflichtfach Informatik Sek I
+              mit Jahrgangsstruktur und Kompetenzbezug.
+            </p>
+<div class="actions">
+<a class="btn green" href="https://node-xejd.onrender.com/lehrplan.html" rel="noopener noreferrer" target="_blank">Zum Lehrplan ↗</a>
+</div>
+</article>
+<article class="card">
+<div class="labelRow">
+<span class="label orange">Lernbuddy</span>
+<span class="icon">✨</span>
+</div>
+<h3>Begleitung beim Programmieren</h3>
+<p>
+              Digitales Arbeitsblatt für selbstgesteuertes Lernen beim Programmieren (z. B. Scratch):
+              Planung, Zwischenschritte und Reflexion.
+            </p>
+<div class="actions">
+<a class="btn" href="https://node-xejd.onrender.com/lernbuddy.html" rel="noopener noreferrer" target="_blank">Zum Lernbuddy ↗</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- GALLERY -->
+<section id="gallery">
+<div class="wrap">
+<div class="sectionHead">
+<h2>Gallery</h2>
+</div>
+<div class="galleryGrid">
+<div class="gItem">
+<div class="gMedia">
+<img alt="Gallery Bild 1 (Platzhalter)" src="/assets/img/img1.jpg"/>
+</div>
+<div class="gCap">assets/img/img1.jpg</div>
+</div>
+<div class="gItem">
+<div class="gMedia">
+<img alt="Gallery Bild 2 (Platzhalter)" src="/assets/img/img2.jpg"/>
+</div>
+<div class="gCap">assets/img/img2.jpg</div>
+</div>
+<div class="gItem">
+<div class="gMedia">
+<img alt="Gallery Bild 3 (Platzhalter)" src="/assets/img/img3.jpg"/>
+</div>
+<div class="gCap">assets/img/img3.jpg</div>
+</div>
+<div class="gItem">
+<div class="gMedia">
+<img alt="Gallery Bild 4 (Platzhalter)" src="/assets/img/img4.jpg"/>
+</div>
+<div class="gCap">assets/img/img4.jpg</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CHANGELOG -->
+<section id="changelog">
+<div class="wrap">
+<div class="sectionHead">
+<h2>Changelog</h2>
+</div>
+<details class="chWrap" open="">
+<summary>
+<span aria-label="Changelog ein- oder ausklappen" class="chToggle" role="button">
+<span aria-hidden="true" class="chCaret"></span>
+              Changelog anzeigen / verbergen
+            </span>
+</summary>
+<div aria-label="Änderungsprotokoll" class="changelog" role="region">
+<div class="chTop">
+<div>ramon@school-lab:~/cyberdefense-site$ <b>python</b> changelog.py</div>
+<span class="pill">tail(6)</span>
+</div>
+<div>&gt;&gt; from ramon_site import changelog</div>
+<div>&gt;&gt; changelog.tail(6)</div>
+<div class="log">
+<div class="entry">
+<span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
+<div>Layout für Smartphones und Tablets überarbeitet – Abschnitte neu strukturiert, bessere Lesbarkeit.</div>
+</div>
+<div class="entry">
+<span class="date">2025-12-06</span><span class="tag">lernbuddy</span>
+<div>Scratch-Preview mit Projekt-Embed, Editor-Link und lokalem Autosave (localStorage) ergänzt.</div>
+</div>
+<div class="entry">
+<span class="date">2025-12-05</span><span class="tag">lehrplan</span>
+<div>Schulinterner Lehrplan in Karten-/Timeline-Ansicht aufgebaut und optisch an die Landing Page angepasst.</div>
+</div>
+<div class="entry">
+<span class="date">2025-12-05</span><span class="tag">landing</span>
+<div>Startseite mit vier Hauptkacheln (CyberDefense Lab, Unterrichtsbeispiele, Lehrplan, Lernbuddy) neu gestaltet.</div>
+</div>
+<div class="entry">
+<span class="date">2025-12-05</span><span class="tag">unterricht</span>
+<div>Unterrichtsbeispiele-Kachel mit Dummy-Links für einzelne Beispiele vorbereitet.</div>
+</div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<!-- KONTAKT -->
+<section id="kontakt">
+<div class="wrap">
+<div class="sectionHead">
+<h2>Kontakt</h2>
+<p>Für schulinterne Fortbildungen oder Fachkonferenz: Schulform, Jg., Ausstattung, Ziel — kurz reicht.</p>
+</div>
+<div class="panel">
+<div style="font-family: var(--mono); font-size: 12px; line-height: 1.8;">
+<div><span style="opacity:.75;">E-Mail:</span></div>
+<div style="margin-top:6px;">
+<a class="tab" href="mailto:ramon.berghorn@hsklunkau.de" style="display:inline-block;">
+                ramon.berghorn@hsklunkau.de
+              </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="wrap">
+<div class="foot">
+<div>
+<b style="color:var(--ink);">Ramon Berghorn</b><br/>
+          Informatik Sek I · CyberDefense Lab<br/>
+          © <span id="year"></span> Ramon Berghorn
+        </div>
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+<a class="tab" href="https://node-xejd.onrender.com/impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
+<a class="tab" href="https://node-xejd.onrender.com/datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Minimaler Cookie-Hinweis -->
+<div class="cc" id="cc">
+<h4>Hinweis</h4>
+<p>Kein Tracking. Dieses Banner speichert nur lokal (localStorage), dass du es bestätigt hast.</p>
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+<button class="btn red" id="ccOk" type="button">OK</button>
+</div>
+</div>
+<!-- (Optional) Console Modal bleibt im Code, wird aktuell nicht genutzt -->
+<div aria-hidden="true" class="modal" id="consoleModal">
+<div class="modalBackdrop" data-close="1"></div>
+<div aria-labelledby="consoleTitle" aria-modal="true" class="modalDialog" role="dialog">
+<div class="modalTop">
+<div class="title" id="consoleTitle">console</div>
+<button class="modalClose" id="consoleClose" type="button">close</button>
+</div>
+<div class="modalBody" id="consoleBody"></div>
+</div>
+</div>
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // active tabs (IntersectionObserver)
+    (function(){
+      const menu = document.querySelector("#mobileNav");
+      if(!menu) return;
+      const links = Array.from(menu.querySelectorAll("a.tab"));
+      const targets = links.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+
+      const setActive = (id) => {
+        links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+      };
+
+      if(!("IntersectionObserver" in window) || targets.length === 0) return;
+
+      const io = new IntersectionObserver((entries) => {
+        const hit = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if(hit && hit.target && hit.target.id) setActive(hit.target.id);
+      }, { threshold: [0.2, 0.35, 0.5] });
+
+      targets.forEach(t => io.observe(t));
+    })();
+
+    // mobile nav toggle (+ ESC + click outside)
+    (function(){
+      const btn = document.getElementById("navToggle");
+      const nav = document.getElementById("mobileNav");
+      if(!btn || !nav) return;
+
+      const isMobile = () => window.matchMedia("(max-width: 980px)").matches;
+
+      const closeNav = () => {
+        nav.classList.remove("open");
+        btn.setAttribute("aria-expanded","false");
+      };
+
+      btn.addEventListener("click", () => {
+        const open = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      nav.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if(!a) return;
+        closeNav();
+      });
+
+      document.addEventListener("click", (e) => {
+        if(!isMobile()) return;
+        const open = nav.classList.contains("open");
+        if(!open) return;
+
+        const withinNav = nav.contains(e.target);
+        const withinBtn = btn.contains(e.target);
+        if(!withinNav && !withinBtn) closeNav();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if(!isMobile()) return;
+        if(e.key === "Escape" && nav.classList.contains("open")) closeNav();
+      });
+
+      window.addEventListener("resize", () => {
+        if(!isMobile()) closeNav();
+      });
+    })();
+
+    // cookie notice
+    (function(){
+      const cc = document.getElementById("cc");
+      const ok = document.getElementById("ccOk");
+      const KEY = "ramon_cookie_notice_ok";
+      if(cc && !localStorage.getItem(KEY)) cc.style.display = "block";
+      if(ok) ok.addEventListener("click", () => {
+        localStorage.setItem(KEY, "1");
+        if(cc) cc.style.display = "none";
+      });
+    })();
+
+    // Hero video: play/pause + mute/unmute
+    (function(){
+      const v = document.getElementById("heroVideo");
+      const btnPlay = document.getElementById("vidToggle");
+      const btnMute = document.getElementById("muteToggle");
+      if(!v) return;
+
+      const sync = () => {
+        if(btnMute) btnMute.textContent = v.muted ? "Unmute" : "Mute";
+        if(btnPlay) btnPlay.textContent = v.paused ? "Play" : "Pause";
+      };
+
+      const tryPlay = () => {
+        const p = v.play();
+        if(p && typeof p.catch === "function") p.catch(() => {});
+      };
+
+      if(btnPlay){
+        btnPlay.addEventListener("click", () => {
+          if(v.paused) tryPlay();
+          else v.pause();
+          sync();
+        });
+      }
+
+      if(btnMute){
+        btnMute.addEventListener("click", () => {
+          v.muted = !v.muted;
+          if(!v.muted && v.paused) tryPlay();
+          sync();
+        });
+      }
+
+      v.addEventListener("play", sync);
+      v.addEventListener("pause", sync);
+      v.addEventListener("volumechange", sync);
+
+      window.addEventListener("load", () => { tryPlay(); sync(); });
+      document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
+    })();
+  
+
+    // --- Netlify CMS content binding (assets/content/texts.json) ---
+    (async function(){
+      try{
+        const res = await fetch("/assets/content/texts.json", { cache: "no-store" });
+        if(!res.ok) return;
+        const data = await res.json();
+
+        // simple text bindings
+        document.querySelectorAll("[data-cms]").forEach(el=>{
+          const key = el.getAttribute("data-cms");
+          if(data[key] !== undefined && data[key] !== null && data[key] !== ""){
+            el.textContent = data[key];
+          }
+        });
+
+        // list bindings (render as bullet lines with •, matching existing poster style)
+        document.querySelectorAll("[data-cms-list]").forEach(el=>{
+          const key = el.getAttribute("data-cms-list");
+          const arr = data[key];
+          if(Array.isArray(arr) && arr.length){
+            // preserve the '•' line-break aesthetic used in the poster
+            el.innerHTML = "<b>•</b><br>" + arr.map(x=>String(x).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")).join("<br>");
+          }
+        });
+      }catch(e){
+        // ignore: site must still work without CMS content
+      }
+    })();
+</script>
+</body>
+</html>
