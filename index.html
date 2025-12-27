@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Ramon Berghorn — RB Shell</title>
   <meta name="description" content="Terminal-Landing für Schüler*innen, Kolleg*innen, Cybersecurity und Laufveranstaltungen."/>
+
   <style>
     :root{
       --bg: #f6f4ef;
@@ -44,7 +45,6 @@
     a{ color:inherit; }
     .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
 
-    /* Top strip */
     .strip{
       background: var(--ink);
       color: var(--paper);
@@ -63,7 +63,6 @@
     .strip b{ font-weight:800; }
     .strip span{ opacity:.85; }
 
-    /* Header */
     header{
       position:sticky;
       top:0;
@@ -110,6 +109,7 @@
       color: var(--muted);
       margin-top:2px;
     }
+
     .menu{
       display:flex;
       gap:10px;
@@ -135,9 +135,7 @@
       align-items:center;
     }
     .tab:hover{ transform: translate(-2px, -2px); }
-    .tab.active{ background: var(--hi); color: var(--paper); }
 
-    /* Layout */
     main{ padding: 18px 0 34px; }
     .grid{
       display:grid;
@@ -189,7 +187,58 @@
       max-width: 78ch;
     }
 
-    /* Terminal block */
+    /* Video frame (wie vorher, nur kompakter) */
+    .videoFrame{
+      margin-top: 12px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      padding: 10px;
+    }
+    .videoHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      flex-wrap:wrap;
+    }
+    .videoBtn{
+      border: var(--bw) solid var(--line);
+      padding: 4px 8px;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background: #fff;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .videoWrap{
+      position:relative;
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+      background:#000;
+    }
+    .videoWrap video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      background:#000;
+    }
+
+    /* Terminal */
     .termHead{
       display:flex;
       justify-content:space-between;
@@ -220,7 +269,7 @@
       box-shadow: 4px 4px 0 var(--shadowInk);
       overflow:hidden;
       background:#0b0b0b;
-      min-height: 340px;
+      min-height: 320px;
       display:flex;
       flex-direction:column;
     }
@@ -292,7 +341,6 @@
     .legend b{ font-weight:800; }
     .cmd{ color: var(--hi2); font-weight:800; }
     .ok{ color: var(--hi3); font-weight:800; }
-    .warn{ color: var(--hi); font-weight:800; }
 
     .quick{
       display:flex;
@@ -304,6 +352,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="strip" aria-hidden="true">
     <div class="wrap">
@@ -323,11 +372,12 @@
           </div>
         </div>
 
+        <!-- WICHTIG: root-relative Links -->
         <nav class="menu" aria-label="Quick Links">
-          <a class="tab" href="students/index.html">Students</a>
-          <a class="tab" href="colleagues/index.html">Colleagues</a>
-          <a class="tab" href="cyber/index.html">Cyber</a>
-          <a class="tab" href="events/index.html">Events</a>
+          <a class="tab" href="/students/index.html">Students</a>
+          <a class="tab" href="/colleagues/index.html">Colleagues</a>
+          <a class="tab" href="/cyber/index.html">Cyber</a>
+          <a class="tab" href="/events/index.html">Events</a>
         </nav>
       </div>
     </div>
@@ -336,15 +386,33 @@
   <main>
     <div class="wrap">
       <div class="grid">
-        <!-- Left: Terminal -->
+
+        <!-- Left: Video + Terminal -->
         <section class="panel" aria-label="RB Shell">
           <div class="kicker"><span class="dot"></span><span>interactive shell · navigation</span></div>
 
           <h1>RB Shell: /</h1>
           <p class="lead">
             Du kannst klicken oder mit <span class="cmd">cd</span> navigieren.
-            Für Unterricht und Fortbildung ist das bewusst als “Filesystem” organisiert.
           </p>
+
+          <!-- Video wieder drin -->
+          <div class="videoFrame" aria-label="Hero Video">
+            <div class="videoHead">
+              <div>Hero Video</div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <button class="videoBtn" id="vidToggle" type="button">Pause</button>
+                <button class="videoBtn" id="muteToggle" type="button">Unmute</button>
+              </div>
+            </div>
+            <div class="videoWrap">
+              <video autoplay controls id="heroVideo" loop muted playsinline poster="/assets/video/hero-poster.jpg" preload="metadata">
+                <source src="/assets/video/hero.webm" type="video/webm"/>
+                <source src="/assets/video/hero.mp4" type="video/mp4"/>
+                Dein Browser unterstützt das Video-Tag nicht.
+              </video>
+            </div>
+          </div>
 
           <div class="termHead">
             <div>school-lab terminal</div>
@@ -356,7 +424,6 @@
 
           <div class="termBox" role="region" aria-label="Terminal">
             <div class="termOut" id="shellOut"></div>
-
             <form class="termInRow" id="shellForm">
               <span class="prompt" id="promptText">ramon@school-lab:~$</span>
               <input class="termIn" id="shellIn" type="text" autocomplete="off" spellcheck="false"
@@ -391,18 +458,61 @@
             <div><span class="ok">OK</span> / Kein Tracking / Nur lokale UI</div>
 
             <div class="quick" aria-label="Quick Buttons">
-              <a class="tab" href="students/index.html">cd students</a>
-              <a class="tab" href="colleagues/index.html">cd colleagues</a>
-              <a class="tab" href="cyber/index.html">cd cyber</a>
-              <a class="tab" href="events/index.html">cd events</a>
+              <a class="tab" href="/students/index.html">cd students</a>
+              <a class="tab" href="/colleagues/index.html">cd colleagues</a>
+              <a class="tab" href="/cyber/index.html">cd cyber</a>
+              <a class="tab" href="/events/index.html">cd events</a>
             </div>
           </div>
         </aside>
+
       </div>
     </div>
   </main>
 
   <script>
+    // Video controls
+    (function(){
+      const v = document.getElementById("heroVideo");
+      const btnPlay = document.getElementById("vidToggle");
+      const btnMute = document.getElementById("muteToggle");
+      if(!v) return;
+
+      const sync = () => {
+        if(btnMute) btnMute.textContent = v.muted ? "Unmute" : "Mute";
+        if(btnPlay) btnPlay.textContent = v.paused ? "Play" : "Pause";
+      };
+
+      const tryPlay = () => {
+        const p = v.play();
+        if(p && typeof p.catch === "function") p.catch(() => {});
+      };
+
+      if(btnPlay){
+        btnPlay.addEventListener("click", () => {
+          if(v.paused) tryPlay();
+          else v.pause();
+          sync();
+        });
+      }
+
+      if(btnMute){
+        btnMute.addEventListener("click", () => {
+          v.muted = !v.muted;
+          if(!v.muted && v.paused) tryPlay();
+          sync();
+        });
+      }
+
+      v.addEventListener("play", sync);
+      v.addEventListener("pause", sync);
+      v.addEventListener("volumechange", sync);
+
+      window.addEventListener("load", () => { tryPlay(); sync(); });
+      document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
+    })();
+
+    // Terminal
     (() => {
       const out = document.getElementById("shellOut");
       const form = document.getElementById("shellForm");
@@ -413,15 +523,15 @@
 
       if (!out || !form || !input || !promptText) return;
 
+      // WICHTIG: root-relative Links (fix für students/students)
       const routes = {
-        students: "students/index.html",
-        colleagues: "colleagues/index.html",
-        cyber: "cyber/index.html",
-        events: "events/index.html"
+        students: "/students/index.html",
+        colleagues: "/colleagues/index.html",
+        cyber: "/cyber/index.html",
+        events: "/events/index.html"
       };
 
       const state = { cwd: "/" };
-
       const print = (s = "") => { out.textContent += s + "\n"; out.scrollTop = out.scrollHeight; };
       const hr = () => print("—".repeat(56));
 
