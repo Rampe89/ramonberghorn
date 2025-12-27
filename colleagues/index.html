@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>RB — Colleagues</title>
+  <meta name="description" content="Kolleg*innen-Bereich: Material + didaktische Kommentare."/>
+  <style>
+    :root{
+      --bg:#f6f4ef; --ink:#111; --muted:#333; --line:#111;
+      --hi:#ff3b30; --hi2:#0057ff; --hi3:#00c853; --paper:#fffdf8;
+      --max:1120px; --pad:18px; --gap:14px; --bw:2px;
+      --shadowInk:rgba(17,17,17,.95);
+      --shadow:8px 8px 0 var(--shadowInk);
+      --shadow2:6px 6px 0 var(--shadowInk);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--sans); color:var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:0 var(--pad); }
+    a{ color:inherit; }
+    header{ position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:var(--bw) solid var(--line); }
+    .nav{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; flex-wrap:wrap; }
+    .brand{ display:flex; gap:12px; align-items:flex-start; min-width:260px; }
+    .mark{ width:44px; height:44px; border:var(--bw) solid var(--line); background:var(--paper);
+      display:grid; place-items:center; font-weight:900; box-shadow:var(--shadow2); }
+    .brandText b{ display:block; font-weight:900; text-transform:uppercase; font-size:14px; }
+    .brandText span{ display:block; font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:2px; }
+    .menu{ display:flex; gap:10px; flex-wrap:wrap; }
+    .tab{
+      font-family:var(--mono); font-size:12px; padding:8px 10px;
+      border:var(--bw) solid var(--line); background:var(--paper);
+      text-decoration:none; box-shadow:4px 4px 0 rgba(17,17,17,.95);
+      text-transform:uppercase; letter-spacing:.06em;
+      transition:transform .12s ease;
+    }
+    .tab:hover{ transform:translate(-2px,-2px); }
+    .tab.active{ background:var(--hi); color:var(--paper); }
+    main{ padding:18px 0 34px; }
+    .panel{ border:var(--bw) solid var(--line); background:var(--paper); box-shadow:var(--shadow); padding:16px; }
+    h1{ margin:0 0 10px; font-size: clamp(22px, 3vw, 40px); font-weight:900; text-transform:uppercase; }
+    .lead{ margin:0; color:var(--muted); line-height:1.75; font-size:14px; max-width:80ch; }
+
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:var(--gap); margin-top:14px; }
+    @media (max-width: 980px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      border:var(--bw) solid var(--line); background:var(--paper);
+      box-shadow:var(--shadow2); padding:14px;
+      display:flex; flex-direction:column; gap:10px;
+      background: linear-gradient(0deg, rgba(0,0,0,.035) 1px, transparent 1px) 0 0/ 16px 16px, var(--paper);
+    }
+    .label{ font-family:var(--mono); font-size:11px; letter-spacing:.10em; text-transform:uppercase;
+      padding:6px 8px; border:var(--bw) solid var(--line); background:#fff; box-shadow:3px 3px 0 rgba(17,17,17,.95); }
+
+    details{
+      border:var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow:4px 4px 0 rgba(17,17,17,.95);
+      padding:10px;
+    }
+    summary{
+      cursor:pointer;
+      font-family:var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:12px;
+      user-select:none;
+    }
+    .notes{
+      margin-top:10px;
+      font-size:13px;
+      line-height:1.75;
+      color:var(--muted);
+    }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; padding-top:10px; border-top:var(--bw) dashed var(--line); margin-top:10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">RB</div>
+          <div class="brandText">
+            <b>Colleagues</b>
+            <span>RB Shell: /colleagues</span>
+          </div>
+        </div>
+        <nav class="menu" aria-label="Navigation">
+          <a class="tab" href="../index.html">root</a>
+          <a class="tab" href="../students/index.html">students</a>
+          <a class="tab active" href="index.html">colleagues</a>
+          <a class="tab" href="../cyber/index.html">cyber</a>
+          <a class="tab" href="../events/index.html">events</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="panel">
+        <h1>Für Kolleg*innen</h1>
+        <p class="lead">
+          Gleiche Materialien wie im Schüler*innen-Bereich – plus didaktische Hinweise, Stolperstellen und Varianten.
+        </p>
+
+        <div class="grid">
+          <article class="card">
+            <div class="label">Lehrplan + Meta</div>
+            <div><b>Schulinterner Lehrplan Informatik</b></div>
+
+            <div class="actions">
+              <a class="tab" href="https://node-xejd.onrender.com/lehrplan.html" target="_blank" rel="noopener noreferrer">Öffnen ↗</a>
+            </div>
+
+            <details>
+              <summary>Didaktische Notizen</summary>
+              <div class="notes">
+                <ul>
+                  <li>Kompetenzbezug klar benennen (Sek I: Problemlösen, Daten, Systeme, Informatik & Gesellschaft).</li>
+                  <li>Stufen: “kennen → anwenden → übertragen”.</li>
+                  <li>Differenzierung: Wahlaufgaben, Hilfekarten, Debug-Checkliste.</li>
+                </ul>
+              </div>
+            </details>
+          </article>
+
+          <article class="card">
+            <div class="label">Unterricht + Kommentar</div>
+            <div><b>Unterrichtsbeispiele</b></div>
+
+            <div class="actions">
+              <a class="tab" href="https://node-xejd.onrender.com/new.html" target="_blank" rel="noopener noreferrer">Beispiel 1 ↗</a>
+              <span class="tab" style="opacity:.6; cursor:not-allowed;" aria-disabled="true">Beispiel 2 (bald)</span>
+            </div>
+
+            <details>
+              <summary>Hinweise (Ausstattung, Ablauf, typische Fehler)</summary>
+              <div class="notes">
+                <ul>
+                  <li>Ausstattung: Tablets/PC, optional Beamer; Ablauf in 10-Minuten-Blöcken.</li>
+                  <li>Typische Fehler: zu große Aufgaben-Sprünge, fehlendes Zwischen-Testing.</li>
+                  <li>Bewertung: Prozess (Planung/Reflexion) stärker gewichten als “fertiges Ergebnis”.</li>
+                </ul>
+              </div>
+            </details>
+          </article>
+
+          <article class="card">
+            <div class="label">Fortbildung</div>
+            <div><b>Cyber im Unterricht (Kurzformat)</b></div>
+            <div class="lead">Ein Einstieg für schulinterne Fortbildungen: Scope, Recht, typische Szenarien.</div>
+
+            <details open>
+              <summary>Mini-Agenda (60 min)</summary>
+              <div class="notes">
+                <ol>
+                  <li>Warum Cyber in Sek I?</li>
+                  <li>Legal/Scope: was geht, was nicht?</li>
+                  <li>Passwörter, Phishing, Basics (Demo)</li>
+                  <li>Schulumgebung / Datenschutz / Tools</li>
+                </ol>
+              </div>
+            </details>
+          </article>
+
+          <article class="card">
+            <div class="label">Kontakt</div>
+            <div><b>Fachkonferenz / Schulinterne Abstimmung</b></div>
+            <div class="lead">Schulform, Jg., Ausstattung, Ziel — kurz reicht.</div>
+            <div class="actions">
+              <a class="tab" href="mailto:ramon.berghorn@hsklunkau.de">Mail</a>
+              <a class="tab" href="../index.html">Back to root</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
