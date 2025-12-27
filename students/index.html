@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ramon Berghorn — RB Shell</title>
+  <meta name="description" content="Terminal-Landing für Schüler*innen, Kolleg*innen, Cybersecurity und Laufveranstaltungen."/>
+  <style>
+    :root{
+      --bg: #f6f4ef;
+      --ink: #111111;
+      --muted: #333333;
+      --line: #111111;
+
+      --hi: #ff3b30;
+      --hi2:#0057ff;
+      --hi3:#00c853;
+      --paper:#fffdf8;
+
+      --max: 1120px;
+      --pad: 18px;
+      --gap: 14px;
+      --bw: 2px;
+
+      --shadowInk: rgba(17,17,17,.95);
+      --shadow: 8px 8px 0 var(--shadowInk);
+      --shadow2: 6px 6px 0 var(--shadowInk);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+    a{ color:inherit; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
+
+    /* Top strip */
+    .strip{
+      background: var(--ink);
+      color: var(--paper);
+      border-bottom: var(--bw) solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+    }
+    .strip .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px var(--pad);
+    }
+    .strip b{ font-weight:800; }
+    .strip span{ opacity:.85; }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: var(--bg);
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 0;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-width: 260px;
+    }
+    .mark{
+      width:44px;height:44px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      letter-spacing:.02em;
+      user-select:none;
+      box-shadow: var(--shadow2);
+    }
+    .brandText b{
+      display:block;
+      font-weight:900;
+      letter-spacing:.01em;
+      font-size: 14px;
+      text-transform:uppercase;
+    }
+    .brandText span{
+      display:block;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      margin-top:2px;
+    }
+    .menu{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    .tab{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      text-decoration:none;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      white-space:nowrap;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+    }
+    .tab:hover{ transform: translate(-2px, -2px); }
+    .tab.active{ background: var(--hi); color: var(--paper); }
+
+    /* Layout */
+    main{ padding: 18px 0 34px; }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: var(--gap);
+      align-items:stretch;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns:1fr; } }
+
+    .panel{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+    }
+    .dot{
+      width:10px;height:10px;
+      background: var(--hi3);
+      border: var(--bw) solid var(--line);
+    }
+
+    h1{
+      margin: 18px 0 8px;
+      font-size: clamp(26px, 3.2vw, 44px);
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight: 900;
+      text-transform:uppercase;
+    }
+    .lead{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+      max-width: 78ch;
+    }
+
+    /* Terminal block */
+    .termHead{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top: 14px;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .termBtn{
+      border: var(--bw) solid var(--line);
+      padding: 4px 8px;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background: #fff;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .termBox{
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+      background:#0b0b0b;
+      min-height: 340px;
+      display:flex;
+      flex-direction:column;
+    }
+    .termOut{
+      padding: 12px;
+      color:#f5f5f5;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.75;
+      white-space:pre-wrap;
+      flex:1;
+      overflow:auto;
+    }
+    .termInRow{
+      display:flex;
+      gap:8px;
+      padding:12px;
+      border-top: var(--bw) solid #111;
+      background:#111;
+      align-items:center;
+    }
+    .prompt{
+      color:#86efac;
+      font-family: var(--mono);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .termIn{
+      flex:1;
+      border: var(--bw) solid #111;
+      background:#fff;
+      font-family: var(--mono);
+      font-size:12px;
+      padding:6px 8px;
+    }
+
+    /* Legend */
+    .legend{
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: #222;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,0,0,.06) 0,
+          rgba(0,0,0,.06) 1px,
+          transparent 1px,
+          transparent 24px
+        ),
+        #fff;
+      padding: 14px;
+      border: var(--bw) solid var(--line);
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .legend::after{
+      content:"";
+      position:absolute;
+      right:-14px;
+      top:-14px;
+      width:80px;height:80px;
+      background: var(--hi);
+      border: var(--bw) solid var(--line);
+      transform: rotate(15deg);
+      opacity:.9;
+    }
+    .legend b{ font-weight:800; }
+    .cmd{ color: var(--hi2); font-weight:800; }
+    .ok{ color: var(--hi3); font-weight:800; }
+    .warn{ color: var(--hi); font-weight:800; }
+
+    .quick{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+      padding-top:10px;
+      border-top: var(--bw) dashed var(--line);
+    }
+  </style>
+</head>
+<body>
+  <div class="strip" aria-hidden="true">
+    <div class="wrap">
+      <div><b>RB</b> / SHELL / Informatik Sek I / CyberDefense Lab</div>
+      <div><span>BUILD:</span> <b id="buildDate">2025-12-27</b></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">RB</div>
+          <div class="brandText">
+            <b>Ramon Berghorn</b>
+            <span>Informatik Sek I · CyberDefense Lab</span>
+          </div>
+        </div>
+
+        <nav class="menu" aria-label="Quick Links">
+          <a class="tab" href="students/index.html">Students</a>
+          <a class="tab" href="colleagues/index.html">Colleagues</a>
+          <a class="tab" href="cyber/index.html">Cyber</a>
+          <a class="tab" href="events/index.html">Events</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="grid">
+        <!-- Left: Terminal -->
+        <section class="panel" aria-label="RB Shell">
+          <div class="kicker"><span class="dot"></span><span>interactive shell · navigation</span></div>
+
+          <h1>RB Shell: /</h1>
+          <p class="lead">
+            Du kannst klicken oder mit <span class="cmd">cd</span> navigieren.
+            Für Unterricht und Fortbildung ist das bewusst als “Filesystem” organisiert.
+          </p>
+
+          <div class="termHead">
+            <div>school-lab terminal</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="termBtn" id="shClear" type="button">clear</button>
+              <button class="termBtn" id="shHelp" type="button">help</button>
+            </div>
+          </div>
+
+          <div class="termBox" role="region" aria-label="Terminal">
+            <div class="termOut" id="shellOut"></div>
+
+            <form class="termInRow" id="shellForm">
+              <span class="prompt" id="promptText">ramon@school-lab:~$</span>
+              <input class="termIn" id="shellIn" type="text" autocomplete="off" spellcheck="false"
+                placeholder="try: ls · cd students · help" aria-label="Terminal Eingabe"/>
+            </form>
+          </div>
+        </section>
+
+        <!-- Right: Legend -->
+        <aside class="panel" aria-label="Command Legend">
+          <div class="kicker"><span class="dot"></span><span>legend · commands</span></div>
+
+          <div class="legend" style="margin-top:14px;">
+            <div><b>Directories</b></div>
+            <div><span class="cmd">$</span> ls</div>
+            <div>students/ · colleagues/ · cyber/ · events/</div>
+
+            <br/>
+            <div><b>Navigate</b></div>
+            <div><span class="cmd">$</span> cd students</div>
+            <div><span class="cmd">$</span> cd colleagues</div>
+            <div><span class="cmd">$</span> cd cyber</div>
+            <div><span class="cmd">$</span> cd events</div>
+
+            <br/>
+            <div><b>Info</b></div>
+            <div><span class="cmd">$</span> cat README</div>
+            <div><span class="cmd">$</span> whoami</div>
+            <div><span class="cmd">$</span> pwd</div>
+
+            <br/>
+            <div><span class="ok">OK</span> / Kein Tracking / Nur lokale UI</div>
+
+            <div class="quick" aria-label="Quick Buttons">
+              <a class="tab" href="students/index.html">cd students</a>
+              <a class="tab" href="colleagues/index.html">cd colleagues</a>
+              <a class="tab" href="cyber/index.html">cd cyber</a>
+              <a class="tab" href="events/index.html">cd events</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const out = document.getElementById("shellOut");
+      const form = document.getElementById("shellForm");
+      const input = document.getElementById("shellIn");
+      const btnClear = document.getElementById("shClear");
+      const btnHelp = document.getElementById("shHelp");
+      const promptText = document.getElementById("promptText");
+
+      if (!out || !form || !input || !promptText) return;
+
+      const routes = {
+        students: "students/index.html",
+        colleagues: "colleagues/index.html",
+        cyber: "cyber/index.html",
+        events: "events/index.html"
+      };
+
+      const state = { cwd: "/" };
+
+      const print = (s = "") => { out.textContent += s + "\n"; out.scrollTop = out.scrollHeight; };
+      const hr = () => print("—".repeat(56));
+
+      const setPrompt = () => {
+        const where = state.cwd === "/" ? "~" : state.cwd;
+        promptText.textContent = `ramon@school-lab:${where}$`;
+      };
+
+      const motd = () => {
+        print("RB Shell v0.1  |  type 'help'  |  click shortcuts available");
+        print("No tracking. Local UI only.");
+        hr();
+        print("Available directories:");
+        print("  students/    colleagues/    cyber/    events/");
+        print("");
+        print("Examples:");
+        print("  ls");
+        print("  cd students");
+        print("  cat README");
+        print("");
+      };
+
+      const help = () => {
+        hr();
+        print("Commands:");
+        print("  ls                 list directories");
+        print("  cd <dir>           open section (students|colleagues|cyber|events)");
+        print("  pwd                print current directory");
+        print("  whoami             print identity");
+        print("  cat README         show overview");
+        print("  clear              clear output");
+        print("  help               show this help");
+        hr();
+      };
+
+      const catReadme = () => {
+        print("README");
+        print("  students   → Lehrplan + Unterrichtsbeispiele (Arbeitsansicht)");
+        print("  colleagues → wie students + didaktische Notizen (Meta, FK)");
+        print("  cyber      → CyberDefense Lab + Writeups + Videos");
+        print("  events     → Lafferde Loop Challenge");
+      };
+
+      const run = (raw) => {
+        const cmdline = String(raw || "").trim();
+        if (!cmdline) return;
+
+        print(`ramon@school-lab:${state.cwd === "/" ? "~" : state.cwd}$ ${cmdline}`);
+
+        const [cmd, ...rest] = cmdline.split(/\s+/);
+        const arg = rest.join(" ").trim();
+
+        switch ((cmd || "").toLowerCase()) {
+          case "ls":
+            print("students/  colleagues/  cyber/  events/");
+            break;
+
+          case "pwd":
+            print(state.cwd);
+            break;
+
+          case "whoami":
+            print("Ramon Berghorn — Informatik Sek I · CyberDefense Lab");
+            break;
+
+          case "cat": {
+            const t = (arg || "").toLowerCase();
+            if (t === "readme" || t === "readme.txt") catReadme();
+            else print("cat: file not found (try: cat README)");
+            break;
+          }
+
+          case "cd": {
+            const target = (arg || "").replace("/", "").toLowerCase();
+            if (!target) { print("cd: missing operand (try: cd students)"); break; }
+            if (target === ".." || target === "/") { state.cwd = "/"; setPrompt(); print("ok"); break; }
+            if (!routes[target]) { print(`cd: no such directory: ${target}`); break; }
+            print("loading…");
+            window.location.href = routes[target];
+            break;
+          }
+
+          case "clear":
+            out.textContent = "";
+            break;
+
+          case "help":
+            help();
+            break;
+
+          default:
+            print(`command not found: ${cmd} (try: help)`);
+        }
+      };
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        run(input.value);
+        input.value = "";
+        input.focus();
+      });
+
+      btnClear?.addEventListener("click", () => { out.textContent = ""; input.focus(); });
+      btnHelp?.addEventListener("click", () => { help(); input.focus(); });
+
+      motd();
+      setPrompt();
+      input.focus();
+    })();
+  </script>
+</body>
+</html>
