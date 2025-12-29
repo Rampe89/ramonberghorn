@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Ramon Berghorn — RB Shell</title>
-  <meta name="description" content="Terminal-Landing für Schüler*innen, Kolleg*innen, Cybersecurity und Laufveranstaltungen."/>
+  <title>Ramon Berghorn — Informatik & CyberDefense Lab</title>
+  <meta name="description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik."/>
 
   <style>
     :root{
-      --bg: #f6f4ef;
-      --ink: #111111;
-      --muted: #333333;
-      --line: #111111;
+      --bg:#f6f4ef;
+      --paper:#fffdf8;
+      --ink:#111;
+      --muted:#2f2f2f;
+      --line:#111;
 
-      --hi: #ff3b30;
+      --hi:#ff3b30;
       --hi2:#0057ff;
       --hi3:#00c853;
-      --paper:#fffdf8;
 
       --max: 1120px;
       --pad: 18px;
@@ -24,19 +24,27 @@
       --bw: 2px;
 
       --shadowInk: rgba(17,17,17,.95);
-      --shadow: 8px 8px 0 var(--shadowInk);
+      --shadow: 10px 10px 0 var(--shadowInk);
       --shadow2: 6px 6px 0 var(--shadowInk);
 
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
       --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --termBg:#070707;
+      --termPanel:#0f0f0f;
+      --termText:#e9e9e9;
+      --termAccent:#7dd3fc;
+      --termOk:#86efac;
+      --termWarn:#ff7a70;
+      --termGlow: rgba(134,239,172,.18);
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
-      font-family: var(--sans);
-      color: var(--ink);
+      font-family:var(--sans);
+      color:var(--ink);
       background:
         linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
         linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
@@ -45,6 +53,7 @@
     a{ color:inherit; }
     .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
 
+    /* Top strip */
     .strip{
       background: var(--ink);
       color: var(--paper);
@@ -63,11 +72,13 @@
     .strip b{ font-weight:800; }
     .strip span{ opacity:.85; }
 
+    /* Header */
     header{
       position:sticky;
       top:0;
       z-index:50;
-      background: var(--bg);
+      background: rgba(246,244,239,.92);
+      backdrop-filter: blur(6px);
       border-bottom: var(--bw) solid var(--line);
     }
     .nav{
@@ -91,7 +102,6 @@
       display:grid;
       place-items:center;
       font-weight:900;
-      letter-spacing:.02em;
       user-select:none;
       box-shadow: var(--shadow2);
     }
@@ -109,7 +119,6 @@
       color: var(--muted);
       margin-top:2px;
     }
-
     .menu{
       display:flex;
       gap:10px;
@@ -117,7 +126,6 @@
       justify-content:flex-end;
       align-items:center;
     }
-
     .tab{
       font-family: var(--mono);
       font-size: 12px;
@@ -133,25 +141,28 @@
       cursor:pointer;
       display:inline-flex;
       align-items:center;
+      gap:8px;
     }
     .tab:hover{ transform: translate(-2px, -2px); }
 
     main{ padding: 18px 0 34px; }
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: var(--gap);
-      align-items:stretch;
-    }
-    @media (max-width: 980px){ .grid{ grid-template-columns:1fr; } }
 
+    /* Single column hero block */
     .panel{
       border: var(--bw) solid var(--line);
       background: var(--paper);
       box-shadow: var(--shadow);
-      padding: 16px;
+      padding: 14px;
     }
 
+    .heroTop{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
     .kicker{
       display:inline-flex;
       gap:10px;
@@ -170,26 +181,17 @@
       background: var(--hi3);
       border: var(--bw) solid var(--line);
     }
-
     h1{
-      margin: 18px 0 8px;
-      font-size: clamp(26px, 3.2vw, 44px);
-      line-height:1.02;
-      letter-spacing:-0.02em;
+      margin: 6px 0 0;
+      font-size: clamp(30px, 3.6vw, 54px);
+      line-height:1.0;
+      letter-spacing:-0.03em;
       font-weight: 900;
       text-transform:uppercase;
     }
-    .lead{
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: 14px;
-      max-width: 78ch;
-    }
 
-    /* Video frame (wie vorher, nur kompakter) */
+    /* Big video */
     .videoFrame{
-      margin-top: 12px;
       border: var(--bw) solid var(--line);
       background:#fff;
       box-shadow: var(--shadow2);
@@ -238,117 +240,121 @@
       background:#000;
     }
 
-    /* Terminal */
-    .termHead{
+    /* Console */
+    .consolePanel{
+      margin-top: 14px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      padding: 10px;
+    }
+    .termTop{
       display:flex;
       justify-content:space-between;
-      gap:10px;
       align-items:center;
+      gap:10px;
       flex-wrap:wrap;
-      margin-top: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-family: var(--mono);
       font-size: 12px;
       text-transform:uppercase;
       letter-spacing:.08em;
     }
-    .termBtn{
+    .miniHelp{
+      font-family: var(--mono);
+      font-size: 12px;
       border: var(--bw) solid var(--line);
-      padding: 4px 8px;
+      background:#fff;
       box-shadow: 3px 3px 0 var(--shadowInk);
-      background: #fff;
-      font-family: var(--mono);
-      font-size: 12px;
+      padding: 6px 8px;
+      white-space:nowrap;
+      cursor:pointer;
       text-transform:uppercase;
       letter-spacing:.08em;
-      cursor:pointer;
-      white-space:nowrap;
     }
+
     .termBox{
       border: var(--bw) solid var(--line);
       box-shadow: 4px 4px 0 var(--shadowInk);
+      background: var(--termBg);
       overflow:hidden;
-      background:#0b0b0b;
-      min-height: 320px;
       display:flex;
       flex-direction:column;
+      min-height: 280px;
+      position:relative;
+    }
+    /* subtle CRT */
+    .termBox::before{
+      content:"";
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,.05) 0px,
+        rgba(255,255,255,.05) 1px,
+        rgba(0,0,0,0) 3px,
+        rgba(0,0,0,0) 7px
+      );
+      opacity:.18;
+      pointer-events:none;
+      mix-blend-mode: soft-light;
+    }
+    .termBox::after{
+      content:"";
+      position:absolute; inset:-40px;
+      background: radial-gradient(closest-side, rgba(134,239,172,.10), transparent 62%);
+      opacity:.55;
+      pointer-events:none;
     }
     .termOut{
       padding: 12px;
-      color:#f5f5f5;
+      color: var(--termText);
       font-family: var(--mono);
       font-size: 12px;
-      line-height: 1.75;
+      line-height: 1.7;
       white-space:pre-wrap;
       flex:1;
       overflow:auto;
+      position:relative;
+      text-shadow: 0 0 14px var(--termGlow);
+    }
+    .termOut .accent{ color: var(--termAccent); font-weight:700; }
+    .termOut .ok{ color: var(--termOk); font-weight:800; }
+    .termOut .warn{ color: var(--termWarn); font-weight:800; }
+    .termOut .pix{
+      display:block;
+      font-size: 10px;
+      line-height: 1.2;
+      letter-spacing: .03em;
+      color:#c7ffdf;
+      opacity:.95;
+      margin: 0 0 8px;
     }
     .termInRow{
       display:flex;
       gap:8px;
-      padding:12px;
-      border-top: var(--bw) solid #111;
-      background:#111;
+      padding: 12px;
+      border-top: 2px solid #111;
+      background: var(--termPanel);
       align-items:center;
     }
     .prompt{
-      color:#86efac;
+      color: var(--termOk);
       font-family: var(--mono);
-      font-size:12px;
+      font-size: 12px;
       white-space:nowrap;
     }
     .termIn{
       flex:1;
-      border: var(--bw) solid #111;
+      border: 2px solid #111;
       background:#fff;
       font-family: var(--mono);
-      font-size:12px;
-      padding:6px 8px;
-    }
-
-    /* Legend */
-    .legend{
-      font-family: var(--mono);
       font-size: 12px;
-      line-height: 1.8;
-      color: #222;
-      background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(0,0,0,.06) 0,
-          rgba(0,0,0,.06) 1px,
-          transparent 1px,
-          transparent 24px
-        ),
-        #fff;
-      padding: 14px;
-      border: var(--bw) solid var(--line);
-      box-shadow: var(--shadow2);
-      position:relative;
-      overflow:hidden;
+      padding: 6px 8px;
     }
-    .legend::after{
-      content:"";
-      position:absolute;
-      right:-14px;
-      top:-14px;
-      width:80px;height:80px;
-      background: var(--hi);
-      border: var(--bw) solid var(--line);
-      transform: rotate(15deg);
-      opacity:.9;
-    }
-    .legend b{ font-weight:800; }
-    .cmd{ color: var(--hi2); font-weight:800; }
-    .ok{ color: var(--hi3); font-weight:800; }
 
-    .quick{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-      padding-top:10px;
-      border-top: var(--bw) dashed var(--line);
+    @media (prefers-reduced-motion: reduce){
+      .tab{ transition:none; }
+      .tab:hover{ transform:none; }
     }
   </style>
 </head>
@@ -356,8 +362,8 @@
 <body>
   <div class="strip" aria-hidden="true">
     <div class="wrap">
-      <div><b>RB</b> / SHELL / Informatik Sek I / CyberDefense Lab</div>
-      <div><span>BUILD:</span> <b id="buildDate">2025-12-27</b></div>
+      <div><b>RB</b> / Informatik Sek I / CyberDefense Lab</div>
+      <div><span>BUILD:</span> <b>2025-12-29</b></div>
     </div>
   </div>
 
@@ -372,8 +378,7 @@
           </div>
         </div>
 
-        <!-- WICHTIG: root-relative Links -->
-        <nav class="menu" aria-label="Quick Links">
+        <nav class="menu" aria-label="Hauptnavigation">
           <a class="tab" href="/students/index.html">Students</a>
           <a class="tab" href="/colleagues/index.html">Colleagues</a>
           <a class="tab" href="/cyber/index.html">Cyber</a>
@@ -385,41 +390,36 @@
 
   <main>
     <div class="wrap">
-      <div class="grid">
 
-        <!-- Left: Video + Terminal -->
-        <section class="panel" aria-label="RB Shell">
-          <div class="kicker"><span class="dot"></span><span>interactive shell · navigation</span></div>
+      <section class="panel" aria-label="Landing">
+        <div class="heroTop">
+          <div class="kicker"><span class="dot"></span><span>unterricht · informatik · praxis</span></div>
+          <h1>Informatik, die wirkt.</h1>
+        </div>
 
-          <h1>RB Shell: /</h1>
-          <p class="lead">
-            Du kannst klicken oder mit <span class="cmd">cd</span> navigieren.
-          </p>
-
-          <!-- Video wieder drin -->
-          <div class="videoFrame" aria-label="Hero Video">
-            <div class="videoHead">
-              <div>Hero Video</div>
-              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                <button class="videoBtn" id="vidToggle" type="button">Pause</button>
-                <button class="videoBtn" id="muteToggle" type="button">Unmute</button>
-              </div>
-            </div>
-            <div class="videoWrap">
-              <video autoplay controls id="heroVideo" loop muted playsinline poster="/assets/video/hero-poster.jpg" preload="metadata">
-                <source src="/assets/video/hero.webm" type="video/webm"/>
-                <source src="/assets/video/hero.mp4" type="video/mp4"/>
-                Dein Browser unterstützt das Video-Tag nicht.
-              </video>
+        <!-- BIG HERO VIDEO (full width) -->
+        <div class="videoFrame" aria-label="Hero Video">
+          <div class="videoHead">
+            <div>Hero Video</div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button class="videoBtn" id="vidToggle" type="button">Pause</button>
+              <button class="videoBtn" id="muteToggle" type="button">Unmute</button>
             </div>
           </div>
+          <div class="videoWrap">
+            <video autoplay controls id="heroVideo" loop muted playsinline poster="/assets/video/hero-poster.jpg" preload="metadata">
+              <source src="/assets/video/hero.webm" type="video/webm"/>
+              <source src="/assets/video/hero.mp4" type="video/mp4"/>
+              Dein Browser unterstützt das Video-Tag nicht.
+            </video>
+          </div>
+        </div>
 
-          <div class="termHead">
-            <div>school-lab terminal</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="termBtn" id="shClear" type="button">clear</button>
-              <button class="termBtn" id="shHelp" type="button">help</button>
-            </div>
+        <!-- CONSOLE below video (full width) -->
+        <div class="consolePanel" aria-label="Console">
+          <div class="termTop">
+            <div>console</div>
+            <button class="miniHelp" id="miniHelp" type="button">$ help</button>
           </div>
 
           <div class="termBox" role="region" aria-label="Terminal">
@@ -427,46 +427,12 @@
             <form class="termInRow" id="shellForm">
               <span class="prompt" id="promptText">ramon@school-lab:~$</span>
               <input class="termIn" id="shellIn" type="text" autocomplete="off" spellcheck="false"
-                placeholder="try: ls · cd students · help" aria-label="Terminal Eingabe"/>
+                     placeholder="ls · cd students · help" aria-label="Terminal Eingabe"/>
             </form>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- Right: Legend -->
-        <aside class="panel" aria-label="Command Legend">
-          <div class="kicker"><span class="dot"></span><span>legend · commands</span></div>
-
-          <div class="legend" style="margin-top:14px;">
-            <div><b>Directories</b></div>
-            <div><span class="cmd">$</span> ls</div>
-            <div>students/ · colleagues/ · cyber/ · events/</div>
-
-            <br/>
-            <div><b>Navigate</b></div>
-            <div><span class="cmd">$</span> cd students</div>
-            <div><span class="cmd">$</span> cd colleagues</div>
-            <div><span class="cmd">$</span> cd cyber</div>
-            <div><span class="cmd">$</span> cd events</div>
-
-            <br/>
-            <div><b>Info</b></div>
-            <div><span class="cmd">$</span> cat README</div>
-            <div><span class="cmd">$</span> whoami</div>
-            <div><span class="cmd">$</span> pwd</div>
-
-            <br/>
-            <div><span class="ok">OK</span> / Kein Tracking / Nur lokale UI</div>
-
-            <div class="quick" aria-label="Quick Buttons">
-              <a class="tab" href="/students/index.html">cd students</a>
-              <a class="tab" href="/colleagues/index.html">cd colleagues</a>
-              <a class="tab" href="/cyber/index.html">cd cyber</a>
-              <a class="tab" href="/events/index.html">cd events</a>
-            </div>
-          </div>
-        </aside>
-
-      </div>
     </div>
   </main>
 
@@ -488,26 +454,12 @@
         if(p && typeof p.catch === "function") p.catch(() => {});
       };
 
-      if(btnPlay){
-        btnPlay.addEventListener("click", () => {
-          if(v.paused) tryPlay();
-          else v.pause();
-          sync();
-        });
-      }
-
-      if(btnMute){
-        btnMute.addEventListener("click", () => {
-          v.muted = !v.muted;
-          if(!v.muted && v.paused) tryPlay();
-          sync();
-        });
-      }
+      btnPlay?.addEventListener("click", () => { v.paused ? tryPlay() : v.pause(); sync(); });
+      btnMute?.addEventListener("click", () => { v.muted = !v.muted; if(!v.muted && v.paused) tryPlay(); sync(); });
 
       v.addEventListener("play", sync);
       v.addEventListener("pause", sync);
       v.addEventListener("volumechange", sync);
-
       window.addEventListener("load", () => { tryPlay(); sync(); });
       document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
     })();
@@ -517,105 +469,97 @@
       const out = document.getElementById("shellOut");
       const form = document.getElementById("shellForm");
       const input = document.getElementById("shellIn");
-      const btnClear = document.getElementById("shClear");
-      const btnHelp = document.getElementById("shHelp");
       const promptText = document.getElementById("promptText");
+      const miniHelp = document.getElementById("miniHelp");
+      if(!out || !form || !input || !promptText) return;
 
-      if (!out || !form || !input || !promptText) return;
-
-      // WICHTIG: root-relative Links (fix für students/students)
       const routes = {
         students: "/students/index.html",
         colleagues: "/colleagues/index.html",
         cyber: "/cyber/index.html",
         events: "/events/index.html"
       };
-
       const state = { cwd: "/" };
-      const print = (s = "") => { out.textContent += s + "\n"; out.scrollTop = out.scrollHeight; };
-      const hr = () => print("—".repeat(56));
+
+      const esc = (s) => String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+      const line = (html="") => { out.innerHTML += html + "<br>"; out.scrollTop = out.scrollHeight; };
+      const hr = () => line(`<span class="accent">${"—".repeat(56)}</span>`);
 
       const setPrompt = () => {
         const where = state.cwd === "/" ? "~" : state.cwd;
         promptText.textContent = `ramon@school-lab:${where}$`;
       };
 
+      const header = () => {
+        line(`<span class="pix">┌─ rb-shell ───────────────────────────────┐</span>`);
+        line(`<span class="pix">│ dirs: students · colleagues · cyber · events │</span>`);
+        line(`<span class="pix">└───────────────────────────────────────────┘</span>`);
+      };
+
       const motd = () => {
-        print("RB Shell v0.1  |  type 'help'  |  click shortcuts available");
-        print("No tracking. Local UI only.");
+        out.innerHTML = "";
+        header();
+        line(`<span class="ok">OK</span> <span class="accent">kein tracking</span> · Tippe <span class="accent">help</span> oder <span class="accent">ls</span>`);
         hr();
-        print("Available directories:");
-        print("  students/    colleagues/    cyber/    events/");
-        print("");
-        print("Examples:");
-        print("  ls");
-        print("  cd students");
-        print("  cat README");
-        print("");
+        line(`<span class="accent">Beispiel:</span> cd students`);
+        line(``);
       };
 
       const help = () => {
         hr();
-        print("Commands:");
-        print("  ls                 list directories");
-        print("  cd <dir>           open section (students|colleagues|cyber|events)");
-        print("  pwd                print current directory");
-        print("  whoami             print identity");
-        print("  cat README         show overview");
-        print("  clear              clear output");
-        print("  help               show this help");
+        line(`<span class="accent">Commands</span>`);
+        line(`ls · cd &lt;dir&gt; · pwd · whoami · cat README · clear · help`);
         hr();
       };
 
       const catReadme = () => {
-        print("README");
-        print("  students   → Lehrplan + Unterrichtsbeispiele (Arbeitsansicht)");
-        print("  colleagues → wie students + didaktische Notizen (Meta, FK)");
-        print("  cyber      → CyberDefense Lab + Writeups + Videos");
-        print("  events     → Lafferde Loop Challenge");
+        line(`<span class="accent">README</span>`);
+        line(`students   → Lehrplan + Unterrichtsbeispiele`);
+        line(`colleagues → didaktische Kommentare + Material`);
+        line(`cyber      → CyberDefense Lab + Writeups + Videos`);
+        line(`events     → Lafferde Loop Challenge`);
       };
 
       const run = (raw) => {
         const cmdline = String(raw || "").trim();
-        if (!cmdline) return;
+        if(!cmdline) return;
 
-        print(`ramon@school-lab:${state.cwd === "/" ? "~" : state.cwd}$ ${cmdline}`);
+        line(`<span class="ok">${esc(`ramon@school-lab:${state.cwd === "/" ? "~" : state.cwd}$`)}</span> ${esc(cmdline)}`);
 
         const [cmd, ...rest] = cmdline.split(/\s+/);
         const arg = rest.join(" ").trim();
 
-        switch ((cmd || "").toLowerCase()) {
+        switch((cmd||"").toLowerCase()){
           case "ls":
-            print("students/  colleagues/  cyber/  events/");
+            line(`<span class="accent">students/</span> colleagues/ cyber/ events/`);
             break;
 
           case "pwd":
-            print(state.cwd);
+            line(esc(state.cwd));
             break;
 
           case "whoami":
-            print("Ramon Berghorn — Informatik Sek I · CyberDefense Lab");
+            line(`<span class="accent">Ramon Berghorn</span> — Informatik Sek I · CyberDefense Lab`);
             break;
 
           case "cat": {
-            const t = (arg || "").toLowerCase();
-            if (t === "readme" || t === "readme.txt") catReadme();
-            else print("cat: file not found (try: cat README)");
+            const t = (arg||"").toLowerCase();
+            if(t === "readme" || t === "readme.txt") catReadme();
+            else line(`<span class="warn">cat:</span> Datei nicht gefunden (Tipp: cat README)`);
             break;
           }
 
           case "cd": {
-            const target = (arg || "").replace("/", "").toLowerCase();
-            if (!target) { print("cd: missing operand (try: cd students)"); break; }
-            if (target === ".." || target === "/") { state.cwd = "/"; setPrompt(); print("ok"); break; }
-            if (!routes[target]) { print(`cd: no such directory: ${target}`); break; }
-            print("loading…");
+            const target = (arg||"").replaceAll("/","").toLowerCase();
+            if(!target){ line(`<span class="warn">cd:</span> Ziel fehlt (Tipp: cd students)`); break; }
+            if(!routes[target]){ line(`<span class="warn">cd:</span> unbekannt: ${esc(target)}`); break; }
+            line(`<span class="accent">loading…</span>`);
             window.location.href = routes[target];
             break;
           }
 
           case "clear":
-            out.textContent = "";
+            out.innerHTML = "";
             break;
 
           case "help":
@@ -623,7 +567,7 @@
             break;
 
           default:
-            print(`command not found: ${cmd} (try: help)`);
+            line(`<span class="warn">command not found:</span> ${esc(cmd)} (Tipp: help)`);
         }
       };
 
@@ -634,8 +578,7 @@
         input.focus();
       });
 
-      btnClear?.addEventListener("click", () => { out.textContent = ""; input.focus(); });
-      btnHelp?.addEventListener("click", () => { help(); input.focus(); });
+      miniHelp?.addEventListener("click", () => { help(); input.focus(); });
 
       motd();
       setPrompt();
@@ -644,4 +587,5 @@
   </script>
 </body>
 </html>
+
 
