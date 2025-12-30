@@ -1097,13 +1097,35 @@ Warum das wichtig ist: In Linux ist "wo bin ich?" die halbe Miete.`,
 - cd /students
 - ls
 - cat README`,
-          tasks: [
-            { id:"L1_T1", text:"Führe pwd aus.", check: (ctx) => ctx.seen("pwd") },
-            { id:"L1_T2", text:"Liste /students mit ls (egal ob du vorher cd machst).", check: (ctx) => ctx.seenRegex(/^ls(\s|$)/) && ctx.seenPath("/students") },
-            { id:"L1_T3", text:"Wechsle nach /students (cd /students).", check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students") },
-            { id:"L1_T4", text:"Lies /students/README (cat README oder cat /students/README).", check: (ctx) => ctx.seenCat("/students/README") }
-          ]
-        },
+tasks: [
+  {
+    id: "L1_T1",
+    text: "Führe pwd aus.",
+    check: (ctx) => ctx.seen("pwd")
+  },
+  {
+    id: "L1_T2",
+    text: "Liste den Inhalt von /students (entweder: ls /students ODER: cd /students + ls).",
+    check: (ctx) =>
+      // Variante A: direktes Listen des Zielpfads
+      ctx.seenRegex(/^ls\s+\/students\/?(\s|$)/) ||
+      // Variante B: erst reinwechseln, dann ls (ohne Argument)
+      (ctx.cwdIs("/students") && ctx.seenRegex(/^ls(\s|$)/)) ||
+      // tolerant: wenn 'cd /students' irgendwann vorkam und danach ein 'ls' ohne Pfad
+      (ctx.seenExact("cd /students") && ctx.seenRegex(/^ls(\s|$)/))
+  },
+  {
+    id: "L1_T3",
+    text: "Wechsle nach /students (cd /students).",
+    check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students")
+  },
+  {
+    id: "L1_T4",
+    text: "Lies /students/README (cat README oder cat /students/README).",
+    check: (ctx) => ctx.seenCat("/students/README")
+  }
+]
+
         {
           id: "L2",
           title: "Lektion 2 — Dateien lesen & schnell suchen",
