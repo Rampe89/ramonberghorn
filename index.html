@@ -263,6 +263,18 @@
       text-transform:uppercase;
       letter-spacing:.08em;
     }
+    .termTopLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .quickRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
     .miniHelp{
       font-family: var(--mono);
       font-size: 12px;
@@ -274,6 +286,34 @@
       cursor:pointer;
       text-transform:uppercase;
       letter-spacing:.08em;
+    }
+
+    .statusLine{
+      margin-bottom: 8px;
+      border: var(--bw) solid var(--line);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background:#fff;
+      padding: 8px 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .statusLine b{ font-weight:900; }
+    .statusPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 4px 8px;
+      white-space:nowrap;
     }
 
     .termBox{
@@ -355,6 +395,26 @@
       padding: 6px 8px;
     }
 
+    .chips{
+      margin-top: 8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      border: var(--bw) solid #111;
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 6px 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+
     /* Lesson panel */
     details.lessonPanel{
       margin-top: 12px;
@@ -386,7 +446,7 @@
     }
     .lessonGrid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.15fr .85fr;
       gap:12px;
     }
     @media (max-width: 880px){
@@ -409,17 +469,6 @@
       font-family: var(--mono);
       font-size: 12px;
       line-height:1.6;
-    }
-    .taskList{
-      margin: 0;
-      padding-left: 18px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height:1.7;
-    }
-    .taskDone{
-      text-decoration: line-through;
-      opacity:.7;
     }
     .btnRow{
       display:flex;
@@ -454,6 +503,85 @@
     .small{
       font-family: var(--mono);
       font-size: 12px;
+    }
+
+    /* Task cards (new) */
+    .taskMeta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 8px;
+    }
+    .taskStatus{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      white-space:nowrap;
+    }
+    .taskStatus .box{
+      width:14px;height:14px;
+      border: var(--bw) solid #111;
+      background:#fff;
+      display:inline-block;
+      box-shadow: 2px 2px 0 var(--shadowInk);
+    }
+    .taskStatus.done .box{ background: var(--hi3); }
+    .taskCard{
+      border: var(--bw) solid var(--panelLine);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 10px;
+      background:#fff;
+      display:grid;
+      gap:8px;
+      margin-top: 10px;
+    }
+    .taskText{
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height:1.6;
+    }
+    .taskWhy{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.6;
+      border-left: 3px solid #111;
+      padding-left: 10px;
+    }
+    .taskActions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .taskActions .mini{
+      border: var(--bw) solid var(--panelLine);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 6px 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .taskActions .ghost{
+      opacity:.9;
+    }
+    .teacherNote{
+      border: var(--bw) dashed #111;
+      padding: 8px 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -522,8 +650,22 @@
         <!-- CONSOLE -->
         <div class="consolePanel" aria-label="Console">
           <div class="termTop">
-            <div>console</div>
+            <div class="termTopLeft">
+              <div>console</div>
+              <div class="quickRow" aria-label="Quick Actions">
+                <button class="miniHelp" id="quickTasks" type="button">tasks</button>
+                <button class="miniHelp" id="quickHint" type="button">hint</button>
+                <button class="miniHelp" id="quickCheck" type="button">check</button>
+              </div>
+            </div>
             <button class="miniHelp" id="miniHelp" type="button">$ help</button>
+          </div>
+
+          <div class="statusLine" aria-label="Status">
+            <div class="statusPill"><span>CWD:</span> <b id="statusCwd">/</b></div>
+            <div class="statusPill"><span>Lesson:</span> <b id="statusLesson">L1</b></div>
+            <div class="statusPill"><span>Progress:</span> <b id="statusProgress">0%</b></div>
+            <div class="statusPill"><span>Last:</span> <b id="statusLast">—</b></div>
           </div>
 
           <div class="termBox" role="region" aria-label="Terminal">
@@ -535,17 +677,34 @@
             </form>
           </div>
 
+          <div class="chips" aria-label="Quick Command Chips">
+            <div class="chip" data-cmd="lesson">lesson</div>
+            <div class="chip" data-cmd="tasks">tasks</div>
+            <div class="chip" data-cmd="pwd">pwd</div>
+            <div class="chip" data-cmd="ls">ls</div>
+            <div class="chip" data-cmd="cd /students">cd /students</div>
+            <div class="chip" data-cmd="cat /students/README">cat /students/README</div>
+          </div>
+
           <!-- LESSON SYSTEM (collapsible) -->
           <details class="lessonPanel" id="lessonPanel">
             <summary>
-              <span>Linux-Mini-Kurs (Jg. 9/10) — Guided</span>
+              <span>Linux-Mini-Kurs (Jg. 9/10) — Guided Incident Case</span>
               <span class="small" id="lessonSummaryRight">Progress: 0%</span>
             </summary>
             <div class="lessonBody">
               <div class="lessonGrid">
                 <div class="card">
-                  <h3 id="lessonTitle">Lesson</h3>
-                  <div class="muted" id="lessonIntro">…</div>
+                  <div class="taskMeta">
+                    <div>
+                      <h3 id="lessonTitle" style="margin:0 0 6px;">Lesson</h3>
+                      <div class="muted" id="lessonIntro">…</div>
+                    </div>
+                    <div class="btnRow" aria-label="Lesson Controls">
+                      <button class="lessonBtn" type="button" id="toggleTeacher">Teacher: OFF</button>
+                    </div>
+                  </div>
+
                   <div style="margin-top:10px;">
                     <div class="barWrap" aria-label="Progress bar">
                       <div class="bar" id="progressBar"></div>
@@ -554,17 +713,33 @@
                       Tipp: Du kannst alles auch im Terminal steuern: <b>lesson</b>, <b>tasks</b>, <b>hint</b>, <b>check</b>, <b>next</b>.
                     </div>
                   </div>
+
+                  <div class="taskCard" aria-label="Next step" style="margin-top:12px;">
+                    <div class="taskMeta" style="margin:0;">
+                      <div class="taskStatus" id="nextStatus"><span class="box"></span><span>NEXT STEP</span></div>
+                      <div class="btnRow">
+                        <button class="lessonBtn" type="button" id="btnPasteNext">Paste</button>
+                        <button class="lessonBtn" type="button" id="btnRunNext">Run</button>
+                      </div>
+                    </div>
+                    <div class="taskText" id="nextText">…</div>
+                    <div class="taskWhy" id="nextWhy" style="display:none;">…</div>
+                    <div class="teacherNote" id="nextTeacher" style="display:none;">…</div>
+                  </div>
                 </div>
 
                 <div class="card">
-                  <h3>Aufgaben</h3>
-                  <ol class="taskList" id="taskList"></ol>
-                  <div class="btnRow" style="margin-top:10px;">
-                    <button class="lessonBtn" type="button" id="btnHint">Hint</button>
-                    <button class="lessonBtn" type="button" id="btnCheck">Check</button>
-                    <button class="lessonBtn" type="button" id="btnNext">Next</button>
-                    <button class="lessonBtn" type="button" id="btnReset">Reset</button>
+                  <div class="taskMeta">
+                    <h3 style="margin:0;">Aufgaben (Guided Flow)</h3>
+                    <div class="btnRow">
+                      <button class="lessonBtn" type="button" id="btnHint">Hint</button>
+                      <button class="lessonBtn" type="button" id="btnCheck">Check</button>
+                      <button class="lessonBtn" type="button" id="btnNext">Next</button>
+                      <button class="lessonBtn" type="button" id="btnReset">Reset</button>
+                    </div>
                   </div>
+
+                  <div id="taskCards"></div>
                 </div>
               </div>
 
@@ -611,7 +786,7 @@
       document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
     })();
 
-    // Terminal + Guided Lessons (rb-shell v3)
+    // Terminal + Guided Lessons (rb-shell v4)
     (() => {
       const out = document.getElementById("shellOut");
       const form = document.getElementById("shellForm");
@@ -619,16 +794,35 @@
       const promptText = document.getElementById("promptText");
       const miniHelp = document.getElementById("miniHelp");
 
+      const quickTasks = document.getElementById("quickTasks");
+      const quickHint = document.getElementById("quickHint");
+      const quickCheck = document.getElementById("quickCheck");
+
+      const statusCwd = document.getElementById("statusCwd");
+      const statusLesson = document.getElementById("statusLesson");
+      const statusProgress = document.getElementById("statusProgress");
+      const statusLast = document.getElementById("statusLast");
+
+      const chips = Array.from(document.querySelectorAll(".chip"));
+
       const lessonPanel = document.getElementById("lessonPanel");
       const lessonTitle = document.getElementById("lessonTitle");
       const lessonIntro = document.getElementById("lessonIntro");
-      const taskListEl = document.getElementById("taskList");
       const progressBar = document.getElementById("progressBar");
       const lessonSummaryRight = document.getElementById("lessonSummaryRight");
       const btnHint = document.getElementById("btnHint");
       const btnCheck = document.getElementById("btnCheck");
       const btnNext = document.getElementById("btnNext");
       const btnReset = document.getElementById("btnReset");
+
+      const taskCardsEl = document.getElementById("taskCards");
+
+      const toggleTeacher = document.getElementById("toggleTeacher");
+      const nextText = document.getElementById("nextText");
+      const nextWhy = document.getElementById("nextWhy");
+      const nextTeacher = document.getElementById("nextTeacher");
+      const btnPasteNext = document.getElementById("btnPasteNext");
+      const btnRunNext = document.getElementById("btnRunNext");
 
       if(!out || !form || !input || !promptText) return;
 
@@ -641,7 +835,7 @@
       };
 
       // In-memory filesystem (expanded)
-      // Hidden stuff inside ".lab/" plus a log-based flag.
+      // Hidden stuff inside ".lab/" plus a log-based evidence.
       const fs = {
         "/": { type:"dir", kids:["students","colleagues","cyber","ultra","courses","var","home","README","notes.txt",".lab"] },
 
@@ -659,9 +853,9 @@ Mini-Linux-Kurs:
 - check    (prüft Fortschritt)
 - next     (nächste Lektion)
 
-CTF:
-- flag #1: irgendwo im Dateibaum (Tipp: ls -a / tree -a / find flag)
-- flag #2: steckt in Logs (Tipp: /var/log)
+Incident Case (Mini-CTF, safe):
+- IOC A: irgendwo im Dateibaum (Tipp: ls -a / tree -a / find evidence)
+- IOC B: steckt in Logs (Tipp: /var/log)
 `},
         "/notes.txt": { type:"file", data:
 `NOTES
@@ -770,7 +964,7 @@ Tipp: cat linux_guide_for_teachers.md
 `Linux-Mini-Kurs (Hinweise)
 - Lass die SuS erst "spielen", dann strukturieren.
 - "Geführt" heißt: kleine Schritte + sofortiger Erfolg.
-- Challenge-Teil nur optional (Flag/CTF).
+- Challenge-Teil nur optional (IOC/Incident).
 
 Safe-by-design:
 - read-only
@@ -875,7 +1069,7 @@ Tipp: cat /courses/linux101/cheatsheet.txt
 1) Navigation & Pfade
 2) Dateien lesen & suchen
 3) Logs lesen & interpretieren
-4) Mini-Challenge: finde Flag(s)
+4) Mini-Challenge: IOCs finden
 
 Optional: Pipes (|) als Level Up
 `},
@@ -935,7 +1129,7 @@ Wenn du das liest, hast du schon mal cat verstanden.
 Ich schwöre, ich hab nichts gemacht. (hat er gesagt)
 `},
         "/home/student/.cache/flag2_hint.txt": { type:"file", data:
-`flag #2 hint
+`IOC B hint
 Schau in die Logs. Such nach "FLAG2".
 /var/log/auth.log ist ein Anfang.
 `},
@@ -969,6 +1163,7 @@ Dec 29 09:19:55 school-lab audit[88]: FLAG2=RB{logs_are_data}
 `Dec 29 09:10:00 kernel: boot ok
 Dec 29 09:11:12 network: link up
 Dec 29 09:12:01 scheduler: class 9/10: linux basics loaded
+Dec 29 09:12:03 scheduler: incident-case: monitoring enabled (sim)
 `},
         "/var/log/app.log": { type:"file", data:
 `[INFO] rb-shell ready
@@ -976,18 +1171,18 @@ Dec 29 09:12:01 scheduler: class 9/10: linux basics loaded
 [INFO] no tracking
 `},
 
-        // Hidden lab area (flag #1)
+        // Hidden lab area (IOC A)
         "/.lab": { type:"dir", kids:[".cache","ops"] },
         "/.lab/.cache": { type:"dir", kids:["hint.txt"] },
         "/.lab/.cache/hint.txt": { type:"file", data:
 `HINT
 - try: ls -a
 - try: tree -a
-- try: find flag
+- try: find evidence
 `},
-        "/.lab/ops": { type:"dir", kids:["flag.txt"] },
-        "/.lab/ops/flag.txt": { type:"file", data:
-`FLAG #1
+        "/.lab/ops": { type:"dir", kids:["evidence.txt"] },
+        "/.lab/ops/evidence.txt": { type:"file", data:
+`IOC A
 RB{terminal_mode_unlocked}
 `},
       };
@@ -1005,20 +1200,29 @@ RB{terminal_mode_unlocked}
         lessonIndex: 0,
         done: {},            // taskId -> true
         seenCmds: [],        // log of executed commands
+        teacherMode: false,
+        lastCmd: ""
       };
 
       const STORE_KEY = "rb_shell_course_v1";
+      const STORE_TEACHER = "rb_shell_teacher_mode_v1";
 
       const loadState = () => {
         try{
           const raw = localStorage.getItem(STORE_KEY);
-          if(!raw) return;
-          const saved = JSON.parse(raw);
-          if(saved && typeof saved === "object"){
-            if(typeof saved.lessonIndex === "number") state.lessonIndex = saved.lessonIndex;
-            if(saved.done && typeof saved.done === "object") state.done = saved.done;
-            if(Array.isArray(saved.seenCmds)) state.seenCmds = saved.seenCmds;
+          if(raw){
+            const saved = JSON.parse(raw);
+            if(saved && typeof saved === "object"){
+              if(typeof saved.lessonIndex === "number") state.lessonIndex = saved.lessonIndex;
+              if(saved.done && typeof saved.done === "object") state.done = saved.done;
+              if(Array.isArray(saved.seenCmds)) state.seenCmds = saved.seenCmds;
+            }
           }
+        }catch(_){}
+
+        try{
+          const t = localStorage.getItem(STORE_TEACHER);
+          if(t === "1") state.teacherMode = true;
         }catch(_){}
       };
 
@@ -1029,6 +1233,12 @@ RB{terminal_mode_unlocked}
             done: state.done,
             seenCmds: state.seenCmds
           }));
+        }catch(_){}
+      };
+
+      const saveTeacherMode = () => {
+        try{
+          localStorage.setItem(STORE_TEACHER, state.teacherMode ? "1" : "0");
         }catch(_){}
       };
 
@@ -1066,6 +1276,14 @@ RB{terminal_mode_unlocked}
         promptText.textContent = `${state.user}@${state.host}:${where}$`;
       };
 
+      const updateStatus = () => {
+        if(statusCwd) statusCwd.textContent = state.cwd;
+        if(statusLesson) statusLesson.textContent = currentLesson().id;
+        const prog = recomputeProgress();
+        if(statusProgress) statusProgress.textContent = `${prog.pct}%`;
+        if(statusLast) statusLast.textContent = state.lastCmd ? state.lastCmd.slice(0, 22) + (state.lastCmd.length > 22 ? "…" : "") : "—";
+      };
+
       const header = () => {
         line(`<span class="pix">┌─ rb-shell ─────────────────────────────────────────┐</span>`);
         line(`<span class="pix">│ dirs: students · colleagues · cyber · ultra · courses │</span>`);
@@ -1083,151 +1301,129 @@ RB{terminal_mode_unlocked}
 
       // ----- Lessons (guided, but not baby-mode)
       const lessons = [
-  {
-    id: "L1",
-    title: "Lektion 1 — Orientierung: Pfade & Navigation",
-    intro:
-`Ziel: Du kannst dich in einem Dateisystem bewegen, ohne zu klicken.
-Du lernst: pwd / ls / cd / cat.
-Warum das wichtig ist: In Linux ist "wo bin ich?" die halbe Miete.`,
-    hint:
+        {
+          id: "L1",
+          title: "Lektion 1 — Orientierung: Pfade & Navigation",
+          intro:
+`Du bist neu im Lab. Bevor du irgendwas interpretierst, musst du wissen, wo du bist.
+Ziel: Du kannst dich in einem Dateisystem bewegen, ohne zu klicken.
+Du lernst: pwd / ls / cd / cat.`,
+          hint:
 `Tipp: Starte mit:
 - pwd
 - ls
 - cd /students
 - ls
 - cat README`,
-    tasks: [
-      {
-        id: "L1_T1",
-        text: "Führe pwd aus.",
-        check: (ctx) => ctx.seen("pwd")
-      },
-      {
-        id: "L1_T2",
-        text: "Liste den Inhalt von /students (entweder: ls /students ODER: cd /students + ls).",
-        check: (ctx) =>
-          ctx.seenRegex(/^ls\s+\/students\/?(\s|$)/) ||
-          (ctx.cwdIs("/students") && ctx.seenRegex(/^ls(\s|$)/)) ||
-          (ctx.seenExact("cd /students") && ctx.seenRegex(/^ls(\s|$)/))
-      },
-      {
-        id: "L1_T3",
-        text: "Wechsle nach /students (cd /students).",
-        check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students")
-      },
-      {
-        id: "L1_T4",
-        text: "Lies /students/README (cat README oder cat /students/README).",
-        check: (ctx) => ctx.seenCat("/students/README")
-      }
-    ]
-  },
+          tasks: [
+            { id: "L1_T1", text: "Führe pwd aus.", why: "Orientierung: Du weißt jederzeit, wo du bist.", starter: "pwd", solution: "pwd",
+              check: (ctx) => ctx.seen("pwd") },
+            { id: "L1_T2", text: "Liste den Inhalt von /students (ls /students ODER: cd /students + ls).", why:"Sichtbarkeit: Erst sehen, dann handeln.", starter:"ls /students", solution:"ls /students",
+              check: (ctx) =>
+                ctx.seenRegex(/^ls\s+\/students\/?(\s|$)/) ||
+                (ctx.cwdIs("/students") && ctx.seenRegex(/^ls(\s|$)/)) ||
+                (ctx.seenExact("cd /students") && ctx.seenRegex(/^ls(\s|$)/))
+            },
+            { id: "L1_T3", text: "Wechsle nach /students (cd /students).", why:"Navigation: Du arbeitest dort, wo die Materialien liegen.", starter:"cd /students", solution:"cd /students",
+              check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students")
+            },
+            { id: "L1_T4", text: "Lies /students/README (cat README oder cat /students/README).", why:"Textarbeit: Du kannst Inhalte direkt im Terminal lesen.", starter:"cat /students/README", solution:"cat /students/README",
+              check: (ctx) => ctx.seenCat("/students/README")
+            }
+          ]
+        },
 
-  {
-    id: "L2",
-    title: "Lektion 2 — Dateien lesen & schnell suchen",
-    intro:
-`Ziel: Du kannst Inhalte lesen und gezielt suchen.
-Du lernst: head / tail / grep / find / tree.
-Warum: Wer suchen kann, verliert weniger Zeit (und wirkt plötzlich sehr kompetent).`,
-    hint:
+        {
+          id: "L2",
+          title: "Lektion 2 — Dateien lesen & schnell suchen",
+          intro:
+`Du arbeitest wie ein Analyst: Du liest nicht alles, du filterst.
+Ziel: Du kannst Inhalte lesen und gezielt suchen.
+Du lernst: head / tail / grep / find / tree.`,
+          hint:
 `Tipp:
 - cd /
 - tree /students
 - find log
 - grep DNS /students/netze_quickcards.txt
 - head -n 3 /var/log/auth.log`,
-    tasks: [
-      { id:"L2_T1", text:"Nutze tree auf /students (tree /students).", check: (ctx) => ctx.seenExact("tree /students") || ctx.seenRegex(/^tree\s+\/students/) },
-      { id:"L2_T2", text:"Suche nach 'DNS' in netze_quickcards.txt (grep DNS ...).", check: (ctx) => ctx.seenGrep("DNS", "/students/netze_quickcards.txt") },
-      { id:"L2_T3", text:"Nutze head oder tail auf /var/log/auth.log.", check: (ctx) => ctx.seenRegex(/^(head|tail)\b/) && ctx.seenPath("/var/log/auth.log") },
-      { id:"L2_T4", text:"Finde mindestens einen Pfad mit find (z.B. find flag oder find log).", check: (ctx) => ctx.seenRegex(/^find\s+\S+/) }
-    ]
-  },
+          tasks: [
+            { id:"L2_T1", text:"Nutze tree auf /students (tree /students).", why:"Struktur erkennen, ohne jedes Verzeichnis einzeln zu öffnen.", starter:"tree /students", solution:"tree /students",
+              check: (ctx) => ctx.seenExact("tree /students") || ctx.seenRegex(/^tree\s+\/students/) },
+            { id:"L2_T2", text:"Suche nach 'DNS' in netze_quickcards.txt (grep DNS ...).", why:"Schnelltreffer statt Scrollen: grep als Filter.", starter:"grep DNS /students/netze_quickcards.txt", solution:"grep DNS /students/netze_quickcards.txt",
+              check: (ctx) => ctx.seenGrep("DNS", "/students/netze_quickcards.txt") },
+            { id:"L2_T3", text:"Nutze head oder tail auf /var/log/auth.log.", why:"Logs sind lang: du brauchst einen Einstieg (Anfang/Ende).", starter:"head -n 3 /var/log/auth.log", solution:"head -n 3 /var/log/auth.log",
+              check: (ctx) => ctx.seenRegex(/^(head|tail)\b/) && ctx.seenPath("/var/log/auth.log") },
+            { id:"L2_T4", text:"Finde mindestens einen Pfad mit find (z.B. find evidence oder find log).", why:"Du suchst systematisch statt zu raten.", starter:"find log", solution:"find log",
+              check: (ctx) => ctx.seenRegex(/^find\s+\S+/) }
+          ]
+        },
 
-  {
-    id: "L3",
-    title: "Lektion 3 — Logs lesen: Was ist hier passiert?",
-    intro:
-`Ziel: Du kannst aus Logs eine kleine Story rekonstruieren.
-Du lernst: Logdateien lesen, grep als Filter, Hypothesen bilden.
-Mini-Story: Es gab Loginversuche und eine Datei wurde verändert.`,
-    hint:
+        {
+          id: "L3",
+          title: "Lektion 3 — Logs lesen: Was ist hier passiert?",
+          intro:
+`Jetzt kommt der Incident-Teil: Du rekonstruierst eine Mini-Story aus Logs.
+Ziel: Du kannst aus Logs eine kleine Story rekonstruieren.
+Du lernst: Logdateien lesen, grep als Filter, Hypothesen bilden.`,
+          hint:
 `Tipp:
 - cd /var/log
 - ls
 - cat auth.log
 - grep Accepted auth.log
 - grep modified auth.log`,
-    tasks: [
-      { id:"L3_T1", text:"Wechsle nach /var/log (cd /var/log).", check: (ctx) => ctx.seenExact("cd /var/log") || ctx.cwdIs("/var/log") },
-      { id:"L3_T2", text:"Öffne auth.log (cat auth.log oder cat /var/log/auth.log).", check: (ctx) => ctx.seenCat("/var/log/auth.log") },
-      { id:"L3_T3", text:"Filtere nach 'Accepted' mit grep.", check: (ctx) => ctx.seenGrep("Accepted", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+Accepted\s+auth\.log/) },
-      { id:"L3_T4", text:"Finde die Zeile mit 'modified' (grep modified ...).", check: (ctx) => ctx.seenGrep("modified", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+modified\s+auth\.log/) }
-    ]
-  },
+          tasks: [
+            { id:"L3_T1", text:"Wechsle nach /var/log (cd /var/log).", why:"Du arbeitest dort, wo die Protokolle liegen.", starter:"cd /var/log", solution:"cd /var/log",
+              check: (ctx) => ctx.seenExact("cd /var/log") || ctx.cwdIs("/var/log") },
+            { id:"L3_T2", text:"Öffne auth.log (cat auth.log oder cat /var/log/auth.log).", why:"Du brauchst die Rohdaten, bevor du filterst.", starter:"cat /var/log/auth.log", solution:"cat /var/log/auth.log",
+              check: (ctx) => ctx.seenCat("/var/log/auth.log") },
+            { id:"L3_T3", text:"Filtere nach 'Accepted' mit grep.", why:"Du isolierst erfolgreiche Logins.", starter:"grep Accepted /var/log/auth.log", solution:"grep Accepted /var/log/auth.log",
+              check: (ctx) => ctx.seenGrep("Accepted", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+Accepted\s+auth\.log/) },
+            { id:"L3_T4", text:"Finde die Zeile mit 'modified' (grep modified ...).", why:"Du suchst nach Änderungen/Artefakten.", starter:"grep modified /var/log/auth.log", solution:"grep modified /var/log/auth.log",
+              check: (ctx) => ctx.seenGrep("modified", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+modified\s+auth\.log/) }
+          ]
+        },
 
-{
-  id: "L4",
-  title: "Lektion 4 — Abschlussmission: Mini-CTF (geführt, ohne Spoiler)",
-  intro:
-`Ziel: Du findest zwei Übungs-Flags, ohne dass sie dir verraten werden.
+        {
+          id: "L4",
+          title: "Lektion 4 — Abschlussmission: Incident Mini-Case (IOCs finden)",
+          intro:
+`Ziel: Du findest zwei IOCs (Beweisstücke), ohne dass sie dir verraten werden.
 Du nutzt nur: ls -a, tree -a, find, cat, grep.
 Regel: Kein Raten. Arbeite wie ein Analyst: erst Sichtbarkeit erhöhen, dann strukturiert suchen, dann verifizieren.`,
-
-  hint:
-`Mission A (Dateibaum):
+          hint:
+`Mission A (Dateibaum / IOC A):
 1) Starte in /
 2) Mach versteckte Dinge sichtbar: ls -a /
 3) Schau dir den Baum an: tree -a /
 4) Wenn du einen verdächtigen Ordner siehst: cd <ordner> und ls -a
 5) Lies die verdächtige Datei: cat <datei>
 
-Mission B (Logs):
+Mission B (Logs / IOC B):
 1) Geh nach /var/log
 2) Lies auth.log (oder nutze grep)
 3) Suche nach einem auffälligen Marker in der Datei (Tipp: grep FLAG2 /var/log/auth.log)
 4) Wenn du glaubst, du hast es: verifizieren durch cat/grep.`,
-
-  tasks: [
-    {
-      id:"L4_T1",
-      text:"Mission A: Mache versteckte Ordner in / sichtbar (ls -a /).",
-      check: (ctx) => ctx.seenRegex(/^ls\s+-a\s+\/(\s|$)/) || ctx.seenRegex(/^ls\s+\/\s+-a(\s|$)/)
-    },
-    {
-      id:"L4_T2",
-      text:"Mission A: Nutze tree -a /, um versteckte Bereiche zu sehen.",
-      check: (ctx) => ctx.seenRegex(/^tree\s+-a\s+\/(\s|$)/) || ctx.seenRegex(/^tree\s+\/\s+-a(\s|$)/)
-    },
-    {
-      id:"L4_T3",
-      text:"Mission A: Öffne eine Flag-Datei per cat (du musst sie vorher finden).",
-      check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") // intern, ohne Spoiler
-    },
-    {
-      id:"L4_T4",
-      text:"Mission B: Finde den FLAG2-Marker in /var/log/auth.log (grep FLAG2 ...).",
-      check: (ctx) =>
-        ctx.seenRegex(/^grep\s+FLAG2\s+\/var\/log\/auth\.log(\s|$)/) ||
-        ctx.seenRegex(/^grep\s+FLAG2\s+auth\.log(\s|$)/)
-    },
-    {
-      id:"L4_T5",
-      text:"Mission B: Verifiziere die zweite Flag (durch cat/grep – nicht raten).",
-      check: (ctx) => ctx.foundFlag("RB{logs_are_data}") // intern, ohne Spoiler
-    },
-    {
-      id:"L4_T6",
-      text:"Bonus: Öffne den Hinweis im Home-Verzeichnis des Studenten (cat /home/student/.cache/flag2_hint.txt).",
-      check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt")
-    }
-  ]
-}
-
-];
-
+          tasks: [
+            { id:"L4_T1", text:"Mission A: Mache versteckte Ordner in / sichtbar (ls -a /).", why:"Ohne -a siehst du relevante Bereiche nicht.", starter:"ls -a /", solution:"ls -a /",
+              check: (ctx) => ctx.seenRegex(/^ls\s+-a\s+\/(\s|$)/) || ctx.seenRegex(/^ls\s+\/\s+-a(\s|$)/) },
+            { id:"L4_T2", text:"Mission A: Nutze tree -a /, um versteckte Bereiche zu sehen.", why:"tree -a zeigt dir den Kontext (wo lohnt sich ein Blick?).", starter:"tree -a /", solution:"tree -a /",
+              check: (ctx) => ctx.seenRegex(/^tree\s+-a\s+\/(\s|$)/) || ctx.seenRegex(/^tree\s+\/\s+-a(\s|$)/) },
+            { id:"L4_T3", text:"Mission A: Öffne den IOC-A-Nachweis per cat (du musst ihn vorher finden).", why:"Verifizieren: du liest die Quelle, nicht nur den Dateinamen.", starter:"find evidence", solution:"cat /.lab/ops/evidence.txt",
+              check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") },
+            { id:"L4_T4", text:"Mission B: Finde den FLAG2-Marker in /var/log/auth.log (grep FLAG2 ...).", why:"Du filterst nach einem klaren Marker im Log.", starter:"grep FLAG2 /var/log/auth.log", solution:"grep FLAG2 /var/log/auth.log",
+              check: (ctx) =>
+                ctx.seenRegex(/^grep\s+FLAG2\s+\/var\/log\/auth\.log(\s|$)/) ||
+                ctx.seenRegex(/^grep\s+FLAG2\s+auth\.log(\s|$)/)
+            },
+            { id:"L4_T5", text:"Mission B: Verifiziere IOC B (durch cat/grep – nicht raten).", why:"Du belegst die Aussage mit Logdaten.", starter:"cat /var/log/auth.log", solution:"grep FLAG2 /var/log/auth.log",
+              check: (ctx) => ctx.foundFlag("RB{logs_are_data}") },
+            { id:"L4_T6", text:"Bonus: Öffne den Hinweis im Home-Verzeichnis des Studenten (cat /home/student/.cache/flag2_hint.txt).", why:"Korrelation: Nutzerverzeichnis + Logdaten ergeben die Story.", starter:"cat /home/student/.cache/flag2_hint.txt", solution:"cat /home/student/.cache/flag2_hint.txt",
+              check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt") }
+          ]
+        }
+      ];
 
       const ctx = {
         seen: (cmd) => state.seenCmds.includes(cmd),
@@ -1262,24 +1458,146 @@ Mission B (Logs):
         return { doneCount, total, pct: Math.round((doneCount/total)*100) };
       };
 
+      const firstOpenTask = () => {
+        const L = currentLesson();
+        for(const t of L.tasks){
+          if(!state.done[t.id]) return t;
+        }
+        return null;
+      };
+
+      const renderNextStep = () => {
+        const t = firstOpenTask();
+        if(!t){
+          if(nextText) nextText.textContent = "Alles erledigt. Du kannst mit NEXT in die nächste Lektion gehen.";
+          if(nextWhy) nextWhy.style.display = "none";
+          if(nextTeacher) nextTeacher.style.display = "none";
+          if(btnPasteNext) btnPasteNext.disabled = true;
+          if(btnRunNext) btnRunNext.disabled = true;
+          return;
+        }
+
+        const starter = t.starter || "";
+        const why = t.why || "";
+        if(nextText) nextText.textContent = starter ? `Vorschlag: ${starter}` : "Öffne tasks oder nutze hint.";
+        if(nextWhy){
+          if(why){
+            nextWhy.style.display = "block";
+            nextWhy.textContent = `Warum: ${why}`;
+          } else {
+            nextWhy.style.display = "none";
+          }
+        }
+
+        if(nextTeacher){
+          if(state.teacherMode && t.solution){
+            nextTeacher.style.display = "block";
+            nextTeacher.innerHTML = `<b>Teacher Note:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
+          } else {
+            nextTeacher.style.display = "none";
+          }
+        }
+
+        if(btnPasteNext) btnPasteNext.disabled = !starter;
+        if(btnRunNext) btnRunNext.disabled = !starter;
+      };
+
       const renderLessonPanel = () => {
         const L = currentLesson();
         const prog = recomputeProgress();
+
         if(lessonTitle) lessonTitle.textContent = `${L.title}`;
         if(lessonIntro) lessonIntro.textContent = L.intro;
 
-        if(taskListEl){
-          taskListEl.innerHTML = "";
-          L.tasks.forEach(t => {
-            const li = document.createElement("li");
-            li.textContent = t.text;
-            if(state.done[t.id]) li.classList.add("taskDone");
-            taskListEl.appendChild(li);
+        if(progressBar) progressBar.style.width = `${prog.pct}%`;
+        if(lessonSummaryRight) lessonSummaryRight.textContent = `Progress: ${prog.pct}%`;
+
+        if(toggleTeacher) toggleTeacher.textContent = `Teacher: ${state.teacherMode ? "ON" : "OFF"}`;
+
+        // Task cards
+        if(taskCardsEl){
+          taskCardsEl.innerHTML = "";
+          L.tasks.forEach((t, idx) => {
+            const done = !!state.done[t.id];
+
+            const card = document.createElement("div");
+            card.className = "taskCard";
+            card.setAttribute("data-task", t.id);
+
+            const meta = document.createElement("div");
+            meta.className = "taskMeta";
+
+            const st = document.createElement("div");
+            st.className = "taskStatus" + (done ? " done" : "");
+            st.innerHTML = `<span class="box"></span><span>${done ? "DONE" : "OPEN"} · #${idx+1}</span>`;
+
+            const actions = document.createElement("div");
+            actions.className = "taskActions";
+
+            const pasteBtn = document.createElement("button");
+            pasteBtn.type = "button";
+            pasteBtn.className = "mini";
+            pasteBtn.textContent = "Paste";
+            pasteBtn.disabled = !t.starter;
+            pasteBtn.addEventListener("click", () => {
+              if(!t.starter) return;
+              input.value = t.starter;
+              input.focus();
+              // open panel stays open, flow continues
+            });
+
+            const runBtn = document.createElement("button");
+            runBtn.type = "button";
+            runBtn.className = "mini";
+            runBtn.textContent = "Run";
+            runBtn.disabled = !t.starter;
+            runBtn.addEventListener("click", () => {
+              if(!t.starter) return;
+              run(t.starter);
+              input.value = "";
+              input.focus();
+            });
+
+            const hintBtn = document.createElement("button");
+            hintBtn.type = "button";
+            hintBtn.className = "mini ghost";
+            hintBtn.textContent = "Hint";
+            hintBtn.addEventListener("click", () => { showHint(); input.focus(); });
+
+            actions.appendChild(pasteBtn);
+            actions.appendChild(runBtn);
+            actions.appendChild(hintBtn);
+
+            meta.appendChild(st);
+            meta.appendChild(actions);
+
+            const text = document.createElement("div");
+            text.className = "taskText";
+            text.textContent = t.text;
+
+            card.appendChild(meta);
+            card.appendChild(text);
+
+            if(t.why){
+              const why = document.createElement("div");
+              why.className = "taskWhy";
+              why.textContent = `Warum: ${t.why}`;
+              card.appendChild(why);
+            }
+
+            if(state.teacherMode && t.solution){
+              const tn = document.createElement("div");
+              tn.className = "teacherNote";
+              tn.innerHTML = `<b>Teacher Note:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
+              card.appendChild(tn);
+            }
+
+            taskCardsEl.appendChild(card);
           });
         }
 
-        if(progressBar) progressBar.style.width = `${prog.pct}%`;
-        if(lessonSummaryRight) lessonSummaryRight.textContent = `Progress: ${prog.pct}%`;
+        renderNextStep();
+        updateStatus();
       };
 
       const markDone = (taskId) => {
@@ -1354,6 +1672,9 @@ Mission B (Logs):
         L.tasks.forEach((t, idx) => {
           const done = state.done[t.id] ? `<span class="ok">[x]</span>` : `<span class="warn">[ ]</span>`;
           line(`${done} ${idx+1}. ${esc(t.text)}`);
+          if(state.teacherMode && t.solution){
+            line(`    <span class="accent">teacher:</span> ${esc(t.solution)}`);
+          }
         });
         hr();
       };
@@ -1375,6 +1696,7 @@ Mission B (Logs):
         line(`Lesson: ${esc(currentLesson().id)} (${esc(currentLesson().title)})`);
         line(`Tasks done: ${doneTasks}/${totalTasks} (${pct}%)`);
         line(`CWD: ${esc(state.cwd)}`);
+        line(`Teacher mode: ${state.teacherMode ? "ON" : "OFF"}`);
         hr();
       };
 
@@ -1549,13 +1871,64 @@ Mission B (Logs):
         hr();
       };
 
+      const suggestCommand = (cmd) => {
+        const c = (cmd||"").toLowerCase();
+        if(!c) return null;
+        // simple: prefix + contains + closest by length diff
+        const prefixes = cmdList.filter(x => x.startsWith(c[0] || ""));
+        const byPrefix = cmdList.filter(x => x.startsWith(c));
+        if(byPrefix.length) return byPrefix[0];
+
+        const byContain = prefixes.filter(x => x.includes(c));
+        if(byContain.length) return byContain[0];
+
+        // fallback: nearest length among same first letter
+        let best = null;
+        let bestScore = Infinity;
+        for(const x of prefixes){
+          const score = Math.abs(x.length - c.length);
+          if(score < bestScore){
+            bestScore = score;
+            best = x;
+          }
+        }
+        return best;
+      };
+
+      const guidanceAfterCommonMistakes = (cmd, cmdline) => {
+        // micro-guidance for L4 if they forget -a
+        if(currentLesson().id === "L4"){
+          if(cmd === "ls" && !cmdline.includes("-a")){
+            line(`<span class="accent">hint:</span> In dieser Mission brauchst du oft <span class="accent">ls -a</span>, sonst bleiben Dinge unsichtbar.`);
+          }
+          if(cmd === "tree" && !cmdline.includes("-a")){
+            line(`<span class="accent">hint:</span> Nutze <span class="accent">tree -a</span>, um versteckte Bereiche zu sehen.`);
+          }
+        }
+      };
+
+      const normalizeFriendlyShortcuts = (cmdline) => {
+        // allow "cd students" -> "cd /students" etc. (no behavior change otherwise)
+        const m = cmdline.match(/^cd\s+([a-z]+)\/?$/i);
+        if(m){
+          const t = m[1].toLowerCase();
+          if(routes[t]) return `cd /${t}`;
+        }
+        return cmdline;
+      };
+
       const run = (raw) => {
-        const cmdline = String(raw || "").trim();
+        let cmdline = String(raw || "").trim();
         if(!cmdline) return;
+
+        cmdline = normalizeFriendlyShortcuts(cmdline);
 
         // history
         state.history.push(cmdline);
         state.histIdx = state.history.length;
+
+        state.lastCmd = cmdline;
+        updateStatus();
 
         printPrompted(cmdline);
 
@@ -1566,6 +1939,13 @@ Mission B (Logs):
 
         // store before execution (so checks can validate even if command errors)
         rememberCmd(cmdline);
+
+        // per-command result separator (readability)
+        // (light touch, still "terminal")
+        // no separator before "clear"
+        if(cmd !== "clear"){
+          line(`<span class="accent">result:</span>`);
+        }
 
         switch(cmd){
           case "ls": {
@@ -1580,6 +1960,7 @@ Mission B (Logs):
               return esc(k);
             }).join(" ");
             line(rendered || "");
+            guidanceAfterCommonMistakes(cmd, cmdline);
             break;
           }
 
@@ -1611,7 +1992,20 @@ Mission B (Logs):
             if(!argLine){ line(`<span class="warn">cat:</span> Datei fehlt (z.B. cat README)`); break; }
             const p = normPath(argLine.replace(/^["']|["']$/g,""));
             const data = readFile(p);
-            if(data == null){ line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`); break; }
+            if(data == null){
+              // friendly suggestion: case-insensitive in same directory
+              const parent = p.includes("/") ? p.slice(0, p.lastIndexOf("/")) || "/" : state.cwd;
+              const base = p.includes("/") ? p.slice(p.lastIndexOf("/")+1) : p;
+              const kids = listDir(parent, true) || [];
+              const suggestion = kids.find(k => k.toLowerCase() === base.toLowerCase());
+              if(suggestion){
+                line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`);
+                line(`<span class="accent">meintest du:</span> cat ${esc((parent === "/" ? "" : parent) + "/" + suggestion)}`.replaceAll("//","/"));
+                break;
+              }
+              line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`);
+              break;
+            }
             maybeFlagFound(data);
             String(data).split("\n").forEach(l => line(esc(l)));
             break;
@@ -1640,11 +2034,12 @@ Mission B (Logs):
             if(!isDir(p)){ line(`<span class="warn">tree:</span> kein verzeichnis: ${esc(target||state.cwd)}`); break; }
             line(`<span class="accent">${esc(p === "/" ? "." : p)}</span>`);
             doTree(p, showAll, "");
+            guidanceAfterCommonMistakes(cmd, cmdline);
             break;
           }
 
           case "find": {
-            if(!argLine){ line(`<span class="warn">find:</span> term fehlt (z.B. find flag)`); break; }
+            if(!argLine){ line(`<span class="warn">find:</span> term fehlt (z.B. find evidence)`); break; }
             doFind(argLine);
             break;
           }
@@ -1673,12 +2068,25 @@ Mission B (Logs):
           }
 
           case "cd": {
-            if(!argLine){ state.cwd = "/"; setPrompt(); break; }
+            if(!argLine){ state.cwd = "/"; setPrompt(); updateStatus(); break; }
             const target = argLine.replace(/^["']|["']$/g,"");
             const p = normPath(target);
-            if(!isDir(p)){ line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`); break; }
+
+            // friendly: if missing leading slash but matches top-level dir
+            if(!isDir(p)){
+              const maybeTop = normPath("/" + target.replace(/^\/+/,""));
+              if(isDir(maybeTop)){
+                line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`);
+                line(`<span class="accent">meintest du:</span> cd ${esc(maybeTop)}`);
+                break;
+              }
+              line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`);
+              break;
+            }
+
             state.cwd = p;
             setPrompt();
+            updateStatus();
             break;
           }
 
@@ -1693,7 +2101,6 @@ Mission B (Logs):
 
           // ----- Course commands
           case "lesson":
-            // open panel for convenience
             if(lessonPanel) lessonPanel.open = true;
             showLesson();
             break;
@@ -1725,12 +2132,18 @@ Mission B (Logs):
             resetCourse();
             break;
 
-          default:
+          default: {
+            const sug = suggestCommand(cmd);
             line(`<span class="warn">command not found:</span> ${esc(cmd)} (Tipp: help)`);
+            if(sug){
+              line(`<span class="accent">meintest du:</span> ${esc(sug)}`);
+            }
+          }
         }
 
         // after any command, update tasks silently
         checkTasks(true);
+        updateStatus();
       };
 
       // Input handlers: submit + history + tab completion
@@ -1791,13 +2204,52 @@ Mission B (Logs):
       btnNext?.addEventListener("click", () => { nextLesson(); input.focus(); });
       btnReset?.addEventListener("click", () => { resetCourse(); input.focus(); });
 
+      // Next step actions
+      btnPasteNext?.addEventListener("click", () => {
+        const t = firstOpenTask();
+        if(!t?.starter) return;
+        input.value = t.starter;
+        input.focus();
+      });
+      btnRunNext?.addEventListener("click", () => {
+        const t = firstOpenTask();
+        if(!t?.starter) return;
+        run(t.starter);
+        input.value = "";
+        input.focus();
+      });
+
+      // Teacher mode toggle
+      toggleTeacher?.addEventListener("click", () => {
+        state.teacherMode = !state.teacherMode;
+        saveTeacherMode();
+        renderLessonPanel();
+        input.focus();
+      });
+
+      // Console quick actions
+      quickTasks?.addEventListener("click", () => { run("tasks"); input.focus(); });
+      quickHint?.addEventListener("click", () => { run("hint"); input.focus(); });
+      quickCheck?.addEventListener("click", () => { run("check"); input.focus(); });
+
       miniHelp?.addEventListener("click", () => { help(); input.focus(); });
+
+      // Chips
+      chips.forEach(ch => {
+        ch.addEventListener("click", () => {
+          const cmd = ch.getAttribute("data-cmd") || "";
+          if(!cmd) return;
+          input.value = cmd;
+          input.focus();
+        });
+      });
 
       // init
       loadState();
       motd();
       setPrompt();
       renderLessonPanel();
+      updateStatus();
       input.focus();
     })();
   </script>
