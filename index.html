@@ -280,7 +280,7 @@
       overflow:hidden;
       display:flex;
       flex-direction:column;
-      min-height: 280px;
+      min-height: 300px;
       position:relative;
     }
     /* subtle CRT */
@@ -379,10 +379,10 @@
         </div>
 
         <nav class="menu" aria-label="Hauptnavigation">
-          <a class="tab" href="/students/index.html">Students</a>
-          <a class="tab" href="/colleagues/index.html">Colleagues</a>
-          <a class="tab" href="/cyber/index.html">Cyber</a>
-          <a class="tab" href="/events/index.html">Events</a>
+          <a class="tab" href="/students/index.html">Für Schüler:innen</a>
+          <a class="tab" href="/colleagues/index.html">Für Kolleg:innen</a>
+          <a class="tab" href="/cyber/index.html">Cybersecurity</a>
+          <a class="tab" href="/ultra/index.html">Ultralaufen</a>
         </nav>
       </div>
     </div>
@@ -427,7 +427,7 @@
             <form class="termInRow" id="shellForm">
               <span class="prompt" id="promptText">ramon@school-lab:~$</span>
               <input class="termIn" id="shellIn" type="text" autocomplete="off" spellcheck="false"
-                     placeholder="ls · cd students · help" aria-label="Terminal Eingabe"/>
+                     placeholder="ls · cd students · help · tree · find flag" aria-label="Terminal Eingabe"/>
             </form>
           </div>
         </div>
@@ -464,7 +464,7 @@
       document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
     })();
 
-    // Terminal
+    // Terminal (rb-shell v2)
     (() => {
       const out = document.getElementById("shellOut");
       const form = document.getElementById("shellForm");
@@ -473,27 +473,214 @@
       const miniHelp = document.getElementById("miniHelp");
       if(!out || !form || !input || !promptText) return;
 
+      // Map "sections" to real pages (what cd/open can navigate to)
       const routes = {
         students: "/students/index.html",
         colleagues: "/colleagues/index.html",
         cyber: "/cyber/index.html",
-        events: "/events/index.html"
+        ultra: "/ultra/index.html"
       };
-      const state = { cwd: "/" };
+
+      // In-memory filesystem (toy)
+      // Directories end with "/" in tree output; content stored as strings.
+      // Hidden material is inside ".lab/" (discoverable via ls -a, tree -a, find).
+      const fs = {
+        "/": { type:"dir", kids:["students","colleagues","cyber","ultra","README","notes.txt",".lab"] },
+
+        "/students": { type:"dir", kids:["README","aufgaben","beispiele"] },
+        "/students/README": { type:"file", data:
+`STUDENTS
+- Lehrplan (Sek I)
+- Unterrichtsbeispiele
+- Aufgaben / Arbeitsblätter
+
+Tipp: cd /students
+`},
+        "/students/aufgaben": { type:"dir", kids:["todo.txt"] },
+        "/students/aufgaben/todo.txt": { type:"file", data:
+`TODO (Beispiele)
+- Scratch: Mini-Game
+- Python: Datentypen + Schleifen
+- HTML/CSS: Landingpage
+`},
+        "/students/beispiele": { type:"dir", kids:["netze.md","daten.md"] },
+        "/students/beispiele/netze.md": { type:"file", data:
+`Netze (Sek I)
+- IP / Subnetz (intuition)
+- Router vs Switch
+- DNS als Telefonbuch
+`},
+        "/students/beispiele/daten.md": { type:"file", data:
+`Daten
+- Binär / Hex (praxisnah)
+- Verschlüsselung vs Hashing
+- Datenbanken: Tabellen + Schlüssel
+`},
+
+        "/colleagues": { type:"dir", kids:["README","didaktik.md","material.md"] },
+        "/colleagues/README": { type:"file", data:
+`COLLEAGUES
+- Didaktische Kommentare
+- Material-Übersichten
+- Workshops / Fortbildung
+
+Tipp: open colleagues
+`},
+        "/colleagues/didaktik.md": { type:"file", data:
+`Didaktik (Kurz)
+- Kompetenzorientiert, aber pragmatisch
+- Output-Orientierung: Projekte > Folien
+- Sicherheit/Datenschutz: "so viel wie nötig"
+`},
+        "/colleagues/material.md": { type:"file", data:
+`Material
+- Vorlagen (Arbeitsblatt, Checklisten)
+- Bewertungsraster
+- Tools: lokal / schulkonform
+`},
+
+        "/cyber": { type:"dir", kids:["README","writeups","lab"] },
+        "/cyber/README": { type:"file", data:
+`CYBERSECURITY
+- CyberDefense Lab
+- Writeups & Demos
+- Grundlagen + verantwortungsbewusste Praxis
+
+Hinweis: Dieses Terminal ist nur Deko. Keine echten Exploits.
+`},
+        "/cyber/writeups": { type:"dir", kids:["index.txt"] },
+        "/cyber/writeups/index.txt": { type:"file", data:
+`Writeups (Beispiele)
+- Recon 101
+- Web Basics
+- Auth & Sessions
+`},
+        "/cyber/lab": { type:"dir", kids:["blue.md","red.md"] },
+        "/cyber/lab/blue.md": { type:"file", data:
+`Blue Team
+- Logging/Monitoring
+- Detection Basics
+- Incident Notes
+`},
+        "/cyber/lab/red.md": { type:"file", data:
+`Red Team (Education)
+- Threat modeling
+- OWASP Top 10 (high level)
+- Hands-on: sichere Übungsumgebungen
+`},
+
+        "/ultra": { type:"dir", kids:["README","training","events"] },
+        "/ultra/README": { type:"file", data:
+`ULTRALAUFEN
+- Training / Mindset
+- Projekte (z.B. Shin-Gōka)
+- Events & Orga
+`},
+        "/ultra/training": { type:"dir", kids:["plan.md","mindset.md"] },
+        "/ultra/training/plan.md": { type:"file", data:
+`Training (Skizze)
+- Base
+- Tempo / Strides
+- Longrun + Back-to-Back
+- Recovery als Pflicht
+`},
+        "/ultra/training/mindset.md": { type:"file", data:
+`Mindset
+- "Es ist alles gut" Check-in
+- Moment erleben
+- Wellen kommen, Wellen gehen
+`},
+        "/ultra/events": { type:"dir", kids:["lafferde.md"] },
+        "/ultra/events/lafferde.md": { type:"file", data:
+`Events
+- Lafferde Loop Challenge
+- Humble Club Backyard (Orga)
+`},
+
+        "/README": { type:"file", data:
+`README
+students   → Lehrplan + Unterrichtsbeispiele
+colleagues → didaktische Kommentare + Material
+cyber      → CyberDefense Lab + Writeups + Videos
+ultra      → Ultralaufen / Training / Projekte
+
+Tipp: ls, cd students, tree, find flag
+`},
+        "/notes.txt": { type:"file", data:
+`NOTES
+- kein tracking
+- statisch hostbar
+- Terminal ist "spielbar" und bewusst harmlos
+`},
+
+        // Hidden lab area (discoverable)
+        "/.lab": { type:"dir", kids:[".cache","ops"] },
+        "/.lab/.cache": { type:"dir", kids:["hint.txt"] },
+        "/.lab/.cache/hint.txt": { type:"file", data:
+`HINT
+- try: ls -a
+- try: tree -a
+- try: find flag
+`},
+        "/.lab/ops": { type:"dir", kids:["flag.txt"] },
+        "/.lab/ops/flag.txt": { type:"file", data:
+`FLAG
+RB{terminal_mode_unlocked}
+`},
+      };
+
+      const state = {
+        cwd: "/",
+        user: "ramon",
+        host: "school-lab",
+        startTs: Date.now(),
+        history: [],
+        histIdx: -1,
+        completions: [],
+        compIdx: 0
+      };
 
       const esc = (s) => String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
       const line = (html="") => { out.innerHTML += html + "<br>"; out.scrollTop = out.scrollHeight; };
       const hr = () => line(`<span class="accent">${"—".repeat(56)}</span>`);
 
+      const normPath = (p) => {
+        if(!p) return state.cwd;
+        // absolute?
+        let path = p.startsWith("/") ? p : (state.cwd === "/" ? `/${p}` : `${state.cwd}/${p}`);
+        // remove duplicate slashes
+        path = path.replace(/\/+/g,"/");
+        // resolve . and ..
+        const parts = [];
+        for(const seg of path.split("/")){
+          if(!seg || seg === ".") continue;
+          if(seg === ".."){ parts.pop(); continue; }
+          parts.push(seg);
+        }
+        return "/" + parts.join("/");
+      };
+
+      const isDir = (path) => fs[path]?.type === "dir";
+      const isFile = (path) => fs[path]?.type === "file";
+
+      const listDir = (path, showAll=false) => {
+        const node = fs[path];
+        if(!node || node.type !== "dir") return null;
+        const kids = node.kids.slice();
+        return kids.filter(k => showAll ? true : !k.startsWith("."));
+      };
+
+      const readFile = (path) => fs[path]?.type === "file" ? fs[path].data : null;
+
       const setPrompt = () => {
         const where = state.cwd === "/" ? "~" : state.cwd;
-        promptText.textContent = `ramon@school-lab:${where}$`;
+        promptText.textContent = `${state.user}@${state.host}:${where}$`;
       };
 
       const header = () => {
-        line(`<span class="pix">┌─ rb-shell ───────────────────────────────┐</span>`);
-        line(`<span class="pix">│ dirs: students · colleagues · cyber · events │</span>`);
-        line(`<span class="pix">└───────────────────────────────────────────┘</span>`);
+        line(`<span class="pix">┌─ rb-shell ───────────────────────────────────┐</span>`);
+        line(`<span class="pix">│ dirs: students · colleagues · cyber · ultra │</span>`);
+        line(`<span class="pix">└─────────────────────────────────────────────┘</span>`);
       };
 
       const motd = () => {
@@ -502,37 +689,178 @@
         line(`<span class="ok">OK</span> <span class="accent">kein tracking</span> · Tippe <span class="accent">help</span> oder <span class="accent">ls</span>`);
         hr();
         line(`<span class="accent">Beispiel:</span> cd students`);
+        line(`<span class="accent">Challenge:</span> finde die versteckte flag (Tipp: find flag)`);
         line(``);
       };
 
       const help = () => {
         hr();
         line(`<span class="accent">Commands</span>`);
-        line(`ls · cd &lt;dir&gt; · pwd · whoami · cat README · clear · help`);
+        line(`ls [-a] · cd &lt;dir&gt; · pwd · whoami · cat &lt;file&gt; · echo ... · clear`);
+        line(`date · uptime · neofetch · tree [-a] · find &lt;term&gt; · grep &lt;term&gt; &lt;file&gt;`);
+        line(`head [-n N] &lt;file&gt; · tail [-n N] &lt;file&gt; · open &lt;section&gt;`);
+        line(`mkdir &lt;dir&gt; · touch &lt;file&gt; (nur /tmp)`);
         hr();
       };
 
-      const catReadme = () => {
-        line(`<span class="accent">README</span>`);
-        line(`students   → Lehrplan + Unterrichtsbeispiele`);
-        line(`colleagues → didaktische Kommentare + Material`);
-        line(`cyber      → CyberDefense Lab + Writeups + Videos`);
-        line(`events     → Lafferde Loop Challenge`);
+      const man = (topic="") => {
+        const t = (topic||"").toLowerCase();
+        hr();
+        if(!t){
+          line(`<span class="accent">man</span> topic fehlt (z.B. man ls)`);
+          hr();
+          return;
+        }
+        const pages = {
+          ls: "ls [-a]\nListet Verzeichnisse. -a zeigt auch dotfiles.",
+          cd: "cd <dir>\nWechselt das Verzeichnis. Unterstützt .. und absolute Pfade.",
+          tree: "tree [-a]\nZeigt Verzeichnisbaum. -a zeigt dotfiles.",
+          find: "find <term>\nSucht Pfade im Dateibaum (substring match).",
+          grep: "grep <term> <file>\nSucht in Datei nach Zeilen, die <term> enthalten.",
+          open: "open <section>\nÖffnet Seite: students|colleagues|cyber|ultra"
+        };
+        line(`<span class="accent">MAN ${esc(t)}</span>`);
+        line(esc(pages[t] || "Keine manpage gefunden."));
+        hr();
+      };
+
+      const doTree = (base, showAll=false, prefix="") => {
+        const node = fs[base];
+        if(!node || node.type !== "dir") return;
+        const kids = listDir(base, showAll) || [];
+        kids.forEach((k, idx) => {
+          const isLast = idx === kids.length - 1;
+          const branch = isLast ? "└── " : "├── ";
+          const nextPrefix = prefix + (isLast ? "    " : "│   ");
+          const full = (base === "/" ? `/${k}` : `${base}/${k}`).replace(/\/+/g,"/");
+          const label = fs[full]?.type === "dir" ? `<span class="accent">${esc(k)}/</span>` : esc(k);
+          line(`${esc(prefix + branch)}${label}`);
+          if(fs[full]?.type === "dir") doTree(full, showAll, nextPrefix);
+        });
+      };
+
+      const doFind = (term) => {
+        const q = (term||"").toLowerCase();
+        const hits = [];
+        for(const p of Object.keys(fs)){
+          if(p.toLowerCase().includes(q)) hits.push(p);
+        }
+        hits.sort();
+        if(!hits.length){
+          line(`<span class="warn">find:</span> nichts gefunden`);
+          return;
+        }
+        hits.slice(0, 80).forEach(h => line(esc(h)));
+        if(hits.length > 80) line(`<span class="accent">…</span> (${hits.length-80} weitere Treffer)`);
+      };
+
+      const doGrep = (term, filePath) => {
+        const p = normPath(filePath);
+        const data = readFile(p);
+        if(data == null){
+          line(`<span class="warn">grep:</span> Datei nicht gefunden: ${esc(filePath)}`);
+          return;
+        }
+        const q = (term||"").toLowerCase();
+        const lines = String(data).split("\n");
+        const hits = lines.filter(L => L.toLowerCase().includes(q));
+        if(!hits.length){
+          line(`<span class="warn">grep:</span> keine Treffer`);
+          return;
+        }
+        hits.slice(0, 60).forEach(h => line(esc(h)));
+        if(hits.length > 60) line(`<span class="accent">…</span> (${hits.length-60} weitere Zeilen)`);
+      };
+
+      const doHeadTail = (filePath, n=10, mode="head") => {
+        const p = normPath(filePath);
+        const data = readFile(p);
+        if(data == null){
+          line(`<span class="warn">${mode}:</span> Datei nicht gefunden: ${esc(filePath)}`);
+          return;
+        }
+        const arr = String(data).split("\n");
+        const slice = mode === "head" ? arr.slice(0, n) : arr.slice(Math.max(0, arr.length - n));
+        slice.forEach(l => line(esc(l)));
+      };
+
+      const neofetch = () => {
+        const up = Math.max(0, Math.floor((Date.now()-state.startTs)/1000));
+        const mins = Math.floor(up/60);
+        const secs = up%60;
+        hr();
+        line(`<span class="accent">rb@school-lab</span>`);
+        line(`OS: RB Static (educational shell)`);
+        line(`Shell: rb-shell`);
+        line(`Uptime: ${mins}m ${secs}s`);
+        line(`Sections: students, colleagues, cyber, ultra`);
+        hr();
+      };
+
+      // Completion helpers
+      const cmdList = [
+        "ls","cd","pwd","whoami","cat","echo","clear","help","man",
+        "date","uptime","neofetch","tree","find","grep","head","tail","open","mkdir","touch"
+      ];
+
+      const pathCompletions = (partial) => {
+        const base = partial.includes("/") ? partial.slice(0, partial.lastIndexOf("/")) : "";
+        const frag = partial.includes("/") ? partial.slice(partial.lastIndexOf("/")+1) : partial;
+        const basePath = partial.startsWith("/") ? (base || "/") : normPath(base || ".");
+        const dirPath = isDir(basePath) ? basePath : state.cwd;
+        const kids = listDir(dirPath, true) || [];
+        const results = kids
+          .filter(k => k.toLowerCase().startsWith(frag.toLowerCase()))
+          .map(k => {
+            const full = (dirPath === "/" ? `/${k}` : `${dirPath}/${k}`).replace(/\/+/g,"/");
+            const suffix = fs[full]?.type === "dir" ? "/" : "";
+            if(partial.startsWith("/")){
+              const prefix = (basePath === "/" ? "/" : basePath + "/");
+              return (prefix + k + suffix).replace(/\/+/g,"/");
+            }
+            // relative
+            const relPrefix = base ? (base.endsWith("/") ? base : base + "/") : "";
+            return relPrefix + k + suffix;
+          });
+        return results;
+      };
+
+      const printPrompted = (cmdline) => {
+        const where = state.cwd === "/" ? "~" : state.cwd;
+        line(`<span class="ok">${esc(`${state.user}@${state.host}:${where}$`)}</span> ${esc(cmdline)}`);
       };
 
       const run = (raw) => {
         const cmdline = String(raw || "").trim();
         if(!cmdline) return;
 
-        line(`<span class="ok">${esc(`ramon@school-lab:${state.cwd === "/" ? "~" : state.cwd}$`)}</span> ${esc(cmdline)}`);
+        // history
+        state.history.push(cmdline);
+        state.histIdx = state.history.length;
 
-        const [cmd, ...rest] = cmdline.split(/\s+/);
-        const arg = rest.join(" ").trim();
+        printPrompted(cmdline);
 
-        switch((cmd||"").toLowerCase()){
-          case "ls":
-            line(`<span class="accent">students/</span> colleagues/ cyber/ events/`);
+        const parts = cmdline.split(/\s+/);
+        const cmd = (parts.shift() || "").toLowerCase();
+        const rest = parts;
+
+        const argLine = rest.join(" ").trim();
+
+        switch(cmd){
+          case "ls": {
+            const showAll = rest.includes("-a") || rest.includes("--all");
+            const target = rest.find(x => !x.startsWith("-"));
+            const p = target ? normPath(target) : state.cwd;
+            const kids = listDir(p, showAll);
+            if(!kids){ line(`<span class="warn">ls:</span> kein verzeichnis: ${esc(target||state.cwd)}`); break; }
+            const rendered = kids.map(k => {
+              const full = (p === "/" ? `/${k}` : `${p}/${k}`).replace(/\/+/g,"/");
+              if(fs[full]?.type === "dir") return `<span class="accent">${esc(k)}/</span>`;
+              return esc(k);
+            }).join(" ");
+            line(rendered || "");
             break;
+          }
 
           case "pwd":
             line(esc(state.cwd));
@@ -542,21 +870,34 @@
             line(`<span class="accent">Ramon Berghorn</span> — Informatik Sek I · CyberDefense Lab`);
             break;
 
-          case "cat": {
-            const t = (arg||"").toLowerCase();
-            if(t === "readme" || t === "readme.txt") catReadme();
-            else line(`<span class="warn">cat:</span> Datei nicht gefunden (Tipp: cat README)`);
+          case "date":
+            line(esc(new Date().toString()));
+            break;
+
+          case "uptime": {
+            const up = Math.max(0, Math.floor((Date.now()-state.startTs)/1000));
+            const mins = Math.floor(up/60);
+            const secs = up%60;
+            line(`${mins}m ${secs}s`);
             break;
           }
 
-          case "cd": {
-            const target = (arg||"").replaceAll("/","").toLowerCase();
-            if(!target){ line(`<span class="warn">cd:</span> Ziel fehlt (Tipp: cd students)`); break; }
-            if(!routes[target]){ line(`<span class="warn">cd:</span> unbekannt: ${esc(target)}`); break; }
-            line(`<span class="accent">loading…</span>`);
-            window.location.href = routes[target];
+          case "neofetch":
+            neofetch();
+            break;
+
+          case "cat": {
+            if(!argLine){ line(`<span class="warn">cat:</span> Datei fehlt (z.B. cat README)`); break; }
+            const p = normPath(argLine.replace(/^["']|["']$/g,""));
+            const data = readFile(p);
+            if(data == null){ line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`); break; }
+            String(data).split("\n").forEach(l => line(esc(l)));
             break;
           }
+
+          case "echo":
+            line(esc(argLine));
+            break;
 
           case "clear":
             out.innerHTML = "";
@@ -566,16 +907,142 @@
             help();
             break;
 
+          case "man":
+            man(rest[0] || "");
+            break;
+
+          case "tree": {
+            const showAll = rest.includes("-a") || rest.includes("--all");
+            const target = rest.find(x => !x.startsWith("-"));
+            const p = target ? normPath(target) : state.cwd;
+            if(!isDir(p)){ line(`<span class="warn">tree:</span> kein verzeichnis: ${esc(target||state.cwd)}`); break; }
+            line(`<span class="accent">${esc(p === "/" ? "." : p)}</span>`);
+            doTree(p, showAll, "");
+            break;
+          }
+
+          case "find": {
+            if(!argLine){ line(`<span class="warn">find:</span> term fehlt (z.B. find flag)`); break; }
+            doFind(argLine);
+            break;
+          }
+
+          case "grep": {
+            if(rest.length < 2){ line(`<span class="warn">grep:</span> usage: grep &lt;term&gt; &lt;file&gt;`); break; }
+            const term = rest[0];
+            const filePath = rest.slice(1).join(" ");
+            doGrep(term, filePath);
+            break;
+          }
+
+          case "head":
+          case "tail": {
+            let n = 10;
+            let i = 0;
+            if(rest[i] === "-n" && rest[i+1]){
+              const parsed = parseInt(rest[i+1],10);
+              if(Number.isFinite(parsed) && parsed > 0) n = parsed;
+              i += 2;
+            }
+            const filePath = rest.slice(i).join(" ");
+            if(!filePath){ line(`<span class="warn">${cmd}:</span> usage: ${cmd} [-n N] &lt;file&gt;`); break; }
+            doHeadTail(filePath, n, cmd);
+            break;
+          }
+
+          case "cd": {
+            if(!argLine){ state.cwd = "/"; setPrompt(); break; }
+            const target = argLine.replace(/^["']|["']$/g,"");
+            const p = normPath(target);
+            if(!isDir(p)){ line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`); break; }
+            state.cwd = p;
+            setPrompt();
+            break;
+          }
+
+          case "open": {
+            const target = (argLine||"").toLowerCase().trim();
+            if(!target){ line(`<span class="warn">open:</span> Ziel fehlt (students|colleagues|cyber|ultra)`); break; }
+            if(!routes[target]){ line(`<span class="warn">open:</span> unbekannt: ${esc(target)}`); break; }
+            line(`<span class="accent">loading…</span>`);
+            window.location.href = routes[target];
+            break;
+          }
+
+          case "mkdir":
+          case "touch": {
+            // intentionally limited (keine echte persistenz, keine manipulation außerhalb /tmp)
+            line(`<span class="warn">${cmd}:</span> deaktiviert (demo-shell, read-only)`);
+            break;
+          }
+
           default:
             line(`<span class="warn">command not found:</span> ${esc(cmd)} (Tipp: help)`);
         }
       };
 
+      // Input handlers: submit + history + tab completion
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         run(input.value);
         input.value = "";
+        state.completions = [];
+        state.compIdx = 0;
         input.focus();
+      });
+
+      input.addEventListener("keydown", (e) => {
+        // history up/down
+        if(e.key === "ArrowUp"){
+          e.preventDefault();
+          if(state.history.length === 0) return;
+          state.histIdx = Math.max(0, state.histIdx - 1);
+          input.value = state.history[state.histIdx] || "";
+          return;
+        }
+        if(e.key === "ArrowDown"){
+          e.preventDefault();
+          if(state.history.length === 0) return;
+          state.histIdx = Math.min(state.history.length, state.histIdx + 1);
+          input.value = state.histIdx === state.history.length ? "" : (state.history[state.histIdx] || "");
+          return;
+        }
+
+        // Tab completion
+        if(e.key === "Tab"){
+          e.preventDefault();
+          const v = input.value;
+          const parts = v.split(/\s+/);
+          const last = parts[parts.length-1] || "";
+          const isFirst = parts.length === 1;
+
+          if(isFirst){
+            // complete command
+            if(!state.completions.length || !v.endsWith(state.completions[state.compIdx] || "")){
+              const m = cmdList.filter(c => c.startsWith(last.toLowerCase()));
+              state.completions = m;
+              state.compIdx = 0;
+            }
+            if(state.completions.length){
+              const cand = state.completions[state.compIdx % state.completions.length];
+              input.value = cand;
+              state.compIdx++;
+            }
+            return;
+          } else {
+            // complete path/sections
+            const comps = pathCompletions(last);
+            if(!comps.length) return;
+            if(state.completions.join("|") !== comps.join("|")){
+              state.completions = comps;
+              state.compIdx = 0;
+            }
+            const cand = state.completions[state.compIdx % state.completions.length];
+            parts[parts.length-1] = cand;
+            input.value = parts.join(" ");
+            state.compIdx++;
+          }
+        }
       });
 
       miniHelp?.addEventListener("click", () => { help(); input.focus(); });
@@ -587,5 +1054,6 @@
   </script>
 </body>
 </html>
+
 
 
