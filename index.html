@@ -263,18 +263,6 @@
       text-transform:uppercase;
       letter-spacing:.08em;
     }
-    .termTopLeft{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .quickRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
     .miniHelp{
       font-family: var(--mono);
       font-size: 12px;
@@ -288,6 +276,7 @@
       letter-spacing:.08em;
     }
 
+    /* Status line: less “buttony” */
     .statusLine{
       margin-bottom: 8px;
       border: var(--bw) solid var(--line);
@@ -309,9 +298,8 @@
       display:inline-flex;
       align-items:center;
       gap:8px;
-      border: var(--bw) solid var(--line);
+      border: 1px solid rgba(0,0,0,.35);
       background:#fff;
-      box-shadow: 3px 3px 0 var(--shadowInk);
       padding: 4px 8px;
       white-space:nowrap;
     }
@@ -395,27 +383,7 @@
       padding: 6px 8px;
     }
 
-    .chips{
-      margin-top: 8px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .chip{
-      border: var(--bw) solid #111;
-      background:#fff;
-      box-shadow: 3px 3px 0 var(--shadowInk);
-      padding: 6px 8px;
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      cursor:pointer;
-      user-select:none;
-      white-space:nowrap;
-    }
-
-    /* Lesson panel */
+    /* Lesson panel (teacher-only, hidden by default) */
     details.lessonPanel{
       margin-top: 12px;
       border: var(--bw) solid var(--panelLine);
@@ -423,6 +391,7 @@
       box-shadow: 4px 4px 0 var(--shadowInk);
       overflow:hidden;
     }
+    details.lessonPanel[hidden]{ display:none !important; }
     details.lessonPanel > summary{
       cursor:pointer;
       list-style:none;
@@ -505,7 +474,7 @@
       font-size: 12px;
     }
 
-    /* Task cards (new) */
+    /* Task cards */
     .taskMeta{
       display:flex;
       align-items:center;
@@ -554,27 +523,6 @@
       border-left: 3px solid #111;
       padding-left: 10px;
     }
-    .taskActions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-    }
-    .taskActions .mini{
-      border: var(--bw) solid var(--panelLine);
-      background:#fff;
-      box-shadow: 3px 3px 0 var(--shadowInk);
-      padding: 6px 8px;
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-    .taskActions .ghost{
-      opacity:.9;
-    }
     .teacherNote{
       border: var(--bw) dashed #111;
       padding: 8px 10px;
@@ -595,7 +543,7 @@
   <div class="strip" aria-hidden="true">
     <div class="wrap">
       <div><b>RB</b> / TEACH / HACK / RUN </div>
-      <div><span>BUILD:</span> <b>2025-12 -30</b></div>
+      <div><span>BUILD:</span> <b>2025-12-30</b></div>
     </div>
   </div>
 
@@ -606,7 +554,7 @@
           <div class="mark" aria-hidden="true">RB</div>
           <div class="brandText">
             <b>Ramon Berghorn</b>
-            <span> Informatik Sek I · CyberDefense Lab · Ultrarunning</span>
+            <span>Informatik Sek I · CyberDefense Lab · Ultrarunning</span>
           </div>
         </div>
 
@@ -625,12 +573,12 @@
 
       <section class="panel" aria-label="Landing">
         <div class="heroTop">
-          <div class="kicker"><span class="dot"></span><span>Praxis > Theorie</span></div>
+          <div class="kicker"><span class="dot"></span><span>Praxis &gt; Theorie</span></div>
           <h1>
-          Informatik für alle –<br>
-          <span style="font-weight:600; letter-spacing:-0.01em;">
-            Schule, Alltag, digitale Kompetenz.
-          </span>
+            Informatik für alle –<br>
+            <span style="font-weight:600; letter-spacing:-0.01em;">
+              Schule, Alltag, digitale Kompetenz.
+            </span>
           </h1>
         </div>
 
@@ -655,14 +603,7 @@
         <!-- CONSOLE -->
         <div class="consolePanel" aria-label="Console">
           <div class="termTop">
-            <div class="termTopLeft">
-              <div>console</div>
-              <div class="quickRow" aria-label="Quick Actions">
-                <button class="miniHelp" id="quickTasks" type="button">tasks</button>
-                <button class="miniHelp" id="quickHint" type="button">hint</button>
-                <button class="miniHelp" id="quickCheck" type="button">check</button>
-              </div>
-            </div>
+            <div>console</div>
             <button class="miniHelp" id="miniHelp" type="button">$ help</button>
           </div>
 
@@ -678,44 +619,28 @@
             <form class="termInRow" id="shellForm">
               <span class="prompt" id="promptText">ramon@school-lab:~$</span>
               <input class="termIn" id="shellIn" type="text" autocomplete="off" spellcheck="false"
-                     placeholder="lesson · tasks · hint · ls · cd students · cat README" aria-label="Terminal Eingabe"/>
+                     placeholder="pwd · ls · cd /students · cat /students/README · help" aria-label="Terminal Eingabe"/>
             </form>
           </div>
 
-          <div class="chips" aria-label="Quick Command Chips">
-            <div class="chip" data-cmd="lesson">lesson</div>
-            <div class="chip" data-cmd="tasks">tasks</div>
-            <div class="chip" data-cmd="pwd">pwd</div>
-            <div class="chip" data-cmd="ls">ls</div>
-            <div class="chip" data-cmd="cd /students">cd /students</div>
-            <div class="chip" data-cmd="cat /students/README">cat /students/README</div>
-          </div>
-
-          <!-- LESSON SYSTEM (collapsible) -->
-          <details class="lessonPanel" id="lessonPanel">
+          <!-- TEACHER GUIDE (hidden until 'imateacher') -->
+          <details class="lessonPanel" id="lessonPanel" hidden>
             <summary>
-              <span>Linux-Mini-Kurs (Jg. 9/10) — Guided Incident Case</span>
+              <span>Linux-Mini-Kurs (Jg. 9/10) — Guided Incident Case (Teacher)</span>
               <span class="small" id="lessonSummaryRight">Progress: 0%</span>
             </summary>
             <div class="lessonBody">
               <div class="lessonGrid">
                 <div class="card">
-                  <div class="taskMeta">
-                    <div>
-                      <h3 id="lessonTitle" style="margin:0 0 6px;">Lesson</h3>
-                      <div class="muted" id="lessonIntro">…</div>
-                    </div>
-                    <div class="btnRow" aria-label="Lesson Controls">
-                      <button class="lessonBtn" type="button" id="toggleTeacher">Teacher: OFF</button>
-                    </div>
-                  </div>
+                  <h3 id="lessonTitle" style="margin:0 0 6px;">Lesson</h3>
+                  <div class="muted" id="lessonIntro">…</div>
 
                   <div style="margin-top:10px;">
                     <div class="barWrap" aria-label="Progress bar">
                       <div class="bar" id="progressBar"></div>
                     </div>
                     <div class="muted" style="margin-top:8px;">
-                      Tipp: Du kannst alles auch im Terminal steuern: <b>lesson</b>, <b>tasks</b>, <b>hint</b>, <b>check</b>, <b>next</b>.
+                      Teacher-only Guide. SuS arbeiten primär im Terminal. Aktivierung: <b>imateacher</b>.
                     </div>
                   </div>
 
@@ -735,7 +660,7 @@
 
                 <div class="card">
                   <div class="taskMeta">
-                    <h3 style="margin:0;">Aufgaben (Guided Flow)</h3>
+                    <h3 style="margin:0;">Aufgaben (Teacher View)</h3>
                     <div class="btnRow">
                       <button class="lessonBtn" type="button" id="btnHint">Hint</button>
                       <button class="lessonBtn" type="button" id="btnCheck">Check</button>
@@ -791,7 +716,7 @@
       document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
     })();
 
-    // Terminal + Guided Lessons (rb-shell v4)
+    // Terminal + Guided Lessons (rb-shell v4 — reduced UI, teacher-guide via 'imateacher')
     (() => {
       const out = document.getElementById("shellOut");
       const form = document.getElementById("shellForm");
@@ -799,16 +724,10 @@
       const promptText = document.getElementById("promptText");
       const miniHelp = document.getElementById("miniHelp");
 
-      const quickTasks = document.getElementById("quickTasks");
-      const quickHint = document.getElementById("quickHint");
-      const quickCheck = document.getElementById("quickCheck");
-
       const statusCwd = document.getElementById("statusCwd");
       const statusLesson = document.getElementById("statusLesson");
       const statusProgress = document.getElementById("statusProgress");
       const statusLast = document.getElementById("statusLast");
-
-      const chips = Array.from(document.querySelectorAll(".chip"));
 
       const lessonPanel = document.getElementById("lessonPanel");
       const lessonTitle = document.getElementById("lessonTitle");
@@ -822,7 +741,6 @@
 
       const taskCardsEl = document.getElementById("taskCards");
 
-      const toggleTeacher = document.getElementById("toggleTeacher");
       const nextText = document.getElementById("nextText");
       const nextWhy = document.getElementById("nextWhy");
       const nextTeacher = document.getElementById("nextTeacher");
@@ -839,8 +757,7 @@
         ultra: "/ultra/index.html"
       };
 
-      // In-memory filesystem (expanded)
-      // Hidden stuff inside ".lab/" plus a log-based evidence.
+      // In-memory filesystem
       const fs = {
         "/": { type:"dir", kids:["students","colleagues","cyber","ultra","courses","var","home","README","notes.txt",".lab"] },
 
@@ -852,15 +769,15 @@ cyber      → CyberDefense Lab + Writeups + Videos
 ultra      → Ultralaufen / Training / Projekte
 
 Mini-Linux-Kurs:
-- lesson   (zeigt aktuelle Lektion)
-- tasks    (zeigt Aufgaben)
-- hint     (kleiner Hinweis)
-- check    (prüft Fortschritt)
-- next     (nächste Lektion)
+- pwd / ls / cd / cat
+- head / tail / grep / find / tree
 
 Incident Case (Mini-CTF, safe):
 - IOC A: irgendwo im Dateibaum (Tipp: ls -a / tree -a / find evidence)
 - IOC B: steckt in Logs (Tipp: /var/log)
+
+Teacher Guide:
+- imateacher   (öffnet den Guide)
 `},
         "/notes.txt": { type:"file", data:
 `NOTES
@@ -888,9 +805,6 @@ Warmup:
 2) Wenn ein Schüler sagt "Bei mir geht's", ist das Debugging offiziell abgeschlossen.
 3) DNS ist wie 'Kontakte' im Handy. Nur ohne Profilbild. Meistens.
 4) "Ich hab nichts geändert" ist eine Änderung.
-
-Bonus:
-- cat /students/netze_quickcards.txt
 `},
         "/students/netze_quickcards.txt": { type:"file", data:
 `NETZE – Quickcards (Jg. 9/10)
@@ -1155,7 +1069,6 @@ Aber keine Sorge: read-only.
         "/var": { type:"dir", kids:["log"] },
         "/var/log": { type:"dir", kids:["auth.log","syslog","app.log"] },
 
-        // Log with embedded "FLAG2"
         "/var/log/auth.log": { type:"file", data:
 `Dec 29 09:14:02 school-lab sshd[119]: Failed password for invalid user admin from 10.0.0.23 port 50112
 Dec 29 09:14:17 school-lab sshd[119]: Failed password for invalid user admin from 10.0.0.23 port 50112
@@ -1176,7 +1089,6 @@ Dec 29 09:12:03 scheduler: incident-case: monitoring enabled (sim)
 [INFO] no tracking
 `},
 
-        // Hidden lab area (IOC A)
         "/.lab": { type:"dir", kids:[".cache","ops"] },
         "/.lab/.cache": { type:"dir", kids:["hint.txt"] },
         "/.lab/.cache/hint.txt": { type:"file", data:
@@ -1199,14 +1111,13 @@ RB{terminal_mode_unlocked}
         startTs: Date.now(),
         history: [],
         histIdx: -1,
-        completions: [],
         compIdx: 0,
-        // lesson progress
+        // lesson progress (still tracked, but guide UI is teacher-only)
         lessonIndex: 0,
-        done: {},            // taskId -> true
-        seenCmds: [],        // log of executed commands
-        teacherMode: false,
-        lastCmd: ""
+        done: {},
+        seenCmds: [],
+        lastCmd: "",
+        teacherMode: false
       };
 
       const STORE_KEY = "rb_shell_course_v1";
@@ -1224,11 +1135,8 @@ RB{terminal_mode_unlocked}
             }
           }
         }catch(_){}
-
-        try{
-          const t = localStorage.getItem(STORE_TEACHER);
-          if(t === "1") state.teacherMode = true;
-        }catch(_){}
+        // Teacher mode is NOT auto-restored. Must be activated each time via 'imateacher'.
+        try{ localStorage.removeItem(STORE_TEACHER); }catch(_){}
       };
 
       const saveState = () => {
@@ -1238,12 +1146,6 @@ RB{terminal_mode_unlocked}
             done: state.done,
             seenCmds: state.seenCmds
           }));
-        }catch(_){}
-      };
-
-      const saveTeacherMode = () => {
-        try{
-          localStorage.setItem(STORE_TEACHER, state.teacherMode ? "1" : "0");
         }catch(_){}
       };
 
@@ -1265,28 +1167,17 @@ RB{terminal_mode_unlocked}
       };
 
       const isDir = (path) => fs[path]?.type === "dir";
-      const isFile = (path) => fs[path]?.type === "file";
-
       const listDir = (path, showAll=false) => {
         const node = fs[path];
         if(!node || node.type !== "dir") return null;
         const kids = node.kids.slice();
         return kids.filter(k => showAll ? true : !k.startsWith("."));
       };
-
       const readFile = (path) => fs[path]?.type === "file" ? fs[path].data : null;
 
       const setPrompt = () => {
         const where = state.cwd === "/" ? "~" : state.cwd;
         promptText.textContent = `${state.user}@${state.host}:${where}$`;
-      };
-
-      const updateStatus = () => {
-        if(statusCwd) statusCwd.textContent = state.cwd;
-        if(statusLesson) statusLesson.textContent = currentLesson().id;
-        const prog = recomputeProgress();
-        if(statusProgress) statusProgress.textContent = `${prog.pct}%`;
-        if(statusLast) statusLast.textContent = state.lastCmd ? state.lastCmd.slice(0, 22) + (state.lastCmd.length > 22 ? "…" : "") : "—";
       };
 
       const header = () => {
@@ -1298,13 +1189,14 @@ RB{terminal_mode_unlocked}
       const motd = () => {
         out.innerHTML = "";
         header();
-        line(`<span class="ok">OK</span> <span class="accent">kein tracking</span> · Tippe <span class="accent">lesson</span> oder <span class="accent">help</span>`);
+        line(`<span class="ok">OK</span> <span class="accent">kein tracking</span> · Tippe <span class="accent">help</span>`);
         hr();
-        line(`<span class="accent">Start:</span> lesson  (oder Panel unten aufklappen)`);
+        line(`<span class="accent">Start:</span> pwd · ls · cd /students · cat /students/README`);
+        line(`<span class="accent">Teacher:</span> imateacher`);
         line(``);
       };
 
-      // ----- Lessons (guided, but not baby-mode)
+      // Lessons
       const lessons = [
         {
           id: "L1",
@@ -1337,7 +1229,6 @@ Du lernst: pwd / ls / cd / cat.`,
             }
           ]
         },
-
         {
           id: "L2",
           title: "Lektion 2 — Dateien lesen & schnell suchen",
@@ -1363,7 +1254,6 @@ Du lernst: head / tail / grep / find / tree.`,
               check: (ctx) => ctx.seenRegex(/^find\s+\S+/) }
           ]
         },
-
         {
           id: "L3",
           title: "Lektion 3 — Logs lesen: Was ist hier passiert?",
@@ -1389,7 +1279,6 @@ Du lernst: Logdateien lesen, grep als Filter, Hypothesen bilden.`,
               check: (ctx) => ctx.seenGrep("modified", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+modified\s+auth\.log/) }
           ]
         },
-
         {
           id: "L4",
           title: "Lektion 4 — Abschlussmission: Incident Mini-Case (IOCs finden)",
@@ -1463,260 +1352,27 @@ Mission B (Logs / IOC B):
         return { doneCount, total, pct: Math.round((doneCount/total)*100) };
       };
 
-      const firstOpenTask = () => {
-        const L = currentLesson();
-        for(const t of L.tasks){
-          if(!state.done[t.id]) return t;
-        }
-        return null;
-      };
-
-      const renderNextStep = () => {
-        const t = firstOpenTask();
-        if(!t){
-          if(nextText) nextText.textContent = "Alles erledigt. Du kannst mit NEXT in die nächste Lektion gehen.";
-          if(nextWhy) nextWhy.style.display = "none";
-          if(nextTeacher) nextTeacher.style.display = "none";
-          if(btnPasteNext) btnPasteNext.disabled = true;
-          if(btnRunNext) btnRunNext.disabled = true;
-          return;
-        }
-
-        const starter = t.starter || "";
-        const why = t.why || "";
-        if(nextText) nextText.textContent = starter ? `Vorschlag: ${starter}` : "Öffne tasks oder nutze hint.";
-        if(nextWhy){
-          if(why){
-            nextWhy.style.display = "block";
-            nextWhy.textContent = `Warum: ${why}`;
-          } else {
-            nextWhy.style.display = "none";
-          }
-        }
-
-        if(nextTeacher){
-          if(state.teacherMode && t.solution){
-            nextTeacher.style.display = "block";
-            nextTeacher.innerHTML = `<b>Teacher Note:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
-          } else {
-            nextTeacher.style.display = "none";
-          }
-        }
-
-        if(btnPasteNext) btnPasteNext.disabled = !starter;
-        if(btnRunNext) btnRunNext.disabled = !starter;
-      };
-
-      const renderLessonPanel = () => {
-        const L = currentLesson();
+      const updateStatus = () => {
+        if(statusCwd) statusCwd.textContent = state.cwd;
+        if(statusLesson) statusLesson.textContent = currentLesson().id;
         const prog = recomputeProgress();
-
-        if(lessonTitle) lessonTitle.textContent = `${L.title}`;
-        if(lessonIntro) lessonIntro.textContent = L.intro;
-
-        if(progressBar) progressBar.style.width = `${prog.pct}%`;
-        if(lessonSummaryRight) lessonSummaryRight.textContent = `Progress: ${prog.pct}%`;
-
-        if(toggleTeacher) toggleTeacher.textContent = `Teacher: ${state.teacherMode ? "ON" : "OFF"}`;
-
-        // Task cards
-        if(taskCardsEl){
-          taskCardsEl.innerHTML = "";
-          L.tasks.forEach((t, idx) => {
-            const done = !!state.done[t.id];
-
-            const card = document.createElement("div");
-            card.className = "taskCard";
-            card.setAttribute("data-task", t.id);
-
-            const meta = document.createElement("div");
-            meta.className = "taskMeta";
-
-            const st = document.createElement("div");
-            st.className = "taskStatus" + (done ? " done" : "");
-            st.innerHTML = `<span class="box"></span><span>${done ? "DONE" : "OPEN"} · #${idx+1}</span>`;
-
-            const actions = document.createElement("div");
-            actions.className = "taskActions";
-
-            const pasteBtn = document.createElement("button");
-            pasteBtn.type = "button";
-            pasteBtn.className = "mini";
-            pasteBtn.textContent = "Paste";
-            pasteBtn.disabled = !t.starter;
-            pasteBtn.addEventListener("click", () => {
-              if(!t.starter) return;
-              input.value = t.starter;
-              input.focus();
-              // open panel stays open, flow continues
-            });
-
-            const runBtn = document.createElement("button");
-            runBtn.type = "button";
-            runBtn.className = "mini";
-            runBtn.textContent = "Run";
-            runBtn.disabled = !t.starter;
-            runBtn.addEventListener("click", () => {
-              if(!t.starter) return;
-              run(t.starter);
-              input.value = "";
-              input.focus();
-            });
-
-            const hintBtn = document.createElement("button");
-            hintBtn.type = "button";
-            hintBtn.className = "mini ghost";
-            hintBtn.textContent = "Hint";
-            hintBtn.addEventListener("click", () => { showHint(); input.focus(); });
-
-            actions.appendChild(pasteBtn);
-            actions.appendChild(runBtn);
-            actions.appendChild(hintBtn);
-
-            meta.appendChild(st);
-            meta.appendChild(actions);
-
-            const text = document.createElement("div");
-            text.className = "taskText";
-            text.textContent = t.text;
-
-            card.appendChild(meta);
-            card.appendChild(text);
-
-            if(t.why){
-              const why = document.createElement("div");
-              why.className = "taskWhy";
-              why.textContent = `Warum: ${t.why}`;
-              card.appendChild(why);
-            }
-
-            if(state.teacherMode && t.solution){
-              const tn = document.createElement("div");
-              tn.className = "teacherNote";
-              tn.innerHTML = `<b>Teacher Note:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
-              card.appendChild(tn);
-            }
-
-            taskCardsEl.appendChild(card);
-          });
-        }
-
-        renderNextStep();
-        updateStatus();
+        if(statusProgress) statusProgress.textContent = `${prog.pct}%`;
+        if(statusLast) statusLast.textContent = state.lastCmd ? state.lastCmd.slice(0, 22) + (state.lastCmd.length > 22 ? "…" : "") : "—";
       };
 
-      const markDone = (taskId) => {
-        state.done[taskId] = true;
-      };
-
-      const checkTasks = (silent=false) => {
-        const L = currentLesson();
-        let newly = 0;
-        for(const t of L.tasks){
-          if(state.done[t.id]) continue;
-          try{
-            if(t.check(ctx)){
-              markDone(t.id);
-              newly++;
-            }
-          }catch(_){}
-        }
+      const rememberCmd = (cmdline) => {
+        state.seenCmds.push(cmdline);
+        if(state.seenCmds.length > 500) state.seenCmds = state.seenCmds.slice(-500);
         saveState();
-        renderLessonPanel();
+      };
 
-        if(!silent){
-          const prog = recomputeProgress();
-          hr();
-          if(newly) line(`<span class="ok">CHECK</span> +${newly} task(s) erledigt.`);
-          else line(`<span class="accent">CHECK</span> keine neuen Tasks — nutze <span class="accent">hint</span> oder schau unten ins Panel.`);
-          line(`<span class="accent">Progress:</span> ${prog.doneCount}/${prog.total} (${prog.pct}%)`);
-          hr();
+      const maybeFlagFound = (fileContent) => {
+        const matches = String(fileContent).match(/RB\{[^}]+\}/g);
+        if(matches){
+          matches.forEach(m => rememberCmd(`FLAG_FOUND:${m}`));
         }
       };
 
-      const nextLesson = () => {
-        // auto-check before advancing
-        checkTasks(true);
-        const prog = recomputeProgress();
-        if(prog.doneCount < prog.total){
-          hr();
-          line(`<span class="warn">NEXT</span> Noch nicht fertig. Mach erst die offenen Aufgaben (tasks) oder hol dir einen hint.`);
-          hr();
-          return;
-        }
-        if(state.lessonIndex < lessons.length - 1){
-          state.lessonIndex++;
-          saveState();
-          renderLessonPanel();
-          hr();
-          line(`<span class="ok">NEXT</span> ${esc(currentLesson().title)}`);
-          line(`<span class="accent">Tipp:</span> tasks`);
-          hr();
-        } else {
-          hr();
-          line(`<span class="ok">DONE</span> Kurs abgeschlossen. Bonus: Wiederhole, erkläre einem anderen den Weg, oder suche eigene "Stories" in /var/log.`);
-          hr();
-        }
-      };
-
-      const showLesson = () => {
-        const L = currentLesson();
-        const prog = recomputeProgress();
-        hr();
-        line(`<span class="accent">${esc(L.title)}</span>`);
-        line(esc(L.intro));
-        line(`<span class="accent">Progress:</span> ${prog.doneCount}/${prog.total} (${prog.pct}%)`);
-        line(`<span class="accent">Commands:</span> tasks · hint · check · next`);
-        hr();
-      };
-
-      const showTasks = () => {
-        const L = currentLesson();
-        hr();
-        line(`<span class="accent">TASKS</span> (${esc(L.id)})`);
-        L.tasks.forEach((t, idx) => {
-          const done = state.done[t.id] ? `<span class="ok">[x]</span>` : `<span class="warn">[ ]</span>`;
-          line(`${done} ${idx+1}. ${esc(t.text)}`);
-          if(state.teacherMode && t.solution){
-            line(`    <span class="accent">teacher:</span> ${esc(t.solution)}`);
-          }
-        });
-        hr();
-      };
-
-      const showHint = () => {
-        const L = currentLesson();
-        hr();
-        line(`<span class="accent">HINT</span>`);
-        String(L.hint).split("\n").forEach(l => line(esc(l)));
-        hr();
-      };
-
-      const showProfile = () => {
-        const totalTasks = lessons.reduce((acc, L) => acc + L.tasks.length, 0) || 1;
-        const doneTasks = Object.values(state.done).filter(Boolean).length;
-        const pct = Math.round((doneTasks/totalTasks)*100);
-        hr();
-        line(`<span class="accent">PROFILE</span>`);
-        line(`Lesson: ${esc(currentLesson().id)} (${esc(currentLesson().title)})`);
-        line(`Tasks done: ${doneTasks}/${totalTasks} (${pct}%)`);
-        line(`CWD: ${esc(state.cwd)}`);
-        line(`Teacher mode: ${state.teacherMode ? "ON" : "OFF"}`);
-        hr();
-      };
-
-      const resetCourse = () => {
-        state.lessonIndex = 0;
-        state.done = {};
-        state.seenCmds = [];
-        try{ localStorage.removeItem(STORE_KEY); }catch(_){}
-        renderLessonPanel();
-        hr();
-        line(`<span class="warn">RESET</span> Kursfortschritt gelöscht.`);
-        hr();
-      };
-
-      // ----- Shell helpers
       const doTree = (base, showAll=false, prefix="") => {
         const node = fs[base];
         if(!node || node.type !== "dir") return;
@@ -1790,55 +1446,6 @@ Mission B (Logs / IOC B):
         hr();
       };
 
-      // Completion
-      const cmdList = [
-        "ls","cd","pwd","whoami","cat","echo","clear","help","man",
-        "date","uptime","neofetch","tree","find","grep","head","tail","open",
-        "lesson","tasks","hint","check","next","profile","reset"
-      ];
-
-      const pathCompletions = (partial) => {
-        const base = partial.includes("/") ? partial.slice(0, partial.lastIndexOf("/")) : "";
-        const frag = partial.includes("/") ? partial.slice(partial.lastIndexOf("/")+1) : partial;
-        const basePath = partial.startsWith("/") ? (base || "/") : normPath(base || ".");
-        const dirPath = isDir(basePath) ? basePath : state.cwd;
-        const kids = listDir(dirPath, true) || [];
-        const results = kids
-          .filter(k => k.toLowerCase().startsWith(frag.toLowerCase()))
-          .map(k => {
-            const full = (dirPath === "/" ? `/${k}` : `${dirPath}/${k}`).replace(/\/+/g,"/");
-            const suffix = fs[full]?.type === "dir" ? "/" : "";
-            if(partial.startsWith("/")){
-              const prefix = (basePath === "/" ? "/" : basePath + "/");
-              return (prefix + k + suffix).replace(/\/+/g,"/");
-            }
-            const relPrefix = base ? (base.endsWith("/") ? base : base + "/") : "";
-            return relPrefix + k + suffix;
-          });
-        return results;
-      };
-
-      const printPrompted = (cmdline) => {
-        const where = state.cwd === "/" ? "~" : state.cwd;
-        line(`<span class="ok">${esc(`${state.user}@${state.host}:${where}$`)}</span> ${esc(cmdline)}`);
-      };
-
-      const rememberCmd = (cmdline) => {
-        // store raw commandline for lesson checks
-        state.seenCmds.push(cmdline);
-        // cap to avoid infinite growth
-        if(state.seenCmds.length > 500) state.seenCmds = state.seenCmds.slice(-500);
-        saveState();
-      };
-
-      const maybeFlagFound = (fileContent) => {
-        // if a file contains RB{...} we mark it as found when it is printed
-        const matches = String(fileContent).match(/RB\{[^}]+\}/g);
-        if(matches){
-          matches.forEach(m => rememberCmd(`FLAG_FOUND:${m}`));
-        }
-      };
-
       const help = () => {
         hr();
         line(`<span class="accent">Commands</span>`);
@@ -1846,87 +1453,205 @@ Mission B (Logs / IOC B):
         line(`date · uptime · neofetch · tree [-a] · find &lt;term&gt; · grep &lt;term&gt; &lt;file&gt;`);
         line(`head [-n N] &lt;file&gt; · tail [-n N] &lt;file&gt; · open &lt;section&gt;`);
         hr();
-        line(`<span class="accent">Course</span>`);
-        line(`lesson · tasks · hint · check · next · profile · reset`);
+        line(`<span class="accent">Teacher</span>`);
+        line(`imateacher  (öffnet Teacher Guide)`);
         hr();
       };
 
-      const man = (topic="") => {
-        const t = (topic||"").toLowerCase();
-        hr();
+      // Teacher Guide rendering (only when enabled)
+      const firstOpenTask = () => {
+        const L = currentLesson();
+        for(const t of L.tasks){
+          if(!state.done[t.id]) return t;
+        }
+        return null;
+      };
+
+      const renderNextStep = () => {
+        const t = firstOpenTask();
         if(!t){
-          line(`<span class="accent">man</span> topic fehlt (z.B. man ls)`);
+          if(nextText) nextText.textContent = "Alles erledigt. Du kannst mit NEXT in die nächste Lektion gehen.";
+          if(nextWhy) nextWhy.style.display = "none";
+          if(nextTeacher) nextTeacher.style.display = "none";
+          if(btnPasteNext) btnPasteNext.disabled = true;
+          if(btnRunNext) btnRunNext.disabled = true;
+          return;
+        }
+
+        const starter = t.starter || "";
+        const why = t.why || "";
+        if(nextText) nextText.textContent = starter ? `Vorschlag: ${starter}` : "—";
+        if(nextWhy){
+          if(why){
+            nextWhy.style.display = "block";
+            nextWhy.textContent = `Warum: ${why}`;
+          } else {
+            nextWhy.style.display = "none";
+          }
+        }
+        if(nextTeacher){
+          if(t.solution){
+            nextTeacher.style.display = "block";
+            nextTeacher.innerHTML = `<b>Teacher Note:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
+          } else {
+            nextTeacher.style.display = "none";
+          }
+        }
+        if(btnPasteNext) btnPasteNext.disabled = !starter;
+        if(btnRunNext) btnRunNext.disabled = !starter;
+      };
+
+      const renderLessonPanel = () => {
+        if(!lessonPanel) return;
+        if(!state.teacherMode){
+          lessonPanel.hidden = true;
+          lessonPanel.open = false;
+          return;
+        }
+
+        lessonPanel.hidden = false; // becomes visible
+        const L = currentLesson();
+        const prog = recomputeProgress();
+
+        if(lessonTitle) lessonTitle.textContent = `${L.title}`;
+        if(lessonIntro) lessonIntro.textContent = L.intro;
+
+        if(progressBar) progressBar.style.width = `${prog.pct}%`;
+        if(lessonSummaryRight) lessonSummaryRight.textContent = `Progress: ${prog.pct}%`;
+
+        if(taskCardsEl){
+          taskCardsEl.innerHTML = "";
+          L.tasks.forEach((t, idx) => {
+            const done = !!state.done[t.id];
+
+            const card = document.createElement("div");
+            card.className = "taskCard";
+            card.setAttribute("data-task", t.id);
+
+            const meta = document.createElement("div");
+            meta.className = "taskMeta";
+
+            const st = document.createElement("div");
+            st.className = "taskStatus" + (done ? " done" : "");
+            st.innerHTML = `<span class="box"></span><span>${done ? "DONE" : "OPEN"} · #${idx+1}</span>`;
+
+            meta.appendChild(st);
+            card.appendChild(meta);
+
+            const text = document.createElement("div");
+            text.className = "taskText";
+            text.textContent = t.text;
+            card.appendChild(text);
+
+            if(t.why){
+              const why = document.createElement("div");
+              why.className = "taskWhy";
+              why.textContent = `Warum: ${t.why}`;
+              card.appendChild(why);
+            }
+
+            if(t.solution){
+              const tn = document.createElement("div");
+              tn.className = "teacherNote";
+              tn.innerHTML = `<b>Teacher Note:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
+              card.appendChild(tn);
+            }
+
+            taskCardsEl.appendChild(card);
+          });
+        }
+
+        renderNextStep();
+      };
+
+      const checkTasks = (silent=false) => {
+        const L = currentLesson();
+        let newly = 0;
+        for(const t of L.tasks){
+          if(state.done[t.id]) continue;
+          try{
+            if(t.check(ctx)){
+              state.done[t.id] = true;
+              newly++;
+            }
+          }catch(_){}
+        }
+        saveState();
+        if(state.teacherMode) renderLessonPanel();
+
+        if(!silent && state.teacherMode){
+          const prog = recomputeProgress();
+          hr();
+          if(newly) line(`<span class="ok">CHECK</span> +${newly} task(s) erledigt.`);
+          else line(`<span class="accent">CHECK</span> keine neuen Tasks.`);
+          line(`<span class="accent">Progress:</span> ${prog.doneCount}/${prog.total} (${prog.pct}%)`);
+          hr();
+        }
+      };
+
+      const showHint = () => {
+        const L = currentLesson();
+        hr();
+        line(`<span class="accent">HINT</span>`);
+        String(L.hint).split("\n").forEach(l => line(esc(l)));
+        hr();
+      };
+
+      const nextLesson = () => {
+        checkTasks(true);
+        const prog = recomputeProgress();
+        if(prog.doneCount < prog.total){
+          hr();
+          line(`<span class="warn">NEXT</span> Noch nicht fertig. (Teacher Guide: CHECK / HINT)`);
           hr();
           return;
         }
-        const pages = {
-          lesson: "lesson\nZeigt aktuelle Lektion (Ziel + Progress).",
-          tasks: "tasks\nZeigt Aufgaben der aktuellen Lektion.",
-          hint: "hint\nZeigt einen geführten Hinweis für die aktuelle Lektion.",
-          check: "check\nPrüft, welche Aufgaben du schon erledigt hast.",
-          next: "next\nWechselt zur nächsten Lektion (nur wenn aktuelle fertig).",
-          ls: "ls [-a]\nListet Verzeichnisse. -a zeigt auch dotfiles.",
-          cd: "cd <dir>\nWechselt das Verzeichnis. Unterstützt .. und absolute Pfade.",
-          tree: "tree [-a] [path]\nZeigt Verzeichnisbaum.",
-          find: "find <term>\nSucht Pfade im Dateibaum (substring match).",
-          grep: "grep <term> <file>\nSucht in Datei nach Zeilen, die <term> enthalten."
-        };
-        line(`<span class="accent">MAN ${esc(t)}</span>`);
-        line(esc(pages[t] || "Keine manpage gefunden."));
+        if(state.lessonIndex < lessons.length - 1){
+          state.lessonIndex++;
+          saveState();
+          if(state.teacherMode) renderLessonPanel();
+          hr();
+          line(`<span class="ok">NEXT</span> ${esc(currentLesson().title)}`);
+          hr();
+        } else {
+          hr();
+          line(`<span class="ok">DONE</span> Kurs abgeschlossen.`);
+          hr();
+        }
+      };
+
+      const resetCourse = () => {
+        state.lessonIndex = 0;
+        state.done = {};
+        state.seenCmds = [];
+        try{ localStorage.removeItem(STORE_KEY); }catch(_){}
+        if(state.teacherMode) renderLessonPanel();
+        hr();
+        line(`<span class="warn">RESET</span> Kursfortschritt gelöscht.`);
         hr();
       };
 
-      const suggestCommand = (cmd) => {
-        const c = (cmd||"").toLowerCase();
-        if(!c) return null;
-        // simple: prefix + contains + closest by length diff
-        const prefixes = cmdList.filter(x => x.startsWith(c[0] || ""));
-        const byPrefix = cmdList.filter(x => x.startsWith(c));
-        if(byPrefix.length) return byPrefix[0];
-
-        const byContain = prefixes.filter(x => x.includes(c));
-        if(byContain.length) return byContain[0];
-
-        // fallback: nearest length among same first letter
-        let best = null;
-        let bestScore = Infinity;
-        for(const x of prefixes){
-          const score = Math.abs(x.length - c.length);
-          if(score < bestScore){
-            bestScore = score;
-            best = x;
-          }
-        }
-        return best;
+      const printPrompted = (cmdline) => {
+        const where = state.cwd === "/" ? "~" : state.cwd;
+        line(`<span class="ok">${esc(`${state.user}@${state.host}:${where}$`)}</span> ${esc(cmdline)}`);
       };
 
-      const guidanceAfterCommonMistakes = (cmd, cmdline) => {
-        // micro-guidance for L4 if they forget -a
-        if(currentLesson().id === "L4"){
-          if(cmd === "ls" && !cmdline.includes("-a")){
-            line(`<span class="accent">hint:</span> In dieser Mission brauchst du oft <span class="accent">ls -a</span>, sonst bleiben Dinge unsichtbar.`);
-          }
-          if(cmd === "tree" && !cmdline.includes("-a")){
-            line(`<span class="accent">hint:</span> Nutze <span class="accent">tree -a</span>, um versteckte Bereiche zu sehen.`);
-          }
+      const activateTeacher = () => {
+        state.teacherMode = true;
+        if(lessonPanel){
+          lessonPanel.hidden = false;
+          lessonPanel.open = true; // open immediately as requested
         }
-      };
-
-      const normalizeFriendlyShortcuts = (cmdline) => {
-        // allow "cd students" -> "cd /students" etc. (no behavior change otherwise)
-        const m = cmdline.match(/^cd\s+([a-z]+)\/?$/i);
-        if(m){
-          const t = m[1].toLowerCase();
-          if(routes[t]) return `cd /${t}`;
-        }
-        return cmdline;
+        renderLessonPanel();
+        hr();
+        line(`<span class="ok">TEACHER</span> Guide geöffnet.`);
+        line(`<span class="accent">Hinweis:</span> SuS sehen diesen Guide nicht. (Aktivierung nur via <span class="accent">imateacher</span>)`);
+        hr();
       };
 
       const run = (raw) => {
-        let cmdline = String(raw || "").trim();
+        const cmdline = String(raw || "").trim();
         if(!cmdline) return;
-
-        cmdline = normalizeFriendlyShortcuts(cmdline);
 
         // history
         state.history.push(cmdline);
@@ -1937,17 +1662,34 @@ Mission B (Logs / IOC B):
 
         printPrompted(cmdline);
 
+        // store before execution
+        rememberCmd(cmdline);
+
         const parts = cmdline.split(/\s+/);
         const cmd = (parts.shift() || "").toLowerCase();
         const rest = parts;
         const argLine = rest.join(" ").trim();
 
-        // store before execution (so checks can validate even if command errors)
-        rememberCmd(cmdline);
+        // special: teacher activation
+        if(cmd === "imateacher"){
+          activateTeacher();
+          checkTasks(true);
+          updateStatus();
+          return;
+        }
 
-        // per-command result separator (readability)
-        // (light touch, still "terminal")
-        // no separator before "clear"
+        // teacher-only course commands (guarded)
+        const teacherOnly = new Set(["lesson","tasks","hint","check","next","reset","profile"]);
+        if(teacherOnly.has(cmd) && !state.teacherMode){
+          hr();
+          line(`<span class="warn">LOCKED</span> Teacher Guide ist gesperrt.`);
+          line(`Tippe <span class="accent">imateacher</span>, um ihn zu öffnen.`);
+          hr();
+          updateStatus();
+          return;
+        }
+
+        // separator for readability (not before clear)
         if(cmd !== "clear"){
           line(`<span class="accent">result:</span>`);
         }
@@ -1965,7 +1707,6 @@ Mission B (Logs / IOC B):
               return esc(k);
             }).join(" ");
             line(rendered || "");
-            guidanceAfterCommonMistakes(cmd, cmdline);
             break;
           }
 
@@ -1997,20 +1738,7 @@ Mission B (Logs / IOC B):
             if(!argLine){ line(`<span class="warn">cat:</span> Datei fehlt (z.B. cat README)`); break; }
             const p = normPath(argLine.replace(/^["']|["']$/g,""));
             const data = readFile(p);
-            if(data == null){
-              // friendly suggestion: case-insensitive in same directory
-              const parent = p.includes("/") ? p.slice(0, p.lastIndexOf("/")) || "/" : state.cwd;
-              const base = p.includes("/") ? p.slice(p.lastIndexOf("/")+1) : p;
-              const kids = listDir(parent, true) || [];
-              const suggestion = kids.find(k => k.toLowerCase() === base.toLowerCase());
-              if(suggestion){
-                line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`);
-                line(`<span class="accent">meintest du:</span> cat ${esc((parent === "/" ? "" : parent) + "/" + suggestion)}`.replaceAll("//","/"));
-                break;
-              }
-              line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`);
-              break;
-            }
+            if(data == null){ line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`); break; }
             maybeFlagFound(data);
             String(data).split("\n").forEach(l => line(esc(l)));
             break;
@@ -2028,10 +1756,6 @@ Mission B (Logs / IOC B):
             help();
             break;
 
-          case "man":
-            man(rest[0] || "");
-            break;
-
           case "tree": {
             const showAll = rest.includes("-a") || rest.includes("--all");
             const target = rest.find(x => !x.startsWith("-"));
@@ -2039,7 +1763,6 @@ Mission B (Logs / IOC B):
             if(!isDir(p)){ line(`<span class="warn">tree:</span> kein verzeichnis: ${esc(target||state.cwd)}`); break; }
             line(`<span class="accent">${esc(p === "/" ? "." : p)}</span>`);
             doTree(p, showAll, "");
-            guidanceAfterCommonMistakes(cmd, cmdline);
             break;
           }
 
@@ -2076,19 +1799,7 @@ Mission B (Logs / IOC B):
             if(!argLine){ state.cwd = "/"; setPrompt(); updateStatus(); break; }
             const target = argLine.replace(/^["']|["']$/g,"");
             const p = normPath(target);
-
-            // friendly: if missing leading slash but matches top-level dir
-            if(!isDir(p)){
-              const maybeTop = normPath("/" + target.replace(/^\/+/,""));
-              if(isDir(maybeTop)){
-                line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`);
-                line(`<span class="accent">meintest du:</span> cd ${esc(maybeTop)}`);
-                break;
-              }
-              line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`);
-              break;
-            }
-
+            if(!isDir(p)){ line(`<span class="warn">cd:</span> kein verzeichnis: ${esc(target)}`); break; }
             state.cwd = p;
             setPrompt();
             updateStatus();
@@ -2104,46 +1815,58 @@ Mission B (Logs / IOC B):
             break;
           }
 
-          // ----- Course commands
-          case "lesson":
-            if(lessonPanel) lessonPanel.open = true;
-            showLesson();
-            break;
-
-          case "tasks":
-            if(lessonPanel) lessonPanel.open = true;
-            showTasks();
-            break;
-
+          // Teacher-only commands (guarded above)
           case "hint":
-            if(lessonPanel) lessonPanel.open = true;
             showHint();
             break;
-
           case "check":
             checkTasks(false);
             break;
-
           case "next":
-            if(lessonPanel) lessonPanel.open = true;
             nextLesson();
             break;
-
-          case "profile":
-            showProfile();
-            break;
-
           case "reset":
             resetCourse();
             break;
-
-          default: {
-            const sug = suggestCommand(cmd);
-            line(`<span class="warn">command not found:</span> ${esc(cmd)} (Tipp: help)`);
-            if(sug){
-              line(`<span class="accent">meintest du:</span> ${esc(sug)}`);
-            }
+          case "lesson": {
+            const L = currentLesson();
+            const prog = recomputeProgress();
+            hr();
+            line(`<span class="accent">${esc(L.title)}</span>`);
+            line(esc(L.intro));
+            line(`<span class="accent">Progress:</span> ${prog.doneCount}/${prog.total} (${prog.pct}%)`);
+            hr();
+            break;
           }
+          case "tasks": {
+            const L = currentLesson();
+            hr();
+            line(`<span class="accent">TASKS</span> (${esc(L.id)})`);
+            L.tasks.forEach((t, idx) => {
+              const done = state.done[t.id] ? `<span class="ok">[x]</span>` : `<span class="warn">[ ]</span>`;
+              line(`${done} ${idx+1}. ${esc(t.text)}`);
+              if(t.solution){
+                line(`    <span class="accent">teacher:</span> ${esc(t.solution)}`);
+              }
+            });
+            hr();
+            break;
+          }
+          case "profile": {
+            const totalTasks = lessons.reduce((acc, L) => acc + L.tasks.length, 0) || 1;
+            const doneTasks = Object.values(state.done).filter(Boolean).length;
+            const pct = Math.round((doneTasks/totalTasks)*100);
+            hr();
+            line(`<span class="accent">PROFILE</span>`);
+            line(`Lesson: ${esc(currentLesson().id)} (${esc(currentLesson().title)})`);
+            line(`Tasks done: ${doneTasks}/${totalTasks} (${pct}%)`);
+            line(`CWD: ${esc(state.cwd)}`);
+            hr();
+            break;
+          }
+
+          default:
+            line(`<span class="warn">command not found:</span> ${esc(cmd)} (Tipp: help)`);
         }
 
         // after any command, update tasks silently
@@ -2152,11 +1875,38 @@ Mission B (Logs / IOC B):
       };
 
       // Input handlers: submit + history + tab completion
+      const cmdList = [
+        "ls","cd","pwd","whoami","cat","echo","clear","help",
+        "date","uptime","neofetch","tree","find","grep","head","tail","open",
+        "imateacher",
+        "lesson","tasks","hint","check","next","profile","reset"
+      ];
+
+      const pathCompletions = (partial) => {
+        const base = partial.includes("/") ? partial.slice(0, partial.lastIndexOf("/")) : "";
+        const frag = partial.includes("/") ? partial.slice(partial.lastIndexOf("/")+1) : partial;
+        const basePath = partial.startsWith("/") ? (base || "/") : normPath(base || ".");
+        const dirPath = isDir(basePath) ? basePath : state.cwd;
+        const kids = listDir(dirPath, true) || [];
+        const results = kids
+          .filter(k => k.toLowerCase().startsWith(frag.toLowerCase()))
+          .map(k => {
+            const full = (dirPath === "/" ? `/${k}` : `${dirPath}/${k}`).replace(/\/+/g,"/");
+            const suffix = fs[full]?.type === "dir" ? "/" : "";
+            if(partial.startsWith("/")){
+              const prefix = (basePath === "/" ? "/" : basePath + "/");
+              return (prefix + k + suffix).replace(/\/+/g,"/");
+            }
+            const relPrefix = base ? (base.endsWith("/") ? base : base + "/") : "";
+            return relPrefix + k + suffix;
+          });
+        return results;
+      };
+
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         run(input.value);
         input.value = "";
-        state.completions = [];
         state.compIdx = 0;
         input.focus();
       });
@@ -2203,20 +1953,21 @@ Mission B (Logs / IOC B):
         }
       });
 
-      // Lesson panel buttons
-      btnHint?.addEventListener("click", () => { showHint(); input.focus(); });
-      btnCheck?.addEventListener("click", () => { checkTasks(false); input.focus(); });
-      btnNext?.addEventListener("click", () => { nextLesson(); input.focus(); });
-      btnReset?.addEventListener("click", () => { resetCourse(); input.focus(); });
+      // Teacher guide buttons (only meaningful when teacherMode is true)
+      btnHint?.addEventListener("click", () => { if(state.teacherMode) showHint(); input.focus(); });
+      btnCheck?.addEventListener("click", () => { if(state.teacherMode) checkTasks(false); input.focus(); });
+      btnNext?.addEventListener("click", () => { if(state.teacherMode) nextLesson(); input.focus(); });
+      btnReset?.addEventListener("click", () => { if(state.teacherMode) resetCourse(); input.focus(); });
 
-      // Next step actions
       btnPasteNext?.addEventListener("click", () => {
+        if(!state.teacherMode) return;
         const t = firstOpenTask();
         if(!t?.starter) return;
         input.value = t.starter;
         input.focus();
       });
       btnRunNext?.addEventListener("click", () => {
+        if(!state.teacherMode) return;
         const t = firstOpenTask();
         if(!t?.starter) return;
         run(t.starter);
@@ -2224,42 +1975,20 @@ Mission B (Logs / IOC B):
         input.focus();
       });
 
-      // Teacher mode toggle
-      toggleTeacher?.addEventListener("click", () => {
-        state.teacherMode = !state.teacherMode;
-        saveTeacherMode();
-        renderLessonPanel();
-        input.focus();
-      });
-
-      // Console quick actions
-      quickTasks?.addEventListener("click", () => { run("tasks"); input.focus(); });
-      quickHint?.addEventListener("click", () => { run("hint"); input.focus(); });
-      quickCheck?.addEventListener("click", () => { run("check"); input.focus(); });
-
       miniHelp?.addEventListener("click", () => { help(); input.focus(); });
-
-      // Chips
-      chips.forEach(ch => {
-        ch.addEventListener("click", () => {
-          const cmd = ch.getAttribute("data-cmd") || "";
-          if(!cmd) return;
-          input.value = cmd;
-          input.focus();
-        });
-      });
 
       // init
       loadState();
       motd();
       setPrompt();
-      renderLessonPanel();
+      renderLessonPanel();   // hidden by default
       updateStatus();
       input.focus();
     })();
   </script>
 </body>
 </html>
+
 
 
 
