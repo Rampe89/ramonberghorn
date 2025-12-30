@@ -37,6 +37,9 @@
       --termOk:#86efac;
       --termWarn:#ff7a70;
       --termGlow: rgba(134,239,172,.18);
+
+      --panelSoft:#fff;
+      --panelLine:#111;
     }
 
     *{ box-sizing:border-box; }
@@ -280,7 +283,7 @@
       overflow:hidden;
       display:flex;
       flex-direction:column;
-      min-height: 300px;
+      min-height: 320px;
       position:relative;
     }
     /* subtle CRT */
@@ -352,6 +355,107 @@
       padding: 6px 8px;
     }
 
+    /* Lesson panel */
+    details.lessonPanel{
+      margin-top: 12px;
+      border: var(--bw) solid var(--panelLine);
+      background: var(--panelSoft);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      overflow:hidden;
+    }
+    details.lessonPanel > summary{
+      cursor:pointer;
+      list-style:none;
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: var(--bw) solid var(--panelLine);
+      user-select:none;
+    }
+    details.lessonPanel > summary::-webkit-details-marker{ display:none; }
+    .lessonBody{
+      padding: 12px;
+      display:grid;
+      gap:12px;
+    }
+    .lessonGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:12px;
+    }
+    @media (max-width: 880px){
+      .lessonGrid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      border: var(--bw) solid var(--panelLine);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 10px;
+      background:#fff;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+    .muted{
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height:1.6;
+    }
+    .taskList{
+      margin: 0;
+      padding-left: 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height:1.7;
+    }
+    .taskDone{
+      text-decoration: line-through;
+      opacity:.7;
+    }
+    .btnRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .lessonBtn{
+      border: var(--bw) solid var(--panelLine);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 6px 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .barWrap{
+      border: var(--bw) solid var(--panelLine);
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      background:#fff;
+      overflow:hidden;
+      height: 16px;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--hi3), var(--hi2));
+    }
+    .small{
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
     @media (prefers-reduced-motion: reduce){
       .tab{ transition:none; }
       .tab:hover{ transform:none; }
@@ -415,7 +519,7 @@
           </div>
         </div>
 
-        <!-- CONSOLE below video (full width) -->
+        <!-- CONSOLE -->
         <div class="consolePanel" aria-label="Console">
           <div class="termTop">
             <div>console</div>
@@ -427,9 +531,52 @@
             <form class="termInRow" id="shellForm">
               <span class="prompt" id="promptText">ramon@school-lab:~$</span>
               <input class="termIn" id="shellIn" type="text" autocomplete="off" spellcheck="false"
-                     placeholder="ls · cd students · help · tree · find flag" aria-label="Terminal Eingabe"/>
+                     placeholder="lesson · tasks · hint · ls · cd students · cat README" aria-label="Terminal Eingabe"/>
             </form>
           </div>
+
+          <!-- LESSON SYSTEM (collapsible) -->
+          <details class="lessonPanel" id="lessonPanel">
+            <summary>
+              <span>Linux-Mini-Kurs (Jg. 9/10) — Guided</span>
+              <span class="small" id="lessonSummaryRight">Progress: 0%</span>
+            </summary>
+            <div class="lessonBody">
+              <div class="lessonGrid">
+                <div class="card">
+                  <h3 id="lessonTitle">Lesson</h3>
+                  <div class="muted" id="lessonIntro">…</div>
+                  <div style="margin-top:10px;">
+                    <div class="barWrap" aria-label="Progress bar">
+                      <div class="bar" id="progressBar"></div>
+                    </div>
+                    <div class="muted" style="margin-top:8px;">
+                      Tipp: Du kannst alles auch im Terminal steuern: <b>lesson</b>, <b>tasks</b>, <b>hint</b>, <b>check</b>, <b>next</b>.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <h3>Aufgaben</h3>
+                  <ol class="taskList" id="taskList"></ol>
+                  <div class="btnRow" style="margin-top:10px;">
+                    <button class="lessonBtn" type="button" id="btnHint">Hint</button>
+                    <button class="lessonBtn" type="button" id="btnCheck">Check</button>
+                    <button class="lessonBtn" type="button" id="btnNext">Next</button>
+                    <button class="lessonBtn" type="button" id="btnReset">Reset</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3>Didaktik-Notiz (für dich)</h3>
+                <div class="muted">
+                  Der Kurs ist bewusst „read-only“ und ungefährlich. Keine echten Exploits, keine echten Systemzugriffe.
+                  Fokus: Navigation, Textarbeit, Logik, Debugging-Mindset. Optional später: Pipes (<span class="small">|</span>).
+                </div>
+              </div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -464,16 +611,28 @@
       document.addEventListener("visibilitychange", () => { if(!document.hidden) tryPlay(); });
     })();
 
-    // Terminal (rb-shell v2)
+    // Terminal + Guided Lessons (rb-shell v3)
     (() => {
       const out = document.getElementById("shellOut");
       const form = document.getElementById("shellForm");
       const input = document.getElementById("shellIn");
       const promptText = document.getElementById("promptText");
       const miniHelp = document.getElementById("miniHelp");
+
+      const lessonPanel = document.getElementById("lessonPanel");
+      const lessonTitle = document.getElementById("lessonTitle");
+      const lessonIntro = document.getElementById("lessonIntro");
+      const taskListEl = document.getElementById("taskList");
+      const progressBar = document.getElementById("progressBar");
+      const lessonSummaryRight = document.getElementById("lessonSummaryRight");
+      const btnHint = document.getElementById("btnHint");
+      const btnCheck = document.getElementById("btnCheck");
+      const btnNext = document.getElementById("btnNext");
+      const btnReset = document.getElementById("btnReset");
+
       if(!out || !form || !input || !promptText) return;
 
-      // Map "sections" to real pages (what cd/open can navigate to)
+      // Map "sections" to real pages
       const routes = {
         students: "/students/index.html",
         colleagues: "/colleagues/index.html",
@@ -481,50 +640,119 @@
         ultra: "/ultra/index.html"
       };
 
-      // In-memory filesystem (toy)
-      // Directories end with "/" in tree output; content stored as strings.
-      // Hidden material is inside ".lab/" (discoverable via ls -a, tree -a, find).
+      // In-memory filesystem (expanded)
+      // Hidden stuff inside ".lab/" plus a log-based flag.
       const fs = {
-        "/": { type:"dir", kids:["students","colleagues","cyber","ultra","README","notes.txt",".lab"] },
+        "/": { type:"dir", kids:["students","colleagues","cyber","ultra","courses","var","home","README","notes.txt",".lab"] },
 
-        "/students": { type:"dir", kids:["README","aufgaben","beispiele"] },
+        "/README": { type:"file", data:
+`README
+students   → Lehrplan + Unterrichtsbeispiele
+colleagues → didaktische Kommentare + Material
+cyber      → CyberDefense Lab + Writeups + Videos
+ultra      → Ultralaufen / Training / Projekte
+
+Mini-Linux-Kurs:
+- lesson   (zeigt aktuelle Lektion)
+- tasks    (zeigt Aufgaben)
+- hint     (kleiner Hinweis)
+- check    (prüft Fortschritt)
+- next     (nächste Lektion)
+
+CTF:
+- flag #1: irgendwo im Dateibaum (Tipp: ls -a / tree -a / find flag)
+- flag #2: steckt in Logs (Tipp: /var/log)
+`},
+        "/notes.txt": { type:"file", data:
+`NOTES
+- kein tracking
+- statisch hostbar
+- Terminal ist "spielbar" und bewusst harmlos
+- Wenn du hier "sudo rm -rf /" tippst: passiert… nichts. (Leider.)
+`},
+
+        "/students": { type:"dir", kids:["README","aufgaben","beispiele","memes.txt","netze_quickcards.txt"] },
         "/students/README": { type:"file", data:
 `STUDENTS
 - Lehrplan (Sek I)
 - Unterrichtsbeispiele
 - Aufgaben / Arbeitsblätter
 
-Tipp: cd /students
+Warmup:
+- cd /students
+- ls
+- cat memes.txt
 `},
-        "/students/aufgaben": { type:"dir", kids:["todo.txt"] },
+        "/students/memes.txt": { type:"file", data:
+`Schulische IT-Witze (trocken, aber fair):
+1) "Ich hab das WLAN repariert." — *stellt Router höher ins Regal*
+2) Wenn ein Schüler sagt "Bei mir geht's", ist das Debugging offiziell abgeschlossen.
+3) DNS ist wie 'Kontakte' im Handy. Nur ohne Profilbild. Meistens.
+4) "Ich hab nichts geändert" ist eine Änderung.
+
+Bonus:
+- cat /students/netze_quickcards.txt
+`},
+        "/students/netze_quickcards.txt": { type:"file", data:
+`NETZE – Quickcards (Jg. 9/10)
+- IP-Adresse: Adresse eines Geräts im Netz (z.B. 192.168.0.23)
+- Subnetz: Bereich von IPs, die "zusammengehören"
+- Router: verbindet Netze
+- DNS: Name -> IP
+- HTTP vs HTTPS: Klartext vs (meist) TLS-verschlüsselt
+`},
+        "/students/aufgaben": { type:"dir", kids:["todo.txt","worksheet_linux_basics.md"] },
         "/students/aufgaben/todo.txt": { type:"file", data:
 `TODO (Beispiele)
 - Scratch: Mini-Game
 - Python: Datentypen + Schleifen
 - HTML/CSS: Landingpage
+- Linux: Navigation & Dateien (genau hier!)
 `},
-        "/students/beispiele": { type:"dir", kids:["netze.md","daten.md"] },
+        "/students/aufgaben/worksheet_linux_basics.md": { type:"file", data:
+`Arbeitsblatt (Skizze): Linux Basics
+1) Was ist ein Pfad? Nenne ein Beispiel.
+2) Erkläre den Unterschied zwischen / und ~.
+3) Finde eine versteckte Datei (dotfile).
+4) Lies eine Logdatei und beschreibe, was du siehst.
+
+Kommandos: pwd, ls, ls -a, cd, cat, head, tail, grep, find, tree
+`},
+        "/students/beispiele": { type:"dir", kids:["daten.md","netze.md","algo.md","privacy.md"] },
+        "/students/beispiele/daten.md": { type:"file", data:
+`DATEN
+- Binär / Hex: Darstellung, nicht Magie
+- Hashing: Fingerabdruck einer Datei (nicht rückrechenbar)
+- Verschlüsselung: Nur mit Schlüssel lesbar
+`},
         "/students/beispiele/netze.md": { type:"file", data:
-`Netze (Sek I)
+`NETZE (Sek I / Jg. 9/10)
 - IP / Subnetz (intuition)
 - Router vs Switch
 - DNS als Telefonbuch
+- Ports: "Türen" für Dienste (80/443 Web, 53 DNS)
 `},
-        "/students/beispiele/daten.md": { type:"file", data:
-`Daten
-- Binär / Hex (praxisnah)
-- Verschlüsselung vs Hashing
-- Datenbanken: Tabellen + Schlüssel
+        "/students/beispiele/algo.md": { type:"file", data:
+`ALGORITHMEN
+- Ein Algorithmus ist eine eindeutige Schrittfolge.
+- Beispiel: "Finde das Maximum" in einer Liste.
+- Debugging: Hypothese → Test → Ergebnis → nächster Schritt
+`},
+        "/students/beispiele/privacy.md": { type:"file", data:
+`DATENSCHUTZ (Kurz)
+- Datensparsamkeit: so wenig wie möglich, so viel wie nötig
+- Personenbezogene Daten: alles, was auf eine Person beziehbar ist
+- Tracking ist nicht "normal", nur oft üblich
 `},
 
-        "/colleagues": { type:"dir", kids:["README","didaktik.md","material.md"] },
+        "/colleagues": { type:"dir", kids:["README","didaktik.md","material.md","linux_guide_for_teachers.md"] },
         "/colleagues/README": { type:"file", data:
 `COLLEAGUES
 - Didaktische Kommentare
 - Material-Übersichten
 - Workshops / Fortbildung
 
-Tipp: open colleagues
+Tipp: cat linux_guide_for_teachers.md
 `},
         "/colleagues/didaktik.md": { type:"file", data:
 `Didaktik (Kurz)
@@ -538,24 +766,49 @@ Tipp: open colleagues
 - Bewertungsraster
 - Tools: lokal / schulkonform
 `},
+        "/colleagues/linux_guide_for_teachers.md": { type:"file", data:
+`Linux-Mini-Kurs (Hinweise)
+- Lass die SuS erst "spielen", dann strukturieren.
+- "Geführt" heißt: kleine Schritte + sofortiger Erfolg.
+- Challenge-Teil nur optional (Flag/CTF).
 
-        "/cyber": { type:"dir", kids:["README","writeups","lab"] },
+Safe-by-design:
+- read-only
+- keine echten Systemkommandos
+- keine Netzwerkzugriffe
+`},
+
+        "/cyber": { type:"dir", kids:["README","writeups","lab","glossary.txt"] },
         "/cyber/README": { type:"file", data:
 `CYBERSECURITY
 - CyberDefense Lab
 - Writeups & Demos
 - Grundlagen + verantwortungsbewusste Praxis
 
-Hinweis: Dieses Terminal ist nur Deko. Keine echten Exploits.
+Hinweis: Dieses Terminal ist nur Simulation.
 `},
-        "/cyber/writeups": { type:"dir", kids:["index.txt"] },
+        "/cyber/glossary.txt": { type:"file", data:
+`Glossar (mini)
+- Recon: Informationen sammeln
+- Attack surface: Angriffsfläche
+- Logging: Protokollierung
+- Incident: Sicherheitsvorfall
+- IOC: Indicator of Compromise
+`},
+        "/cyber/writeups": { type:"dir", kids:["index.txt","recon101.txt"] },
         "/cyber/writeups/index.txt": { type:"file", data:
 `Writeups (Beispiele)
 - Recon 101
 - Web Basics
 - Auth & Sessions
 `},
-        "/cyber/lab": { type:"dir", kids:["blue.md","red.md"] },
+        "/cyber/writeups/recon101.txt": { type:"file", data:
+`Recon 101 (Education)
+- Was kann ich über ein System herausfinden, ohne "einzubrechen"?
+- Beispiel: Welche Dienste laufen? (in echten Labs)
+- Hier: nur Textverständnis + Logik
+`},
+        "/cyber/lab": { type:"dir", kids:["blue.md","red.md","incident_notes.txt"] },
         "/cyber/lab/blue.md": { type:"file", data:
 `Blue Team
 - Logging/Monitoring
@@ -568,13 +821,25 @@ Hinweis: Dieses Terminal ist nur Deko. Keine echten Exploits.
 - OWASP Top 10 (high level)
 - Hands-on: sichere Übungsumgebungen
 `},
+        "/cyber/lab/incident_notes.txt": { type:"file", data:
+`Incident Notes (Fake)
+- 09:14: ungewöhnliche Loginversuche
+- 09:16: "student" hat sich erfolgreich angemeldet
+- 09:18: Datei in /home/student/.cache verändert
+`},
 
-        "/ultra": { type:"dir", kids:["README","training","events"] },
+        "/ultra": { type:"dir", kids:["README","training","events","quotes.txt"] },
         "/ultra/README": { type:"file", data:
 `ULTRALAUFEN
 - Training / Mindset
 - Projekte (z.B. Shin-Gōka)
 - Events & Orga
+`},
+        "/ultra/quotes.txt": { type:"file", data:
+`Lauf-Mindset (kurz)
+- "Es ist alles gut." (Check-in)
+- Wellen kommen, Wellen gehen.
+- Wenn du noch reden kannst, kannst du auch noch laufen. (meistens)
 `},
         "/ultra/training": { type:"dir", kids:["plan.md","mindset.md"] },
         "/ultra/training/plan.md": { type:"file", data:
@@ -586,9 +851,9 @@ Hinweis: Dieses Terminal ist nur Deko. Keine echten Exploits.
 `},
         "/ultra/training/mindset.md": { type:"file", data:
 `Mindset
-- "Es ist alles gut" Check-in
 - Moment erleben
-- Wellen kommen, Wellen gehen
+- Schwierige Phasen gehen vorbei
+- Kontrolle über das, was du kontrollieren kannst
 `},
         "/ultra/events": { type:"dir", kids:["lafferde.md"] },
         "/ultra/events/lafferde.md": { type:"file", data:
@@ -597,23 +862,121 @@ Hinweis: Dieses Terminal ist nur Deko. Keine echten Exploits.
 - Humble Club Backyard (Orga)
 `},
 
-        "/README": { type:"file", data:
-`README
-students   → Lehrplan + Unterrichtsbeispiele
-colleagues → didaktische Kommentare + Material
-cyber      → CyberDefense Lab + Writeups + Videos
-ultra      → Ultralaufen / Training / Projekte
-
-Tipp: ls, cd students, tree, find flag
+        "/courses": { type:"dir", kids:["linux101","informatik_basics"] },
+        "/courses/linux101": { type:"dir", kids:["README","lesson_plan.md","cheatsheet.txt"] },
+        "/courses/linux101/README": { type:"file", data:
+`LINUX101 (Jg. 9/10)
+- lesson_plan.md
+- cheatsheet.txt
+Tipp: cat /courses/linux101/cheatsheet.txt
 `},
-        "/notes.txt": { type:"file", data:
-`NOTES
-- kein tracking
-- statisch hostbar
-- Terminal ist "spielbar" und bewusst harmlos
+        "/courses/linux101/lesson_plan.md": { type:"file", data:
+`Lesson Plan (Kurz)
+1) Navigation & Pfade
+2) Dateien lesen & suchen
+3) Logs lesen & interpretieren
+4) Mini-Challenge: finde Flag(s)
+
+Optional: Pipes (|) als Level Up
+`},
+        "/courses/linux101/cheatsheet.txt": { type:"file", data:
+`Cheatsheet
+pwd            → wo bin ich?
+ls / ls -a     → was ist hier?
+cd <dir>       → wechseln
+cat <file>     → Datei lesen
+head/tail      → Anfang/Ende
+grep <x> <f>   → suchen in Datei
+find <x>       → suchen nach Pfad
+tree / tree -a → Baum
 `},
 
-        // Hidden lab area (discoverable)
+        "/courses/informatik_basics": { type:"dir", kids:["daten.txt","netze.txt","algos.txt"] },
+        "/courses/informatik_basics/daten.txt": { type:"file", data:
+`Daten (Kurz)
+- Bit/Byte
+- Binär/Hex
+- Hash vs Verschlüsselung
+`},
+        "/courses/informatik_basics/netze.txt": { type:"file", data:
+`Netze (Kurz)
+- IP, Subnetz, Gateway
+- DNS
+- Ports
+`},
+        "/courses/informatik_basics/algos.txt": { type:"file", data:
+`Algorithmen (Kurz)
+- deterministisch
+- endlich
+- eindeutig
+`},
+
+        "/home": { type:"dir", kids:["student","teacher"] },
+        "/home/student": { type:"dir", kids:["README",".cache",".bash_history"] },
+        "/home/student/README": { type:"file", data:
+`home/student
+Hier liegen "Benutzerdaten".
+Tipp: ls -a
+`},
+        "/home/student/.bash_history": { type:"file", data:
+`# Fake History
+ls
+cd /var/log
+cat auth.log
+# hmm…
+`},
+        "/home/student/.cache": { type:"dir", kids:["tmp.txt","note.txt","flag2_hint.txt"] },
+        "/home/student/.cache/tmp.txt": { type:"file", data:
+`tmp
+Wenn du das liest, hast du schon mal cat verstanden.
+`},
+        "/home/student/.cache/note.txt": { type:"file", data:
+`note
+Ich schwöre, ich hab nichts gemacht. (hat er gesagt)
+`},
+        "/home/student/.cache/flag2_hint.txt": { type:"file", data:
+`flag #2 hint
+Schau in die Logs. Such nach "FLAG2".
+/var/log/auth.log ist ein Anfang.
+`},
+        "/home/teacher": { type:"dir", kids:["README","grading_rubric.txt"] },
+        "/home/teacher/README": { type:"file", data:
+`home/teacher
+Wenn du hier bist: Respekt.
+Aber keine Sorge: read-only.
+`},
+        "/home/teacher/grading_rubric.txt": { type:"file", data:
+`Rubric (Mini)
+- Orientierung (pwd/cd/ls)
+- Datei lesen (cat/head/tail)
+- Suchen (grep/find/tree)
+- Erklärung in Worten (Was hast du getan und warum?)
+`},
+
+        "/var": { type:"dir", kids:["log"] },
+        "/var/log": { type:"dir", kids:["auth.log","syslog","app.log"] },
+
+        // Log with embedded "FLAG2"
+        "/var/log/auth.log": { type:"file", data:
+`Dec 29 09:14:02 school-lab sshd[119]: Failed password for invalid user admin from 10.0.0.23 port 50112
+Dec 29 09:14:17 school-lab sshd[119]: Failed password for invalid user admin from 10.0.0.23 port 50112
+Dec 29 09:16:03 school-lab sshd[121]: Accepted password for student from 10.0.0.17 port 50133
+Dec 29 09:16:04 school-lab sshd[121]: pam_unix(sshd:session): session opened for user student
+Dec 29 09:18:12 school-lab filewatch[77]: modified /home/student/.cache/note.txt
+Dec 29 09:19:55 school-lab audit[88]: FLAG2=RB{logs_are_data}
+`},
+        "/var/log/syslog": { type:"file", data:
+`Dec 29 09:10:00 kernel: boot ok
+Dec 29 09:11:12 network: link up
+Dec 29 09:12:01 scheduler: class 9/10: linux basics loaded
+`},
+        "/var/log/app.log": { type:"file", data:
+`[INFO] rb-shell ready
+[INFO] no network
+[INFO] no tracking
+`},
+
+        // Hidden lab area (flag #1)
         "/.lab": { type:"dir", kids:[".cache","ops"] },
         "/.lab/.cache": { type:"dir", kids:["hint.txt"] },
         "/.lab/.cache/hint.txt": { type:"file", data:
@@ -624,7 +987,7 @@ Tipp: ls, cd students, tree, find flag
 `},
         "/.lab/ops": { type:"dir", kids:["flag.txt"] },
         "/.lab/ops/flag.txt": { type:"file", data:
-`FLAG
+`FLAG #1
 RB{terminal_mode_unlocked}
 `},
       };
@@ -637,20 +1000,46 @@ RB{terminal_mode_unlocked}
         history: [],
         histIdx: -1,
         completions: [],
-        compIdx: 0
+        compIdx: 0,
+        // lesson progress
+        lessonIndex: 0,
+        done: {},            // taskId -> true
+        seenCmds: [],        // log of executed commands
+      };
+
+      const STORE_KEY = "rb_shell_course_v1";
+
+      const loadState = () => {
+        try{
+          const raw = localStorage.getItem(STORE_KEY);
+          if(!raw) return;
+          const saved = JSON.parse(raw);
+          if(saved && typeof saved === "object"){
+            if(typeof saved.lessonIndex === "number") state.lessonIndex = saved.lessonIndex;
+            if(saved.done && typeof saved.done === "object") state.done = saved.done;
+            if(Array.isArray(saved.seenCmds)) state.seenCmds = saved.seenCmds;
+          }
+        }catch(_){}
+      };
+
+      const saveState = () => {
+        try{
+          localStorage.setItem(STORE_KEY, JSON.stringify({
+            lessonIndex: state.lessonIndex,
+            done: state.done,
+            seenCmds: state.seenCmds
+          }));
+        }catch(_){}
       };
 
       const esc = (s) => String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
       const line = (html="") => { out.innerHTML += html + "<br>"; out.scrollTop = out.scrollHeight; };
-      const hr = () => line(`<span class="accent">${"—".repeat(56)}</span>`);
+      const hr = () => line(`<span class="accent">${"—".repeat(60)}</span>`);
 
       const normPath = (p) => {
         if(!p) return state.cwd;
-        // absolute?
         let path = p.startsWith("/") ? p : (state.cwd === "/" ? `/${p}` : `${state.cwd}/${p}`);
-        // remove duplicate slashes
         path = path.replace(/\/+/g,"/");
-        // resolve . and ..
         const parts = [];
         for(const seg of path.split("/")){
           if(!seg || seg === ".") continue;
@@ -678,52 +1067,270 @@ RB{terminal_mode_unlocked}
       };
 
       const header = () => {
-        line(`<span class="pix">┌─ rb-shell ───────────────────────────────────┐</span>`);
-        line(`<span class="pix">│ dirs: students · colleagues · cyber · ultra │</span>`);
-        line(`<span class="pix">└─────────────────────────────────────────────┘</span>`);
+        line(`<span class="pix">┌─ rb-shell ─────────────────────────────────────────┐</span>`);
+        line(`<span class="pix">│ dirs: students · colleagues · cyber · ultra · courses │</span>`);
+        line(`<span class="pix">└─────────────────────────────────────────────────────┘</span>`);
       };
 
       const motd = () => {
         out.innerHTML = "";
         header();
-        line(`<span class="ok">OK</span> <span class="accent">kein tracking</span> · Tippe <span class="accent">help</span> oder <span class="accent">ls</span>`);
+        line(`<span class="ok">OK</span> <span class="accent">kein tracking</span> · Tippe <span class="accent">lesson</span> oder <span class="accent">help</span>`);
         hr();
-        line(`<span class="accent">Beispiel:</span> cd students`);
-        line(`<span class="accent">Challenge:</span> finde die versteckte flag (Tipp: find flag)`);
+        line(`<span class="accent">Start:</span> lesson  (oder Panel unten aufklappen)`);
         line(``);
       };
 
-      const help = () => {
-        hr();
-        line(`<span class="accent">Commands</span>`);
-        line(`ls [-a] · cd &lt;dir&gt; · pwd · whoami · cat &lt;file&gt; · echo ... · clear`);
-        line(`date · uptime · neofetch · tree [-a] · find &lt;term&gt; · grep &lt;term&gt; &lt;file&gt;`);
-        line(`head [-n N] &lt;file&gt; · tail [-n N] &lt;file&gt; · open &lt;section&gt;`);
-        line(`mkdir &lt;dir&gt; · touch &lt;file&gt; (nur /tmp)`);
-        hr();
+      // ----- Lessons (guided, but not baby-mode)
+      const lessons = [
+        {
+          id: "L1",
+          title: "Lektion 1 — Orientierung: Pfade & Navigation",
+          intro:
+`Ziel: Du kannst dich in einem Dateisystem bewegen, ohne zu klicken.
+Du lernst: pwd / ls / cd / cat.
+Warum das wichtig ist: In Linux ist "wo bin ich?" die halbe Miete.`,
+          hint:
+`Tipp: Starte mit:
+- pwd
+- ls
+- cd /students
+- ls
+- cat README`,
+          tasks: [
+            { id:"L1_T1", text:"Führe pwd aus.", check: (ctx) => ctx.seen("pwd") },
+            { id:"L1_T2", text:"Liste /students mit ls (egal ob du vorher cd machst).", check: (ctx) => ctx.seenRegex(/^ls(\s|$)/) && ctx.seenPath("/students") },
+            { id:"L1_T3", text:"Wechsle nach /students (cd /students).", check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students") },
+            { id:"L1_T4", text:"Lies /students/README (cat README oder cat /students/README).", check: (ctx) => ctx.seenCat("/students/README") }
+          ]
+        },
+        {
+          id: "L2",
+          title: "Lektion 2 — Dateien lesen & schnell suchen",
+          intro:
+`Ziel: Du kannst Inhalte lesen und gezielt suchen.
+Du lernst: head / tail / grep / find / tree.
+Warum: Wer suchen kann, verliert weniger Zeit (und wirkt plötzlich sehr kompetent).`,
+          hint:
+`Tipp:
+- cd /
+- tree /students
+- find log
+- grep DNS /students/netze_quickcards.txt
+- head -n 3 /var/log/auth.log`,
+          tasks: [
+            { id:"L2_T1", text:"Nutze tree auf /students (tree /students).", check: (ctx) => ctx.seenExact("tree /students") || ctx.seenRegex(/^tree\s+\/students/) },
+            { id:"L2_T2", text:"Suche nach 'DNS' in netze_quickcards.txt (grep DNS ...).", check: (ctx) => ctx.seenGrep("DNS", "/students/netze_quickcards.txt") },
+            { id:"L2_T3", text:"Nutze head oder tail auf /var/log/auth.log.", check: (ctx) => ctx.seenRegex(/^(head|tail)\b/) && ctx.seenPath("/var/log/auth.log") },
+            { id:"L2_T4", text:"Finde mindestens einen Pfad mit find (z.B. find flag oder find log).", check: (ctx) => ctx.seenRegex(/^find\s+\S+/) }
+          ]
+        },
+        {
+          id: "L3",
+          title: "Lektion 3 — Logs lesen: Was ist hier passiert?",
+          intro:
+`Ziel: Du kannst aus Logs eine kleine Story rekonstruieren.
+Du lernst: Logdateien lesen, grep als Filter, Hypothesen bilden.
+Mini-Story: Es gab Loginversuche und eine Datei wurde verändert.`,
+          hint:
+`Tipp:
+- cd /var/log
+- ls
+- cat auth.log
+- grep Accepted auth.log
+- grep modified auth.log`,
+          tasks: [
+            { id:"L3_T1", text:"Wechsle nach /var/log (cd /var/log).", check: (ctx) => ctx.seenExact("cd /var/log") || ctx.cwdIs("/var/log") },
+            { id:"L3_T2", text:"Öffne auth.log (cat auth.log oder cat /var/log/auth.log).", check: (ctx) => ctx.seenCat("/var/log/auth.log") },
+            { id:"L3_T3", text:"Filtere nach 'Accepted' mit grep.", check: (ctx) => ctx.seenGrep("Accepted", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+Accepted\s+auth\.log/) },
+            { id:"L3_T4", text:"Finde die Zeile mit 'modified' (grep modified ...).", check: (ctx) => ctx.seenGrep("modified", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+modified\s+auth\.log/) }
+          ]
+        },
+        {
+          id: "L4",
+          title: "Lektion 4 — Mini-Challenge: Flags finden (geführt)",
+          intro:
+`Ziel: Du nutzt deine Tools, um zwei Flags zu finden.
+Wichtig: Das ist nur eine Simulation. Du sollst NICHT hacken, sondern suchen/lesen/filtern.`,
+          hint:
+`Flag #1:
+- ls -a /
+- tree -a /
+- find flag
+Dann: cat <datei>
+
+Flag #2:
+- Schau in /var/log/auth.log
+- grep FLAG2 /var/log/auth.log`,
+          tasks: [
+            { id:"L4_T1", text:"Finde Flag #1 (RB{terminal_mode_unlocked}).", check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") },
+            { id:"L4_T2", text:"Finde Flag #2 (RB{logs_are_data}).", check: (ctx) => ctx.foundFlag("RB{logs_are_data}") },
+            { id:"L4_T3", text:"Bonus: Öffne /home/student/.cache/flag2_hint.txt.", check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt") }
+          ]
+        }
+      ];
+
+      const ctx = {
+        seen: (cmd) => state.seenCmds.includes(cmd),
+        seenExact: (cmd) => state.seenCmds.includes(cmd),
+        seenRegex: (re) => state.seenCmds.some(c => re.test(c)),
+        cwdIs: (p) => state.cwd === p,
+        seenPath: (p) => state.seenCmds.some(c => c.includes(p)),
+        seenCat: (path) => state.seenCmds.some(c => {
+          if(!c.startsWith("cat ")) return false;
+          const arg = c.slice(4).trim();
+          const p = normPath(arg);
+          return p === path;
+        }),
+        seenGrep: (term, path) => state.seenCmds.some(c => {
+          if(!c.startsWith("grep ")) return false;
+          const rest = c.slice(5).trim().split(/\s+/);
+          if(rest.length < 2) return false;
+          const t = rest[0];
+          const file = rest.slice(1).join(" ");
+          return t === term && normPath(file) === path;
+        }),
+        foundFlag: (flag) => state.seenCmds.some(c => c === `FLAG_FOUND:${flag}`)
       };
 
-      const man = (topic="") => {
-        const t = (topic||"").toLowerCase();
-        hr();
-        if(!t){
-          line(`<span class="accent">man</span> topic fehlt (z.B. man ls)`);
+      const currentLesson = () => lessons[Math.max(0, Math.min(lessons.length-1, state.lessonIndex))];
+
+      const recomputeProgress = () => {
+        const L = currentLesson();
+        const checks = L.tasks.map(t => !!state.done[t.id]);
+        const doneCount = checks.filter(Boolean).length;
+        const total = checks.length || 1;
+        return { doneCount, total, pct: Math.round((doneCount/total)*100) };
+      };
+
+      const renderLessonPanel = () => {
+        const L = currentLesson();
+        const prog = recomputeProgress();
+        if(lessonTitle) lessonTitle.textContent = `${L.title}`;
+        if(lessonIntro) lessonIntro.textContent = L.intro;
+
+        if(taskListEl){
+          taskListEl.innerHTML = "";
+          L.tasks.forEach(t => {
+            const li = document.createElement("li");
+            li.textContent = t.text;
+            if(state.done[t.id]) li.classList.add("taskDone");
+            taskListEl.appendChild(li);
+          });
+        }
+
+        if(progressBar) progressBar.style.width = `${prog.pct}%`;
+        if(lessonSummaryRight) lessonSummaryRight.textContent = `Progress: ${prog.pct}%`;
+      };
+
+      const markDone = (taskId) => {
+        state.done[taskId] = true;
+      };
+
+      const checkTasks = (silent=false) => {
+        const L = currentLesson();
+        let newly = 0;
+        for(const t of L.tasks){
+          if(state.done[t.id]) continue;
+          try{
+            if(t.check(ctx)){
+              markDone(t.id);
+              newly++;
+            }
+          }catch(_){}
+        }
+        saveState();
+        renderLessonPanel();
+
+        if(!silent){
+          const prog = recomputeProgress();
+          hr();
+          if(newly) line(`<span class="ok">CHECK</span> +${newly} task(s) erledigt.`);
+          else line(`<span class="accent">CHECK</span> keine neuen Tasks — nutze <span class="accent">hint</span> oder schau unten ins Panel.`);
+          line(`<span class="accent">Progress:</span> ${prog.doneCount}/${prog.total} (${prog.pct}%)`);
+          hr();
+        }
+      };
+
+      const nextLesson = () => {
+        // auto-check before advancing
+        checkTasks(true);
+        const prog = recomputeProgress();
+        if(prog.doneCount < prog.total){
+          hr();
+          line(`<span class="warn">NEXT</span> Noch nicht fertig. Mach erst die offenen Aufgaben (tasks) oder hol dir einen hint.`);
           hr();
           return;
         }
-        const pages = {
-          ls: "ls [-a]\nListet Verzeichnisse. -a zeigt auch dotfiles.",
-          cd: "cd <dir>\nWechselt das Verzeichnis. Unterstützt .. und absolute Pfade.",
-          tree: "tree [-a]\nZeigt Verzeichnisbaum. -a zeigt dotfiles.",
-          find: "find <term>\nSucht Pfade im Dateibaum (substring match).",
-          grep: "grep <term> <file>\nSucht in Datei nach Zeilen, die <term> enthalten.",
-          open: "open <section>\nÖffnet Seite: students|colleagues|cyber|ultra"
-        };
-        line(`<span class="accent">MAN ${esc(t)}</span>`);
-        line(esc(pages[t] || "Keine manpage gefunden."));
+        if(state.lessonIndex < lessons.length - 1){
+          state.lessonIndex++;
+          saveState();
+          renderLessonPanel();
+          hr();
+          line(`<span class="ok">NEXT</span> ${esc(currentLesson().title)}`);
+          line(`<span class="accent">Tipp:</span> tasks`);
+          hr();
+        } else {
+          hr();
+          line(`<span class="ok">DONE</span> Kurs abgeschlossen. Bonus: Wiederhole, erkläre einem anderen den Weg, oder suche eigene "Stories" in /var/log.`);
+          hr();
+        }
+      };
+
+      const showLesson = () => {
+        const L = currentLesson();
+        const prog = recomputeProgress();
+        hr();
+        line(`<span class="accent">${esc(L.title)}</span>`);
+        line(esc(L.intro));
+        line(`<span class="accent">Progress:</span> ${prog.doneCount}/${prog.total} (${prog.pct}%)`);
+        line(`<span class="accent">Commands:</span> tasks · hint · check · next`);
         hr();
       };
 
+      const showTasks = () => {
+        const L = currentLesson();
+        hr();
+        line(`<span class="accent">TASKS</span> (${esc(L.id)})`);
+        L.tasks.forEach((t, idx) => {
+          const done = state.done[t.id] ? `<span class="ok">[x]</span>` : `<span class="warn">[ ]</span>`;
+          line(`${done} ${idx+1}. ${esc(t.text)}`);
+        });
+        hr();
+      };
+
+      const showHint = () => {
+        const L = currentLesson();
+        hr();
+        line(`<span class="accent">HINT</span>`);
+        String(L.hint).split("\n").forEach(l => line(esc(l)));
+        hr();
+      };
+
+      const showProfile = () => {
+        const totalTasks = lessons.reduce((acc, L) => acc + L.tasks.length, 0) || 1;
+        const doneTasks = Object.values(state.done).filter(Boolean).length;
+        const pct = Math.round((doneTasks/totalTasks)*100);
+        hr();
+        line(`<span class="accent">PROFILE</span>`);
+        line(`Lesson: ${esc(currentLesson().id)} (${esc(currentLesson().title)})`);
+        line(`Tasks done: ${doneTasks}/${totalTasks} (${pct}%)`);
+        line(`CWD: ${esc(state.cwd)}`);
+        hr();
+      };
+
+      const resetCourse = () => {
+        state.lessonIndex = 0;
+        state.done = {};
+        state.seenCmds = [];
+        try{ localStorage.removeItem(STORE_KEY); }catch(_){}
+        renderLessonPanel();
+        hr();
+        line(`<span class="warn">RESET</span> Kursfortschritt gelöscht.`);
+        hr();
+      };
+
+      // ----- Shell helpers
       const doTree = (base, showAll=false, prefix="") => {
         const node = fs[base];
         if(!node || node.type !== "dir") return;
@@ -750,8 +1357,8 @@ RB{terminal_mode_unlocked}
           line(`<span class="warn">find:</span> nichts gefunden`);
           return;
         }
-        hits.slice(0, 80).forEach(h => line(esc(h)));
-        if(hits.length > 80) line(`<span class="accent">…</span> (${hits.length-80} weitere Treffer)`);
+        hits.slice(0, 120).forEach(h => line(esc(h)));
+        if(hits.length > 120) line(`<span class="accent">…</span> (${hits.length-120} weitere Treffer)`);
       };
 
       const doGrep = (term, filePath) => {
@@ -768,8 +1375,8 @@ RB{terminal_mode_unlocked}
           line(`<span class="warn">grep:</span> keine Treffer`);
           return;
         }
-        hits.slice(0, 60).forEach(h => line(esc(h)));
-        if(hits.length > 60) line(`<span class="accent">…</span> (${hits.length-60} weitere Zeilen)`);
+        hits.slice(0, 120).forEach(h => line(esc(h)));
+        if(hits.length > 120) line(`<span class="accent">…</span> (${hits.length-120} weitere Zeilen)`);
       };
 
       const doHeadTail = (filePath, n=10, mode="head") => {
@@ -793,14 +1400,15 @@ RB{terminal_mode_unlocked}
         line(`OS: RB Static (educational shell)`);
         line(`Shell: rb-shell`);
         line(`Uptime: ${mins}m ${secs}s`);
-        line(`Sections: students, colleagues, cyber, ultra`);
+        line(`Sections: students, colleagues, cyber, ultra, courses`);
         hr();
       };
 
-      // Completion helpers
+      // Completion
       const cmdList = [
         "ls","cd","pwd","whoami","cat","echo","clear","help","man",
-        "date","uptime","neofetch","tree","find","grep","head","tail","open","mkdir","touch"
+        "date","uptime","neofetch","tree","find","grep","head","tail","open",
+        "lesson","tasks","hint","check","next","profile","reset"
       ];
 
       const pathCompletions = (partial) => {
@@ -818,7 +1426,6 @@ RB{terminal_mode_unlocked}
               const prefix = (basePath === "/" ? "/" : basePath + "/");
               return (prefix + k + suffix).replace(/\/+/g,"/");
             }
-            // relative
             const relPrefix = base ? (base.endsWith("/") ? base : base + "/") : "";
             return relPrefix + k + suffix;
           });
@@ -828,6 +1435,59 @@ RB{terminal_mode_unlocked}
       const printPrompted = (cmdline) => {
         const where = state.cwd === "/" ? "~" : state.cwd;
         line(`<span class="ok">${esc(`${state.user}@${state.host}:${where}$`)}</span> ${esc(cmdline)}`);
+      };
+
+      const rememberCmd = (cmdline) => {
+        // store raw commandline for lesson checks
+        state.seenCmds.push(cmdline);
+        // cap to avoid infinite growth
+        if(state.seenCmds.length > 500) state.seenCmds = state.seenCmds.slice(-500);
+        saveState();
+      };
+
+      const maybeFlagFound = (fileContent) => {
+        // if a file contains RB{...} we mark it as found when it is printed
+        const matches = String(fileContent).match(/RB\{[^}]+\}/g);
+        if(matches){
+          matches.forEach(m => rememberCmd(`FLAG_FOUND:${m}`));
+        }
+      };
+
+      const help = () => {
+        hr();
+        line(`<span class="accent">Commands</span>`);
+        line(`ls [-a] · cd &lt;dir&gt; · pwd · whoami · cat &lt;file&gt; · echo ... · clear`);
+        line(`date · uptime · neofetch · tree [-a] · find &lt;term&gt; · grep &lt;term&gt; &lt;file&gt;`);
+        line(`head [-n N] &lt;file&gt; · tail [-n N] &lt;file&gt; · open &lt;section&gt;`);
+        hr();
+        line(`<span class="accent">Course</span>`);
+        line(`lesson · tasks · hint · check · next · profile · reset`);
+        hr();
+      };
+
+      const man = (topic="") => {
+        const t = (topic||"").toLowerCase();
+        hr();
+        if(!t){
+          line(`<span class="accent">man</span> topic fehlt (z.B. man ls)`);
+          hr();
+          return;
+        }
+        const pages = {
+          lesson: "lesson\nZeigt aktuelle Lektion (Ziel + Progress).",
+          tasks: "tasks\nZeigt Aufgaben der aktuellen Lektion.",
+          hint: "hint\nZeigt einen geführten Hinweis für die aktuelle Lektion.",
+          check: "check\nPrüft, welche Aufgaben du schon erledigt hast.",
+          next: "next\nWechselt zur nächsten Lektion (nur wenn aktuelle fertig).",
+          ls: "ls [-a]\nListet Verzeichnisse. -a zeigt auch dotfiles.",
+          cd: "cd <dir>\nWechselt das Verzeichnis. Unterstützt .. und absolute Pfade.",
+          tree: "tree [-a] [path]\nZeigt Verzeichnisbaum.",
+          find: "find <term>\nSucht Pfade im Dateibaum (substring match).",
+          grep: "grep <term> <file>\nSucht in Datei nach Zeilen, die <term> enthalten."
+        };
+        line(`<span class="accent">MAN ${esc(t)}</span>`);
+        line(esc(pages[t] || "Keine manpage gefunden."));
+        hr();
       };
 
       const run = (raw) => {
@@ -843,8 +1503,10 @@ RB{terminal_mode_unlocked}
         const parts = cmdline.split(/\s+/);
         const cmd = (parts.shift() || "").toLowerCase();
         const rest = parts;
-
         const argLine = rest.join(" ").trim();
+
+        // store before execution (so checks can validate even if command errors)
+        rememberCmd(cmdline);
 
         switch(cmd){
           case "ls": {
@@ -891,6 +1553,7 @@ RB{terminal_mode_unlocked}
             const p = normPath(argLine.replace(/^["']|["']$/g,""));
             const data = readFile(p);
             if(data == null){ line(`<span class="warn">cat:</span> Datei nicht gefunden: ${esc(argLine)}`); break; }
+            maybeFlagFound(data);
             String(data).split("\n").forEach(l => line(esc(l)));
             break;
           }
@@ -969,16 +1632,46 @@ RB{terminal_mode_unlocked}
             break;
           }
 
-          case "mkdir":
-          case "touch": {
-            // intentionally limited (keine echte persistenz, keine manipulation außerhalb /tmp)
-            line(`<span class="warn">${cmd}:</span> deaktiviert (demo-shell, read-only)`);
+          // ----- Course commands
+          case "lesson":
+            // open panel for convenience
+            if(lessonPanel) lessonPanel.open = true;
+            showLesson();
             break;
-          }
+
+          case "tasks":
+            if(lessonPanel) lessonPanel.open = true;
+            showTasks();
+            break;
+
+          case "hint":
+            if(lessonPanel) lessonPanel.open = true;
+            showHint();
+            break;
+
+          case "check":
+            checkTasks(false);
+            break;
+
+          case "next":
+            if(lessonPanel) lessonPanel.open = true;
+            nextLesson();
+            break;
+
+          case "profile":
+            showProfile();
+            break;
+
+          case "reset":
+            resetCourse();
+            break;
 
           default:
             line(`<span class="warn">command not found:</span> ${esc(cmd)} (Tipp: help)`);
         }
+
+        // after any command, update tasks silently
+        checkTasks(true);
       };
 
       // Input handlers: submit + history + tab completion
@@ -992,7 +1685,6 @@ RB{terminal_mode_unlocked}
       });
 
       input.addEventListener("keydown", (e) => {
-        // history up/down
         if(e.key === "ArrowUp"){
           e.preventDefault();
           if(state.history.length === 0) return;
@@ -1008,7 +1700,6 @@ RB{terminal_mode_unlocked}
           return;
         }
 
-        // Tab completion
         if(e.key === "Tab"){
           e.preventDefault();
           const v = input.value;
@@ -1017,27 +1708,17 @@ RB{terminal_mode_unlocked}
           const isFirst = parts.length === 1;
 
           if(isFirst){
-            // complete command
-            if(!state.completions.length || !v.endsWith(state.completions[state.compIdx] || "")){
-              const m = cmdList.filter(c => c.startsWith(last.toLowerCase()));
-              state.completions = m;
-              state.compIdx = 0;
-            }
-            if(state.completions.length){
-              const cand = state.completions[state.compIdx % state.completions.length];
+            const m = cmdList.filter(c => c.startsWith(last.toLowerCase()));
+            if(m.length){
+              const cand = m[state.compIdx % m.length];
               input.value = cand;
               state.compIdx++;
             }
             return;
           } else {
-            // complete path/sections
             const comps = pathCompletions(last);
             if(!comps.length) return;
-            if(state.completions.join("|") !== comps.join("|")){
-              state.completions = comps;
-              state.compIdx = 0;
-            }
-            const cand = state.completions[state.compIdx % state.completions.length];
+            const cand = comps[state.compIdx % comps.length];
             parts[parts.length-1] = cand;
             input.value = parts.join(" ");
             state.compIdx++;
@@ -1045,10 +1726,19 @@ RB{terminal_mode_unlocked}
         }
       });
 
+      // Lesson panel buttons
+      btnHint?.addEventListener("click", () => { showHint(); input.focus(); });
+      btnCheck?.addEventListener("click", () => { checkTasks(false); input.focus(); });
+      btnNext?.addEventListener("click", () => { nextLesson(); input.focus(); });
+      btnReset?.addEventListener("click", () => { resetCourse(); input.focus(); });
+
       miniHelp?.addEventListener("click", () => { help(); input.focus(); });
 
+      // init
+      loadState();
       motd();
       setPrompt();
+      renderLessonPanel();
       input.focus();
     })();
   </script>
