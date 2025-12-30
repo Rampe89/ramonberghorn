@@ -1083,98 +1083,98 @@ RB{terminal_mode_unlocked}
 
       // ----- Lessons (guided, but not baby-mode)
       const lessons = [
-        {
-          id: "L1",
-          title: "Lektion 1 — Orientierung: Pfade & Navigation",
-          intro:
+  {
+    id: "L1",
+    title: "Lektion 1 — Orientierung: Pfade & Navigation",
+    intro:
 `Ziel: Du kannst dich in einem Dateisystem bewegen, ohne zu klicken.
 Du lernst: pwd / ls / cd / cat.
 Warum das wichtig ist: In Linux ist "wo bin ich?" die halbe Miete.`,
-          hint:
+    hint:
 `Tipp: Starte mit:
 - pwd
 - ls
 - cd /students
 - ls
 - cat README`,
-tasks: [
-  {
-    id: "L1_T1",
-    text: "Führe pwd aus.",
-    check: (ctx) => ctx.seen("pwd")
+    tasks: [
+      {
+        id: "L1_T1",
+        text: "Führe pwd aus.",
+        check: (ctx) => ctx.seen("pwd")
+      },
+      {
+        id: "L1_T2",
+        text: "Liste den Inhalt von /students (entweder: ls /students ODER: cd /students + ls).",
+        check: (ctx) =>
+          ctx.seenRegex(/^ls\s+\/students\/?(\s|$)/) ||
+          (ctx.cwdIs("/students") && ctx.seenRegex(/^ls(\s|$)/)) ||
+          (ctx.seenExact("cd /students") && ctx.seenRegex(/^ls(\s|$)/))
+      },
+      {
+        id: "L1_T3",
+        text: "Wechsle nach /students (cd /students).",
+        check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students")
+      },
+      {
+        id: "L1_T4",
+        text: "Lies /students/README (cat README oder cat /students/README).",
+        check: (ctx) => ctx.seenCat("/students/README")
+      }
+    ]
   },
-  {
-    id: "L1_T2",
-    text: "Liste den Inhalt von /students (entweder: ls /students ODER: cd /students + ls).",
-    check: (ctx) =>
-      // Variante A: direktes Listen des Zielpfads
-      ctx.seenRegex(/^ls\s+\/students\/?(\s|$)/) ||
-      // Variante B: erst reinwechseln, dann ls (ohne Argument)
-      (ctx.cwdIs("/students") && ctx.seenRegex(/^ls(\s|$)/)) ||
-      // tolerant: wenn 'cd /students' irgendwann vorkam und danach ein 'ls' ohne Pfad
-      (ctx.seenExact("cd /students") && ctx.seenRegex(/^ls(\s|$)/))
-  },
-  {
-    id: "L1_T3",
-    text: "Wechsle nach /students (cd /students).",
-    check: (ctx) => ctx.seenExact("cd /students") || ctx.cwdIs("/students")
-  },
-  {
-    id: "L1_T4",
-    text: "Lies /students/README (cat README oder cat /students/README).",
-    check: (ctx) => ctx.seenCat("/students/README")
-  }
-]
 
-        {
-          id: "L2",
-          title: "Lektion 2 — Dateien lesen & schnell suchen",
-          intro:
+  {
+    id: "L2",
+    title: "Lektion 2 — Dateien lesen & schnell suchen",
+    intro:
 `Ziel: Du kannst Inhalte lesen und gezielt suchen.
 Du lernst: head / tail / grep / find / tree.
 Warum: Wer suchen kann, verliert weniger Zeit (und wirkt plötzlich sehr kompetent).`,
-          hint:
+    hint:
 `Tipp:
 - cd /
 - tree /students
 - find log
 - grep DNS /students/netze_quickcards.txt
 - head -n 3 /var/log/auth.log`,
-          tasks: [
-            { id:"L2_T1", text:"Nutze tree auf /students (tree /students).", check: (ctx) => ctx.seenExact("tree /students") || ctx.seenRegex(/^tree\s+\/students/) },
-            { id:"L2_T2", text:"Suche nach 'DNS' in netze_quickcards.txt (grep DNS ...).", check: (ctx) => ctx.seenGrep("DNS", "/students/netze_quickcards.txt") },
-            { id:"L2_T3", text:"Nutze head oder tail auf /var/log/auth.log.", check: (ctx) => ctx.seenRegex(/^(head|tail)\b/) && ctx.seenPath("/var/log/auth.log") },
-            { id:"L2_T4", text:"Finde mindestens einen Pfad mit find (z.B. find flag oder find log).", check: (ctx) => ctx.seenRegex(/^find\s+\S+/) }
-          ]
-        },
-        {
-          id: "L3",
-          title: "Lektion 3 — Logs lesen: Was ist hier passiert?",
-          intro:
+    tasks: [
+      { id:"L2_T1", text:"Nutze tree auf /students (tree /students).", check: (ctx) => ctx.seenExact("tree /students") || ctx.seenRegex(/^tree\s+\/students/) },
+      { id:"L2_T2", text:"Suche nach 'DNS' in netze_quickcards.txt (grep DNS ...).", check: (ctx) => ctx.seenGrep("DNS", "/students/netze_quickcards.txt") },
+      { id:"L2_T3", text:"Nutze head oder tail auf /var/log/auth.log.", check: (ctx) => ctx.seenRegex(/^(head|tail)\b/) && ctx.seenPath("/var/log/auth.log") },
+      { id:"L2_T4", text:"Finde mindestens einen Pfad mit find (z.B. find flag oder find log).", check: (ctx) => ctx.seenRegex(/^find\s+\S+/) }
+    ]
+  },
+
+  {
+    id: "L3",
+    title: "Lektion 3 — Logs lesen: Was ist hier passiert?",
+    intro:
 `Ziel: Du kannst aus Logs eine kleine Story rekonstruieren.
 Du lernst: Logdateien lesen, grep als Filter, Hypothesen bilden.
 Mini-Story: Es gab Loginversuche und eine Datei wurde verändert.`,
-          hint:
+    hint:
 `Tipp:
 - cd /var/log
 - ls
 - cat auth.log
 - grep Accepted auth.log
 - grep modified auth.log`,
-          tasks: [
-            { id:"L3_T1", text:"Wechsle nach /var/log (cd /var/log).", check: (ctx) => ctx.seenExact("cd /var/log") || ctx.cwdIs("/var/log") },
-            { id:"L3_T2", text:"Öffne auth.log (cat auth.log oder cat /var/log/auth.log).", check: (ctx) => ctx.seenCat("/var/log/auth.log") },
-            { id:"L3_T3", text:"Filtere nach 'Accepted' mit grep.", check: (ctx) => ctx.seenGrep("Accepted", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+Accepted\s+auth\.log/) },
-            { id:"L3_T4", text:"Finde die Zeile mit 'modified' (grep modified ...).", check: (ctx) => ctx.seenGrep("modified", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+modified\s+auth\.log/) }
-          ]
-        },
-        {
-          id: "L4",
-          title: "Lektion 4 — Mini-Challenge: Flags finden (geführt)",
-          intro:
+    tasks: [
+      { id:"L3_T1", text:"Wechsle nach /var/log (cd /var/log).", check: (ctx) => ctx.seenExact("cd /var/log") || ctx.cwdIs("/var/log") },
+      { id:"L3_T2", text:"Öffne auth.log (cat auth.log oder cat /var/log/auth.log).", check: (ctx) => ctx.seenCat("/var/log/auth.log") },
+      { id:"L3_T3", text:"Filtere nach 'Accepted' mit grep.", check: (ctx) => ctx.seenGrep("Accepted", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+Accepted\s+auth\.log/) },
+      { id:"L3_T4", text:"Finde die Zeile mit 'modified' (grep modified ...).", check: (ctx) => ctx.seenGrep("modified", "/var/log/auth.log") || ctx.seenRegex(/^grep\s+modified\s+auth\.log/) }
+    ]
+  },
+
+  {
+    id: "L4",
+    title: "Lektion 4 — Mini-Challenge: Flags finden (geführt)",
+    intro:
 `Ziel: Du nutzt deine Tools, um zwei Flags zu finden.
 Wichtig: Das ist nur eine Simulation. Du sollst NICHT hacken, sondern suchen/lesen/filtern.`,
-          hint:
+    hint:
 `Flag #1:
 - ls -a /
 - tree -a /
@@ -1184,13 +1184,14 @@ Dann: cat <datei>
 Flag #2:
 - Schau in /var/log/auth.log
 - grep FLAG2 /var/log/auth.log`,
-          tasks: [
-            { id:"L4_T1", text:"Finde Flag #1 (RB{terminal_mode_unlocked}).", check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") },
-            { id:"L4_T2", text:"Finde Flag #2 (RB{logs_are_data}).", check: (ctx) => ctx.foundFlag("RB{logs_are_data}") },
-            { id:"L4_T3", text:"Bonus: Öffne /home/student/.cache/flag2_hint.txt.", check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt") }
-          ]
-        }
-      ];
+    tasks: [
+      { id:"L4_T1", text:"Finde Flag #1 (RB{terminal_mode_unlocked}).", check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") },
+      { id:"L4_T2", text:"Finde Flag #2 (RB{logs_are_data}).", check: (ctx) => ctx.foundFlag("RB{logs_are_data}") },
+      { id:"L4_T3", text:"Bonus: Öffne /home/student/.cache/flag2_hint.txt.", check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt") }
+    ]
+  }
+];
+
 
       const ctx = {
         seen: (cmd) => state.seenCmds.includes(cmd),
