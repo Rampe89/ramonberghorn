@@ -1168,28 +1168,64 @@ Mini-Story: Es gab Loginversuche und eine Datei wurde verändert.`,
     ]
   },
 
-  {
-    id: "L4",
-    title: "Lektion 4 — Mini-Challenge: Flags finden (geführt)",
-    intro:
-`Ziel: Du nutzt deine Tools, um zwei Flags zu finden.
-Wichtig: Das ist nur eine Simulation. Du sollst NICHT hacken, sondern suchen/lesen/filtern.`,
-    hint:
-`Flag #1:
-- ls -a /
-- tree -a /
-- find flag
-Dann: cat <datei>
+{
+  id: "L4",
+  title: "Lektion 4 — Abschlussmission: Mini-CTF (geführt, ohne Spoiler)",
+  intro:
+`Ziel: Du findest zwei Übungs-Flags, ohne dass sie dir verraten werden.
+Du nutzt nur: ls -a, tree -a, find, cat, grep.
+Regel: Kein Raten. Arbeite wie ein Analyst: erst Sichtbarkeit erhöhen, dann strukturiert suchen, dann verifizieren.`,
 
-Flag #2:
-- Schau in /var/log/auth.log
-- grep FLAG2 /var/log/auth.log`,
-    tasks: [
-      { id:"L4_T1", text:"Finde Flag #1 (RB{terminal_mode_unlocked}).", check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") },
-      { id:"L4_T2", text:"Finde Flag #2 (RB{logs_are_data}).", check: (ctx) => ctx.foundFlag("RB{logs_are_data}") },
-      { id:"L4_T3", text:"Bonus: Öffne /home/student/.cache/flag2_hint.txt.", check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt") }
-    ]
-  }
+  hint:
+`Mission A (Dateibaum):
+1) Starte in /
+2) Mach versteckte Dinge sichtbar: ls -a /
+3) Schau dir den Baum an: tree -a /
+4) Wenn du einen verdächtigen Ordner siehst: cd <ordner> und ls -a
+5) Lies die verdächtige Datei: cat <datei>
+
+Mission B (Logs):
+1) Geh nach /var/log
+2) Lies auth.log (oder nutze grep)
+3) Suche nach einem auffälligen Marker in der Datei (Tipp: grep FLAG2 /var/log/auth.log)
+4) Wenn du glaubst, du hast es: verifizieren durch cat/grep.`,
+
+  tasks: [
+    {
+      id:"L4_T1",
+      text:"Mission A: Mache versteckte Ordner in / sichtbar (ls -a /).",
+      check: (ctx) => ctx.seenRegex(/^ls\s+-a\s+\/(\s|$)/) || ctx.seenRegex(/^ls\s+\/\s+-a(\s|$)/)
+    },
+    {
+      id:"L4_T2",
+      text:"Mission A: Nutze tree -a /, um versteckte Bereiche zu sehen.",
+      check: (ctx) => ctx.seenRegex(/^tree\s+-a\s+\/(\s|$)/) || ctx.seenRegex(/^tree\s+\/\s+-a(\s|$)/)
+    },
+    {
+      id:"L4_T3",
+      text:"Mission A: Öffne eine Flag-Datei per cat (du musst sie vorher finden).",
+      check: (ctx) => ctx.foundFlag("RB{terminal_mode_unlocked}") // intern, ohne Spoiler
+    },
+    {
+      id:"L4_T4",
+      text:"Mission B: Finde den FLAG2-Marker in /var/log/auth.log (grep FLAG2 ...).",
+      check: (ctx) =>
+        ctx.seenRegex(/^grep\s+FLAG2\s+\/var\/log\/auth\.log(\s|$)/) ||
+        ctx.seenRegex(/^grep\s+FLAG2\s+auth\.log(\s|$)/)
+    },
+    {
+      id:"L4_T5",
+      text:"Mission B: Verifiziere die zweite Flag (durch cat/grep – nicht raten).",
+      check: (ctx) => ctx.foundFlag("RB{logs_are_data}") // intern, ohne Spoiler
+    },
+    {
+      id:"L4_T6",
+      text:"Bonus: Öffne den Hinweis im Home-Verzeichnis des Studenten (cat /home/student/.cache/flag2_hint.txt).",
+      check: (ctx) => ctx.seenCat("/home/student/.cache/flag2_hint.txt")
+    }
+  ]
+}
+
 ];
 
 
