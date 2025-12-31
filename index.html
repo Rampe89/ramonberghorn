@@ -404,6 +404,19 @@
       gap:10px;
       border-bottom: var(--bw) solid var(--panelLine);
       user-select:none;
+
+      /* NEW: visueller Kontrast */
+      background: linear-gradient(90deg, rgba(0,87,255,.10), rgba(255,59,48,.06));
+      position:relative;
+    }
+    details.lessonPanel > summary::before{
+      /* NEW: linker Marker */
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width: 10px;
+      background: var(--hi2);
+      border-right: var(--bw) solid var(--panelLine);
     }
     details.lessonPanel > summary::-webkit-details-marker{ display:none; }
     .lessonBody{
@@ -425,6 +438,12 @@
       padding: 10px;
       background:#fff;
     }
+
+    /* NEW: Aufgaben-Spalte leicht getönt */
+    .card.tasksCard{
+      background: rgba(0,87,255,.05);
+    }
+
     .card h3{
       margin:0 0 8px;
       font-size: 14px;
@@ -498,7 +517,13 @@
       display:inline-block;
       box-shadow: 2px 2px 0 var(--shadowInk);
     }
+
+    /* NEW: OPEN/DONE klarer unterscheiden */
     .taskStatus.done .box{ background: var(--hi3); }
+    .taskStatus:not(.done) .box{ background: rgba(255,59,48,.25); }
+    .taskStatus.done{ color:#0b6b2a; }
+    .taskStatus:not(.done){ color:#7a1b15; }
+
     .taskCard{
       border: var(--bw) solid var(--panelLine);
       box-shadow: 3px 3px 0 var(--shadowInk);
@@ -540,14 +565,6 @@
       white-space:nowrap;
     }
     .taskActions .ghost{ opacity:.9; }
-    .teacherNote{
-      border: var(--bw) dashed #111;
-      padding: 8px 10px;
-      font-family: var(--mono);
-      font-size: 12px;
-      background:#fff;
-      box-shadow: 3px 3px 0 var(--shadowInk);
-    }
 
     @media (prefers-reduced-motion: reduce){
       .tab{ transition:none; }
@@ -672,11 +689,10 @@
                     </div>
                     <div class="taskText" id="nextText">…</div>
                     <div class="taskWhy" id="nextWhy" style="display:none;">…</div>
-                    <div class="teacherNote" id="nextTeacher" style="display:none;">…</div>
                   </div>
                 </div>
 
-                <div class="card">
+                <div class="card tasksCard">
                   <div class="taskMeta">
                     <h3 style="margin:0;">Aufgaben (für Schüler:innen)</h3>
                     <div class="btnRow">
@@ -691,13 +707,7 @@
                 </div>
               </div>
 
-              <div class="card">
-                <h3>Didaktik-Notiz</h3>
-                <div class="muted">
-                  Der Kurs ist bewusst „read-only“ und ungefährlich.
-                  Fokus: Navigation, Textarbeit, Logik, Debugging-Mindset. Optional später: Pipes (<span class="small">|</span>).
-                </div>
-              </div>
+              <!-- Didaktik-Notiz entfernt -->
             </div>
           </details>
         </div>
@@ -761,7 +771,6 @@
 
       const nextText = document.getElementById("nextText");
       const nextWhy = document.getElementById("nextWhy");
-      const nextTeacher = document.getElementById("nextTeacher");
       const btnPasteNext = document.getElementById("btnPasteNext");
       const btnRunNext = document.getElementById("btnRunNext");
 
@@ -805,7 +814,7 @@ Incident Case (Mini-CTF, safe):
 - Wenn du hier "sudo rm -rf /" tippst: passiert… nichts. (Leider.)
 `},
 
-        "/students": { type:"dir", kids:["README","aufgaben","beispiele","memes.txt","netze_quickcards.txt"] },
+        "/students": { type:"dir", kids:["README","aufgaben","beispiele","netze_quickcards.txt"] },
         "/students/README": { type:"file", data:
 `STUDENTS
 - Lehrplan (Sek I)
@@ -815,17 +824,7 @@ Incident Case (Mini-CTF, safe):
 Warmup:
 - cd /students
 - ls
-- cat memes.txt
-`},
-        "/students/memes.txt": { type:"file", data:
-`Schulische IT-Witze (trocken, aber fair):
-1) "Ich hab das WLAN repariert." — *stellt Router höher ins Regal*
-2) Wenn ein Schüler sagt "Bei mir geht's", ist das Debugging offiziell abgeschlossen.
-3) DNS ist wie 'Kontakte' im Handy. Nur ohne Profilbild. Meistens.
-4) "Ich hab nichts geändert" ist eine Änderung.
-
-Bonus:
-- cat /students/netze_quickcards.txt
+- cat netze_quickcards.txt
 `},
         "/students/netze_quickcards.txt": { type:"file", data:
 `NETZE – Quickcards (Jg. 9/10)
@@ -1137,12 +1136,10 @@ RB{terminal_mode_unlocked}
         lessonIndex: 0,
         done: {},
         seenCmds: [],
-        teacherMode: false,
         lastCmd: ""
       };
 
       const STORE_KEY = "rb_shell_course_v1";
-      const STORE_TEACHER = "rb_shell_teacher_mode_v1";
 
       const loadState = () => {
         try{
@@ -1156,11 +1153,6 @@ RB{terminal_mode_unlocked}
             }
           }
         }catch(_){}
-
-        try{
-          const t = localStorage.getItem(STORE_TEACHER);
-          if(t === "1") state.teacherMode = true;
-        }catch(_){}
       };
 
       const saveState = () => {
@@ -1170,12 +1162,6 @@ RB{terminal_mode_unlocked}
             done: state.done,
             seenCmds: state.seenCmds
           }));
-        }catch(_){}
-      };
-
-      const saveTeacherMode = () => {
-        try{
-          localStorage.setItem(STORE_TEACHER, state.teacherMode ? "1" : "0");
         }catch(_){}
       };
 
@@ -1377,7 +1363,6 @@ Mission B (Logs / IOC B):
         if(!t){
           if(nextText) nextText.textContent = "Alles erledigt. Du kannst mit NEXT in die nächste Lektion gehen.";
           if(nextWhy) nextWhy.style.display = "none";
-          if(nextTeacher) nextTeacher.style.display = "none";
           if(btnPasteNext) btnPasteNext.disabled = true;
           if(btnRunNext) btnRunNext.disabled = true;
           return;
@@ -1392,15 +1377,6 @@ Mission B (Logs / IOC B):
             nextWhy.textContent = `Warum: ${why}`;
           } else {
             nextWhy.style.display = "none";
-          }
-        }
-
-        if(nextTeacher){
-          if(state.teacherMode && t.solution){
-            nextTeacher.style.display = "block";
-            nextTeacher.innerHTML = `<b>Hinweis:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
-          } else {
-            nextTeacher.style.display = "none";
           }
         }
 
@@ -1485,13 +1461,6 @@ Mission B (Logs / IOC B):
               why.className = "taskWhy";
               why.textContent = `Warum: ${t.why}`;
               card.appendChild(why);
-            }
-
-            if(state.teacherMode && t.solution){
-              const tn = document.createElement("div");
-              tn.className = "teacherNote";
-              tn.innerHTML = `<b>Hinweis:</b> mögliche Lösung: <span style="font-family:var(--mono);">${esc(t.solution)}</span>`;
-              card.appendChild(tn);
             }
 
             taskCardsEl.appendChild(card);
@@ -1803,15 +1772,6 @@ Mission B (Logs / IOC B):
         }
 
         switch(cmd){
-          // secret toggle (no docs, no UI)
-          case "imateacher": {
-            state.teacherMode = true;
-            saveTeacherMode();
-            renderLessonPanel();
-            line(`<span class="ok">OK</span>`);
-            break;
-          }
-
           case "ls": {
             const showAll = rest.includes("-a") || rest.includes("--all");
             const target = rest.find(x => !x.startsWith("-"));
@@ -2065,7 +2025,7 @@ Mission B (Logs / IOC B):
         }
       });
 
-      // Lesson panel buttons (unten – bleibt so)
+      // Lesson panel buttons
       btnHint?.addEventListener("click", () => { showHint(); input.focus(); });
       btnCheck?.addEventListener("click", () => { checkTasks(false); input.focus(); });
       btnNext?.addEventListener("click", () => { nextLesson(); input.focus(); });
@@ -2104,41 +2064,41 @@ Mission B (Logs / IOC B):
       input.focus();
     })();
   </script>
- <footer style="
-  margin-top: 18px;
-  border-top: 2px solid #111;
-  padding: 14px 0 22px;
-">
-  <div class="wrap" style="
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    justify-content:space-between;
-    align-items:center;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-  ">
-    <div style="opacity:.8;">© <span id="year"></span> Ramon Berghorn</div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a>
-      <span aria-hidden="true">·</span>
-      <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
-    </div>
-  </div>
-</footer>
 
-<script>
-  // kleines Nice-to-have: aktuelles Jahr
-  (function(){ 
-    var y = document.getElementById("year"); 
-    if(y) y.textContent = new Date().getFullYear(); 
-  })();
-</script> 
+  <footer style="
+    margin-top: 18px;
+    border-top: 2px solid #111;
+    padding: 14px 0 22px;
+  ">
+    <div class="wrap" style="
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    ">
+      <div style="opacity:.8;">© <span id="year"></span> Ramon Berghorn</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // kleines Nice-to-have: aktuelles Jahr
+    (function(){
+      var y = document.getElementById("year");
+      if(y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
-
 
 
 
