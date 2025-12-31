@@ -1421,7 +1421,7 @@ Mission B (Logs / IOC B):
             pasteBtn.addEventListener("click", () => {
               if(!t.starter) return;
               input.value = t.starter;
-              input.focus();
+              focusInputNoScroll();
             });
 
             const runBtn = document.createElement("button");
@@ -1433,14 +1433,14 @@ Mission B (Logs / IOC B):
               if(!t.starter) return;
               run(t.starter);
               input.value = "";
-              input.focus();
+              focusInputNoScroll();
             });
 
             const hintBtn = document.createElement("button");
             hintBtn.type = "button";
             hintBtn.className = "mini ghost";
             hintBtn.textContent = "Hint";
-            hintBtn.addEventListener("click", () => { showHint(); input.focus(); });
+            hintBtn.addEventListener("click", () => { showHint(); focusInputNoScroll(); });
 
             actions.appendChild(pasteBtn);
             actions.appendChild(runBtn);
@@ -1962,7 +1962,7 @@ Mission B (Logs / IOC B):
         run(input.value);
         input.value = "";
         state.compIdx = 0;
-        input.focus();
+        focusInputNoScroll();
       });
 
       input.addEventListener("keydown", (e) => {
@@ -2026,27 +2026,27 @@ Mission B (Logs / IOC B):
       });
 
       // Lesson panel buttons
-      btnHint?.addEventListener("click", () => { showHint(); input.focus(); });
-      btnCheck?.addEventListener("click", () => { checkTasks(false); input.focus(); });
-      btnNext?.addEventListener("click", () => { nextLesson(); input.focus(); });
-      btnReset?.addEventListener("click", () => { resetCourse(); input.focus(); });
+      btnHint?.addEventListener("click", () => { showHint(); focusInputNoScroll(); });
+      btnCheck?.addEventListener("click", () => { checkTasks(false); focusInputNoScroll(); });
+      btnNext?.addEventListener("click", () => { nextLesson(); focusInputNoScroll(); });
+      btnReset?.addEventListener("click", () => { resetCourse(); focusInputNoScroll(); });
 
       // Next step actions
       btnPasteNext?.addEventListener("click", () => {
         const t = firstOpenTask();
         if(!t?.starter) return;
         input.value = t.starter;
-        input.focus();
+        focusInputNoScroll();
       });
       btnRunNext?.addEventListener("click", () => {
         const t = firstOpenTask();
         if(!t?.starter) return;
         run(t.starter);
         input.value = "";
-        input.focus();
+        focusInputNoScroll();
       });
 
-      miniHelp?.addEventListener("click", () => { help(); input.focus(); });
+      miniHelp?.addEventListener("click", () => { help(); focusInputNoScroll(); });
 
       // init
       loadState();
@@ -2061,7 +2061,7 @@ Mission B (Logs / IOC B):
       setPrompt();
       renderLessonPanel();
       updateStatus();
-      input.focus();
+      focusInputNoScroll();
     })();
   </script>
 
