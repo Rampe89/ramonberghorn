@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>RB — Events</title>
+  <meta name="description" content="Weiterleitung zur Lafferde Loop Challenge."/>
+  <meta http-equiv="refresh" content="1; url=https://lafferdeloopchallenge.wordpress.com/">
+  <style>
+    :root{
+      --bg:#f6f4ef; --ink:#111; --muted:#333; --line:#111;
+      --hi:#ff3b30; --paper:#fffdf8; --bw:2px; --shadowInk:rgba(17,17,17,.95);
+      --shadow:8px 8px 0 var(--shadowInk);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      --max:1120px; --pad:18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--sans); color:var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:0 var(--pad); }
+    .panel{ margin:18px auto; border:var(--bw) solid var(--line); background:var(--paper); box-shadow:var(--shadow); padding:16px; }
+    .tab{
+      font-family:var(--mono); font-size:12px; padding:8px 10px;
+      border:var(--bw) solid var(--line); background:var(--paper);
+      text-decoration:none; box-shadow:4px 4px 0 rgba(17,17,17,.95);
+      text-transform:uppercase; letter-spacing:.06em;
+      display:inline-flex;
+    }
+    h1{ margin:0 0 10px; font-weight:900; text-transform:uppercase; }
+    p{ margin:0 0 12px; color:var(--muted); line-height:1.75; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h1>Events → Redirect</h1>
+      <p>Du wirst weitergeleitet zur Lafferde Loop Challenge.</p>
+      <p>Falls das nicht klappt:</p>
+      <p>
+        <a class="tab" href="https://lafferdeloopchallenge.wordpress.com/" target="_blank" rel="noopener noreferrer">
+          Open Lafferde Loop Challenge ↗
+        </a>
+      </p>
+      <p>
+        <a class="tab" href="/index.html">Back to root</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
