@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Datenschutzerklärung — Ramon Berghorn</title>
+  <meta name="description" content="Datenschutzerklärung für die Website von Ramon Berghorn (inkl. CyberDefense Lab-Inhalte)."/>
+
+  <style>
+    :root{
+      --bg:#f6f4ef;
+      --paper:#fffdf8;
+      --ink:#111;
+      --muted:#2f2f2f;
+      --line:#111;
+
+      --hi:#ff3b30;
+      --hi2:#0057ff;
+      --hi3:#00c853;
+
+      --max: 1120px;
+      --pad: 18px;
+      --gap: 14px;
+      --bw: 2px;
+
+      --shadowInk: rgba(17,17,17,.95);
+      --shadow: 10px 10px 0 var(--shadowInk);
+      --shadow2: 6px 6px 0 var(--shadowInk);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+    a{ color:inherit; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
+
+    /* Top strip */
+    .strip{
+      background: var(--ink);
+      color: var(--paper);
+      border-bottom: var(--bw) solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+    }
+    .strip .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px var(--pad);
+    }
+    .strip b{ font-weight:800; }
+    .strip span{ opacity:.85; }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: rgba(246,244,239,.92);
+      backdrop-filter: blur(6px);
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 0;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-width: 260px;
+    }
+    .mark{
+      width:44px;height:44px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      user-select:none;
+      box-shadow: var(--shadow2);
+    }
+    .brandText b{
+      display:block;
+      font-weight:900;
+      letter-spacing:.01em;
+      font-size: 14px;
+      text-transform:uppercase;
+    }
+    .brandText span{
+      display:block;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      margin-top:2px;
+    }
+    .menu{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .tab{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      text-decoration:none;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      white-space:nowrap;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .tab:hover{ transform: translate(-2px, -2px); }
+
+    main{ padding: 18px 0 34px; }
+
+    .panel{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .heroTop{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+    }
+    .dot{
+      width:10px;height:10px;
+      background: var(--hi2);
+      border: var(--bw) solid var(--line);
+    }
+    h1{
+      margin: 6px 0 0;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height:1.05;
+      letter-spacing:-0.03em;
+      font-weight: 900;
+      text-transform:uppercase;
+    }
+
+    .content{
+      display:grid;
+      gap:12px;
+    }
+    .card{
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      padding: 12px;
+    }
+    h2{
+      margin: 0 0 8px;
+      font-size: 14px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+    p, li{
+      margin: 8px 0;
+      line-height:1.7;
+      font-size: 14px;
+    }
+    ul{
+      margin: 8px 0 0 18px;
+      padding:0;
+    }
+    .muted{
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height:1.6;
+    }
+    .note{
+      border-left: 4px solid var(--hi2);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+    .link{
+      font-family: var(--mono);
+      font-size: 12px;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    footer{
+      margin-top: 18px;
+      border-top: 2px solid #111;
+      padding: 14px 0 22px;
+    }
+    .footRow{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .footRow .dim{ opacity:.8; }
+    .footLinks{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .tab{ transition:none; }
+      .tab:hover{ transform:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="strip" aria-hidden="true">
+    <div class="wrap">
+      <div><b>RB</b> / TEACH / HACK / RUN </div>
+      <div><span>BUILD:</span> <b>2025-12-30</b></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">RB</div>
+          <div class="brandText">
+            <b>Ramon Berghorn</b>
+            <span>Informatik Sek I · CyberDefense Lab · Ultrarunning</span>
+          </div>
+        </div>
+
+        <nav class="menu" aria-label="Hauptnavigation">
+          <a class="tab" href="/students/index.html">Für Schüler:innen</a>
+          <a class="tab" href="/colleagues/index.html">Für Kolleg:innen</a>
+          <a class="tab" href="/cyber/index.html">Cybersecurity</a>
+          <a class="tab" href="/ultra/index.html">Ultralaufen</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="panel" aria-label="Datenschutzerklärung">
+        <div class="heroTop">
+          <div class="kicker"><span class="dot"></span><span>Legal</span></div>
+          <h1>Datenschutzerklärung</h1>
+        </div>
+
+        <div class="content">
+
+          <div class="card">
+            <h2>1. Grundsatz</h2>
+            <p>
+              Diese Website (Ramon Berghorn) erhebt, speichert oder verarbeitet keine personenbezogenen Daten der Nutzer:innen
+              zu Tracking- oder Analysezwecken. Es werden keine Profile erstellt und keine Daten an Dritte verkauft oder weitergegeben.
+            </p>
+            <p class="muted note">
+              Die Seite ist überwiegend statisch. Interaktive Elemente (z. B. ein „spielbares“ Terminal) sind so gebaut,
+              dass sie lokal im Browser laufen.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>2. Lokale Verarbeitung im Browser</h2>
+            <p>
+              Eingaben in interaktiven Bereichen (z. B. Flags, Kommandos, Antworten) werden ausschließlich lokal im Browser verarbeitet.
+              Es findet keine Übermittlung dieser Inhalte an einen Server und keine Protokollierung dieser Eingaben statt.
+            </p>
+
+            <p><strong>Lokale Speicherung (LocalStorage):</strong> Zur Funktion (z. B. Kursfortschritt, freigeschaltete Schritte)
+              können Daten lokal im Browser gespeichert werden. Diese Daten sind nicht personenbezogen und dienen ausschließlich der Nutzung
+              auf dem jeweiligen Endgerät.</p>
+
+            <p class="muted note">
+              Wenn du den LocalStorage deines Browsers löschst, werden Fortschritt/Zustände in den Modulen zurückgesetzt.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>3. Drittanbieter-Links</h2>
+            <p>
+              Diese Website kann Links zu externen Tools und Seiten enthalten, z. B.
+              <a class="link" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener noreferrer">CyberChef</a>
+              oder
+              <a class="link" href="https://crackstation.net/" target="_blank" rel="noopener noreferrer">CrackStation</a>.
+              Beim Aufruf externer Seiten gelten deren jeweilige Datenschutzerklärungen.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>4. Bildungszweck und Sicherheit</h2>
+            <p>
+              Inhalte und Übungen (u. a. CyberDefense Lab) dienen ausschließlich Bildungszwecken.
+              Szenarien sind so gestaltet, dass keine realen Systeme angegriffen werden und keine echten Sicherheitsrisiken entstehen.
+            </p>
+            <p class="muted note">
+              Erlernte Techniken dürfen nicht für rechtswidrige Handlungen verwendet werden.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>5. Haftungsausschluss</h2>
+            <p>
+              Die Inhalte wurden sorgfältig erstellt, um ein sicheres Lernumfeld zu bieten.
+              Für Schäden, die aus unsachgemäßer Nutzung oder missbräuchlicher Anwendung der Inhalte entstehen, wird keine Haftung übernommen.
+              Die Nutzung erfolgt auf eigene Verantwortung.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>6. Kontakt</h2>
+            <p>
+              Bei Fragen zu dieser Datenschutzerklärung nutze bitte die Kontaktmöglichkeit im
+              <a class="link" href="https://node-xejd.onrender.com/impressum.html">Impressum</a>.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>7. Stand</h2>
+            <p>Stand: <strong>31.12.2025</strong></p>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footRow">
+        <div class="dim">© <span id="year"></span> Ramon Berghorn</div>
+        <div class="footLinks">
+          <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var y = document.getElementById("year");
+      if(y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
