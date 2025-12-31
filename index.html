@@ -2065,30 +2065,28 @@ Mission B (Logs / IOC B):
     })();
   </script>
 
-  <footer style="
-    margin-top: 18px;
-    border-top: 2px solid #111;
-    padding: 14px 0 22px;
-  ">
-    <div class="wrap" style="
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      justify-content:space-between;
-      align-items:center;
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-    ">
-      <div style="opacity:.8;">© <span id="year"></span> Ramon Berghorn</div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a>
+ <footer>
+  <div class="wrap">
+    <div class="footRow">
+      <div class="dim">
+        © <span id="year"></span> Ramon Berghorn
+      </div>
+      <div class="footLinks">
+        <a class="link" href="impressum.html">Impressum</a>
         <span aria-hidden="true">·</span>
-        <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
+        <a class="link" href="datenschutz.html">Datenschutz</a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+</script>
+
 
   <script>
     // kleines Nice-to-have: aktuelles Jahr
