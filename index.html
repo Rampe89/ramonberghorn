@@ -2096,6 +2096,18 @@ Mission B (Logs / IOC B):
     if (y) y.textContent = new Date().getFullYear();
   })();
 </script>
+<script>
+  // Fix: Wenn wir per #linuxkurs reinkommen, nach dem initialen Jump den Hash entfernen,
+  // damit ein Reload nicht erneut springt.
+  (function () {
+    if (location.hash === "#linuxkurs") {
+      // warten bis Layout steht, dann Hash entfernen ohne Reload
+      requestAnimationFrame(() => {
+        history.replaceState(null, "", location.pathname + location.search);
+      });
+    }
+  })();
+</script>
 
 </body>
 </html>
