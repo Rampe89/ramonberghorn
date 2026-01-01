@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ramon Berghorn — whoami</title>
+  <meta name="description" content="whoami: Beruflicher Werdegang, Tätigkeiten, Vorträge & besondere Kenntnisse."/>
+  <style>
+    :root{
+      --bg:#f6f4ef;
+      --paper:#fffdf8;
+      --ink:#111;
+      --muted:#2f2f2f;
+      --line:#111;
+
+      --hi:#ff3b30;
+      --hi2:#0057ff;
+      --hi3:#00c853;
+
+      --max: 1120px;
+      --pad: 18px;
+      --gap: 14px;
+      --bw: 2px;
+
+      --shadowInk: rgba(17,17,17,.95);
+      --shadow: 10px 10px 0 var(--shadowInk);
+      --shadow2: 6px 6px 0 var(--shadowInk);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        var(--bg);
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
+
+    /* Top strip */
+    .strip{
+      background: var(--ink);
+      color: var(--paper);
+      border-bottom: var(--bw) solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.06em;
+    }
+    .strip .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px var(--pad);
+    }
+    .strip b{ font-weight:800; }
+    .strip span{ opacity:.85; }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: rgba(246,244,239,.92);
+      backdrop-filter: blur(6px);
+      border-bottom: var(--bw) solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 0;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-width: 260px;
+    }
+    .mark{
+      width:44px;height:44px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      user-select:none;
+      box-shadow: var(--shadow2);
+    }
+    .brandText b{
+      display:block;
+      font-weight:900;
+      letter-spacing:.01em;
+      font-size: 14px;
+      text-transform:uppercase;
+    }
+    .brandText span{
+      display:block;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      margin-top:2px;
+    }
+    .menu{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .tab{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      text-decoration:none;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      transition: transform .12s ease;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      white-space:nowrap;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .tab:hover{ transform: translate(-2px, -2px); }
+    .tab.active{ background: var(--hi); color: var(--paper); }
+
+    main{ padding: 18px 0 34px; }
+
+    .panel{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+    }
+    .dot{
+      width:10px;height:10px;
+      background: var(--hi3);
+      border: var(--bw) solid var(--line);
+    }
+
+    h1{
+      margin: 10px 0 10px;
+      font-size: clamp(22px, 3vw, 40px);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:-0.02em;
+      line-height:1.05;
+    }
+    .lead{
+      margin:0;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:14px;
+      max-width: 95ch;
+    }
+
+    /* Two-column layout */
+    .whoGrid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 0.95fr 1.25fr;
+      gap: var(--gap);
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .whoGrid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border: var(--bw) solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.035) 1px, transparent 1px) 0 0/ 16px 16px,
+        var(--paper);
+    }
+
+    .photoFrame{
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      padding: 10px;
+    }
+    .photo{
+      width:100%;
+      aspect-ratio: 4 / 5;
+      border: var(--bw) solid var(--line);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      background:
+        linear-gradient(135deg, rgba(0,87,255,.12), rgba(255,59,48,.10)),
+        repeating-linear-gradient(0deg, rgba(0,0,0,.07) 0px, rgba(0,0,0,.07) 1px, transparent 1px, transparent 12px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: var(--mono);
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-size: 12px;
+      color: rgba(0,0,0,.75);
+      position:relative;
+      overflow:hidden;
+    }
+    .photo small{
+      display:block;
+      margin-top:6px;
+      opacity:.8;
+      letter-spacing:.06em;
+      text-transform:none;
+      font-family: var(--sans);
+      font-size: 13px;
+    }
+
+    h2{
+      margin:0 0 10px;
+      font-size: 14px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .section{
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .item{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap: 10px;
+      padding: 8px 0;
+      border-top: 1px solid rgba(17,17,17,.15);
+    }
+    .item:first-of-type{ border-top:0; padding-top:0; }
+    .when{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .what{
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .what b{ font-weight:900; }
+
+    ul{
+      margin: 8px 0 0 18px;
+      padding:0;
+      color: var(--muted);
+      line-height:1.75;
+      font-size:14px;
+    }
+
+    footer.panel{
+      margin-top:18px;
+      box-shadow: var(--shadow2);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .tab{ transition:none; }
+      .tab:hover{ transform:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="strip" aria-hidden="true">
+    <div class="wrap">
+      <div><b>RB</b> / TEACH / HACK / RUN </div>
+      <div><span>BUILD:</span> <b>2025-12-31</b></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">RB</div>
+          <div class="brandText">
+            <b>Ramon Berghorn</b>
+            <span>Informatik Sek I · CyberDefense Lab · Ultrarunning</span>
+          </div>
+        </div>
+
+        <!-- Reiter (wie auf den anderen Seiten) -->
+        <nav class="menu" aria-label="Hauptnavigation">
+          <a class="tab" href="/students/index.html">Für Schüler:innen</a>
+          <a class="tab" href="/colleagues/index.html">Für Kolleg:innen</a>
+          <a class="tab" href="/cyber/index.html">Cybersecurity</a>
+          <a class="tab" href="/events/index.html">Events</a>
+          <a class="tab" href="/ultra/index.html">Ultralaufen</a>
+          <a class="tab active" href="/whoami/index.html">whoami</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="panel" aria-label="whoami">
+        <div class="kicker"><span class="dot"></span><span>Profil</span></div>
+        <h1>whoami</h1>
+        <p class="lead">
+          Kurzprofil mit beruflichem Werdegang, zusätzlichen schulischen Tätigkeiten, Vorträgen/Fortbildungen und besonderen Kenntnissen.
+        </p>
+
+        <div class="whoGrid">
+          <!-- Left: Image -->
+          <div class="card">
+            <h2>Foto</h2>
+            <div class="photoFrame">
+              <!-- Platzhalter: später ersetzen durch <img src="/assets/img/ramon.jpg" ...> -->
+              <div class="photo" aria-label="Platzhalterbild">
+                IMAGE PLACEHOLDER
+                <small>(hier später dein Foto einfügen)</small>
+              </div>
+            </div>
+
+            <div class="section" style="margin-top:12px;">
+              <h2 style="margin:0 0 6px;">Kurzfokus</h2>
+              <ul>
+                <li>Informatik Sek I (Pflichtfach + Aufbau)</li>
+                <li>CyberDefense Lab / schul-taugliche Szenarien</li>
+                <li>KI als Werkzeug für Lehrkräfte & Unterricht</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Right: Career -->
+          <div class="card">
+            <h2>Beruflicher Werdegang</h2>
+            <div class="section">
+              <div class="item">
+                <div class="when">2015 – 2016</div>
+                <div class="what">
+                  <b>Vorbereitungsdienst</b> an der Hauptschule An der Klunkau<br/>
+                  Fächer: Englisch &amp; Geschichte (Abschlussnote 2,0)
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">2016 – heute</div>
+                <div class="what">
+                  <b>Lehrer</b> an der Hauptschule An der Klunkau, Salzgitter-Lebenstedt
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">02/2022 – heute</div>
+                <div class="what">
+                  <b>Schulformbezogener Fachberater</b> für Informatik (Sek I)
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin-top:14px;">Zusätzliche schulische Tätigkeiten</h2>
+            <div class="section">
+              <div class="item">
+                <div class="when">2016 – 2022</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>Klassenlehrerschaft</li>
+                    <li>Unterricht in Englisch &amp; Geschichte</li>
+                    <li>Fachfremder Unterricht: Informatik, Erdkunde, Politik, Deutsch, Werte &amp; Normen</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">2020 – heute</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>Fachleitung Informatik</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">08/2022 – 08/2023</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>Kommissarischer Konrektor: Koordination Stunden- &amp; Vertretungsplan (Untis)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin-top:14px;">Vorträge &amp; Fortbildungen</h2>
+            <div class="section">
+              <div class="item">
+                <div class="when">2022 – 2024</div>
+                <div class="what">
+                  Mehrere Durchgänge der 2-tägigen Fortbildung <b>„Erste-Hilfe-Informatik“</b>
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">2023</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>MNU-Tag 2023 (Hannover): Unterricht im Pflichtfach Informatik</li>
+                    <li>Tag der Informatiklehrer/innen 2023: Informatik an Hauptschulen/Oberschulen: Herausforderungen, Chancen, Erfahrungen &amp; Umsetzungsvorschläge</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">2024</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>Herbsttagung der Fachberater/innen für berufliche Orientierung (Soltau): KI als Unterstützung für Lehrkräfte</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="item">
+                <div class="when">2025</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>Mehrere Durchgänge der schulinterne Lehrerfortbildung: KI als Unterstützung für Lehrkräfte</li>
+                    <li>Tag der Informatiklehrer/innen: CyberDefense Lab: Technische Hintergründe &amp; praktische Einblicke</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin-top:14px;">Besondere Kenntnisse</h2>
+            <div class="section">
+              <div class="item">
+                <div class="when">IT- und KI-Kompetenzen</div>
+                <div class="what">
+                  <ul style="margin-top:0;">
+                    <li>Sicherer Umgang mit modernen IT-Systemen, Netzwerktechnologien &amp; Cybersecurity-Tools (u. a. Penetration Testing, TryHackMe)</li>
+                    <li>Erfahrung mit aktuellen KI-Technologien, insbesondere Sprachmodellen (ChatGPT, GPT-4) &amp; generativer Bild-KI (Midjourney)</li>
+                    <li>Vertraut mit digitalen Lernplattformen wie fobizz</li>
+                    <li>Fundierte Kenntnisse in Hard- &amp; Software-Administration sowie Betriebssystemmigration</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <footer class="panel" aria-label="Footer">
+        <div class="wrap">
+          <div style="
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            justify-content:space-between;
+            align-items:center;
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing:.06em;
+            text-transform:uppercase;
+          ">
+            <div style="opacity:.8;">
+              © <span id="year"></span> Ramon Berghorn
+            </div>
+
+            <div style="display:flex; gap:10px; align-items:center;">
+              <a class="tab" href="impressum.html">Impressum</a>
+              <a class="tab" href="datenschutz.html">Datenschutz</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
