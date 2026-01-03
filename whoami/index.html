@@ -209,6 +209,8 @@
       box-shadow: 4px 4px 0 var(--shadowInk);
       padding: 10px;
     }
+
+    /* Placeholder frame styles (keeps the retro frame + aspect) */
     .photo{
       width:100%;
       aspect-ratio: 4 / 5;
@@ -228,6 +230,23 @@
       position:relative;
       overflow:hidden;
     }
+
+    /* NEW: apply to img so it never looks stretched */
+    img.photo{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit: cover;        /* fill frame without distortion */
+      object-position: center;  /* keep face centered */
+      background: none;         /* ignore placeholder background */
+      font-family: initial;     /* no placeholder typography on img */
+      letter-spacing: normal;
+      text-transform:none;
+      color: inherit;
+      align-items: initial;
+      justify-content: initial;
+    }
+
     .photo small{
       display:block;
       margin-top:6px;
@@ -342,20 +361,21 @@
           <div class="card">
             <h2>Foto</h2>
             <div class="photoFrame">
-              <img 
+              <img
                 class="photo"
                 src="/assets/img/ramon.png"
                 alt="Profilfoto Ramon"
+                loading="lazy"
+                decoding="async"
               >
             </div>
-
 
             <div class="section" style="margin-top:12px;">
               <h2 style="margin:0 0 6px;">Kurzfokus</h2>
               <ul>
-                <li>Informatik Sek I (Pflichtfach + Aufbau)</li>
-                <li>CyberDefense Lab / schul-taugliche Szenarien</li>
-                <li>KI als Werkzeug für Lehrkräfte & Unterricht</li>
+                <li>Ramon Berghorn</li>
+                <li>Lehrer, Fachberater, Papa, Läufer</li>
+                <li>Cybersecurity Enthusiast</li>
               </ul>
             </div>
           </div>
@@ -388,7 +408,7 @@
             <h2 style="margin-top:14px;">Zusätzliche schulische Tätigkeiten</h2>
             <div class="section">
               <div class="item">
-                <div class="when">2016 – 2022</div>
+                <div class="when">2016 – heute</div>
                 <div class="what">
                   <ul style="margin-top:0;">
                     <li>Klassenlehrerschaft</li>
@@ -418,7 +438,7 @@
             <h2 style="margin-top:14px;">Vorträge &amp; Fortbildungen</h2>
             <div class="section">
               <div class="item">
-                <div class="when">2022 – 2024</div>
+                <div class="when">2022 – 2025</div>
                 <div class="what">
                   Mehrere Durchgänge der 2-tägigen Fortbildung <b>„Erste-Hilfe-Informatik“</b>
                 </div>
