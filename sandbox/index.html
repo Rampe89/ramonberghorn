@@ -211,15 +211,24 @@
       justify-content:center;
       align-items:center;
     }
+
+    /* IMPORTANT: use stable, integer scaling (no height:auto) */
     canvas{
-      width: min(100%, 1120px);
-      height: auto;
+      width: 1040px;   /* 2x of 520 */
+      height: 640px;   /* 2x of 320 */
       image-rendering: pixelated;
       border-radius: 18px;
       border: 1px solid rgba(38,50,68,.95);
       background:#000;
       box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset;
       touch-action: none;
+      display:block;
+    }
+    @media (max-width: 1100px){
+      canvas{ width: 780px; height: 480px; } /* 1.5x */
+    }
+    @media (max-width: 820px){
+      canvas{ width: 520px; height: 320px; } /* 1x */
     }
 
     .statsGrid{
@@ -289,7 +298,6 @@
       background: rgba(15,20,27,.35);
     }
 
-    /* file inputs hidden, triggered via buttons */
     input[type="file"]{ display:none; }
   </style>
 </head>
@@ -566,9 +574,11 @@
     fuel.fill(0);
     life.fill(0);
     age.fill(0);
+    cooledStoneCounter = 0;
     runStart = performance.now();
     score = 0;
     goalState = {};
+    renderGoals();
   }
 
   function swap(i1,i2){
@@ -627,6 +637,8 @@
   const importJsonBtn = document.getElementById('importJsonBtn');
   const importFile = document.getElementById('importFile');
 
+  const goalsEl = document.getElementById('goals');
+
   // Tabs
   document.querySelectorAll('.tab').forEach(t => {
     t.addEventListener('click', () => {
@@ -643,7 +655,7 @@
   let running = true;
   let brush = Number(brushSlider.value);
   let ticksPerFrame = Number(tpfSlider.value);
-  let brushShape = "circle"; // circle|square
+  let brushShape = "circle";
   let showThermo = false;
   let showMoist = false;
 
@@ -687,14 +699,12 @@
 
     pauseBtn.textContent = running ? "Pause (Space)" : "Play (Space)";
     statusText.textContent = `Element: ${eraser ? "Radierer" : MAT_NAMES[selected]} • Brush: ${brush} • Ticks/Frame: ${ticksPerFrame}`;
-
     stScore.textContent = String(score);
   }
 
   renderElements();
   syncUI();
 
-  // Controls
   brushSlider.addEventListener('input', () => { brush = Number(brushSlider.value); syncUI(); });
   tpfSlider.addEventListener('input', () => { ticksPerFrame = Number(tpfSlider.value); syncUI(); });
 
@@ -708,7 +718,6 @@
   pauseBtn.addEventListener('click', () => { running = !running; syncUI(); });
   clearBtn.addEventListener('click', () => { resetWorld(); syncUI(); });
 
-  // Keyboard shortcuts
   window.addEventListener('keydown', (e) => {
     const k = e.key;
 
@@ -747,15 +756,10 @@
   }
   function scenarioGarden(){
     resetWorld();
-    // base soil layer
     fillRect(0, Math.floor(H*0.68), W, Math.ceil(H*0.32), MAT.SOIL);
-    // rocks
     sprinkle(0, Math.floor(H*0.70), W, Math.ceil(H*0.30), MAT.STONE, 0.04);
-    // water pocket
     fillRect(Math.floor(W*0.10), Math.floor(H*0.60), Math.floor(W*0.18), Math.floor(H*0.08), MAT.WATER);
-    // seeds near soil surface
     sprinkle(0, Math.floor(H*0.60), W, Math.floor(H*0.12), MAT.SEED, 0.03);
-    // hydrate soil a bit
     for(let i=0;i<N;i++){
       if(grid[i]===MAT.SOIL) moist[i]=0.45 + Math.random()*0.12;
     }
@@ -765,7 +769,6 @@
   function scenarioVolcano(){
     resetWorld();
     fillRect(0, Math.floor(H*0.70), W, Math.ceil(H*0.30), MAT.STONE);
-    // volcano cone
     const cx = Math.floor(W*0.70), baseY = Math.floor(H*0.70);
     for(let y=0; y<Math.floor(H*0.55); y++){
       const yy = baseY - y;
@@ -774,9 +777,7 @@
         if(inBounds(x,yy)) setCellI(idx(x,yy), MAT.STONE);
       }
     }
-    // lava core
     fillRect(Math.floor(W*0.68), Math.floor(H*0.25), Math.floor(W*0.06), Math.floor(H*0.15), MAT.LAVA);
-    // a bit of soil+seed on left for contrast
     fillRect(0, Math.floor(H*0.72), Math.floor(W*0.35), Math.ceil(H*0.28), MAT.SOIL);
     sprinkle(0, Math.floor(H*0.60), Math.floor(W*0.35), Math.floor(H*0.10), MAT.SEED, 0.04);
     for(let i=0;i<N;i++){
@@ -787,9 +788,7 @@
   }
   function scenarioLab(){
     resetWorld();
-    // floor
     fillRect(0, Math.floor(H*0.78), W, Math.ceil(H*0.22), MAT.METAL);
-    // containers
     fillRect(Math.floor(W*0.08), Math.floor(H*0.45), Math.floor(W*0.22), Math.floor(H*0.33), MAT.METAL);
     fillRect(Math.floor(W*0.10), Math.floor(H*0.47), Math.floor(W*0.18), Math.floor(H*0.28), MAT.EMPTY);
     fillRect(Math.floor(W*0.12), Math.floor(H*0.55), Math.floor(W*0.14), Math.floor(H*0.18), MAT.WATER);
@@ -798,7 +797,6 @@
     fillRect(Math.floor(W*0.42), Math.floor(H*0.52), Math.floor(W*0.18), Math.floor(H*0.23), MAT.EMPTY);
     fillRect(Math.floor(W*0.44), Math.floor(H*0.60), Math.floor(W*0.14), Math.floor(H*0.12), MAT.ACID);
 
-    // soil test patch
     fillRect(Math.floor(W*0.70), Math.floor(H*0.70), Math.floor(W*0.26), Math.floor(H*0.20), MAT.SOIL);
     sprinkle(Math.floor(W*0.70), Math.floor(H*0.62), Math.floor(W*0.26), Math.floor(H*0.08), MAT.SEED, 0.05);
     for(let i=0;i<N;i++){
@@ -824,7 +822,8 @@
       life: Array.from(life),
       age:  Array.from(age),
       score,
-      runStart
+      runStart,
+      cooledStoneCounter
     };
   }
   function restore(s){
@@ -837,6 +836,7 @@
     age.set(Uint16Array.from(s.age));
     score = Number(s.score || 0);
     runStart = Number(s.runStart || performance.now());
+    cooledStoneCounter = Number(s.cooledStoneCounter || 0);
     return true;
   }
   saveLocal.addEventListener('click', () => {
@@ -872,9 +872,7 @@
     importFile.value = "";
   });
 
-  // ===== Goals (Spielergebnis) =====
-  const goalsEl = document.getElementById('goals');
-
+  // ===== Goals =====
   const GOALS = [
     { id:"g1", title:"Grüner Teppich", desc:"Erreiche 160 Plant Cells.", type:"plantCount", target:160, points:200 },
     { id:"g2", title:"Feuchter Boden", desc:"Ø Soil Moisture ≥ 0.45 (mind. 10s).", type:"soilMoistSustain", target:0.45, seconds:10, points:160 },
@@ -882,8 +880,7 @@
     { id:"g4", title:"Vulkan-Management", desc:"Kühle Lava zu 40 Stein (durch Wasser).", type:"cooledStone", target:40, points:220 },
   ];
 
-  let goalState = {}; // per-goal tracking
-
+  let goalState = {};
   function renderGoals(){
     goalsEl.innerHTML = "";
     for(const g of GOALS){
@@ -918,10 +915,8 @@
 
   function canvasToCell(clientX, clientY){
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / canvas.clientWidth;
-    const scaleY = canvas.height / canvas.clientHeight;
-    const x = Math.floor((clientX - rect.left) * scaleX);
-    const y = Math.floor((clientY - rect.top) * scaleY);
+    const x = Math.floor((clientX - rect.left) * canvas.width / rect.width);
+    const y = Math.floor((clientY - rect.top) * canvas.height / rect.height);
     return {x,y};
   }
 
@@ -991,11 +986,8 @@
     if(!painting) return;
     const p = canvasToCell(e.clientX, e.clientY);
     const mat = eraser ? MAT.EMPTY : selected;
-    if(lastPt){
-      paintLine(lastPt.x, lastPt.y, p.x, p.y, mat);
-    } else {
-      brushFill(p.x, p.y, mat);
-    }
+    if(lastPt) paintLine(lastPt.x, lastPt.y, p.x, p.y, mat);
+    else brushFill(p.x, p.y, mat);
     lastPt = p;
   });
   canvas.addEventListener('pointerup', () => { painting=false; lastPt=null; });
@@ -1199,7 +1191,6 @@
       moist[c] = clamp(moist[c] + give, 0.15, PROP[MAT.PLANT].moistCap);
       age[c] = 0;
 
-      // tiny score feedback for growth
       score += 1;
       return true;
     }
@@ -1217,7 +1208,6 @@
         if(age[i] < 65000) age[i]++;
       }
 
-      // water <-> ice/steam
       if(m === MAT.WATER){
         if(T < -1 && Math.random() < 0.10) setCellI(i, MAT.ICE);
         else if(T > 105 && Math.random() < 0.18) setCellI(i, MAT.STEAM);
@@ -1235,7 +1225,6 @@
         if(life[i] === 0 && Math.random() < 0.35) clearCellI(i);
       }
 
-      // fire / lava
       if(m === MAT.FIRE){
         temp[i] = Math.max(temp[i], 650);
         if(life[i] > 0) life[i]--;
@@ -1254,7 +1243,6 @@
         }
       }
 
-      // seed germination
       if(m === MAT.SEED){
         const soil = neighborHas(i, MAT.SOIL) || isOnSoil(i);
         if(Math.random() < 0.20) pullMoistureFromNeighbors(i, 0.06);
@@ -1262,7 +1250,7 @@
         if(soil && goodTemp && moist[i] > 0.12 && age[i] > 40 && Math.random() < 0.05){
           setCellI(i, MAT.PLANT);
           moist[i] = clamp(moist[i], 0.25, PROP[MAT.PLANT].moistCap);
-          score += 10; // germination reward
+          score += 10;
           continue;
         }
         if(T > 60 && Math.random() < 0.10){
@@ -1271,7 +1259,6 @@
         }
       }
 
-      // plant physiology
       if(m === MAT.PLANT){
         moist[i] = Math.max(0, moist[i] - 0.003);
         if(Math.random() < 0.35) pullMoistureFromNeighbors(i, 0.05);
@@ -1292,7 +1279,6 @@
         }
       }
 
-      // wood ignition
       if(m === MAT.WOOD){
         if(T > 280 && Math.random() < 0.08){
           setCellI(i, MAT.FIRE);
@@ -1300,7 +1286,6 @@
         }
       }
 
-      // oil ignition
       if(m === MAT.OIL){
         if(T > 240 && Math.random() < 0.12){
           setCellI(i, MAT.FIRE);
@@ -1308,7 +1293,6 @@
         }
       }
 
-      // acid corrosion
       if(m === MAT.ACID){
         if(Math.random() < 0.10){
           const n = randomNeighborIndex(i);
@@ -1331,7 +1315,6 @@
   }
 
   function fireInteractions(){
-    // fire dries and ignites; water/ice extinguish
     for(let i=0;i<N;i++){
       if(grid[i] !== MAT.FIRE) continue;
 
@@ -1368,7 +1351,6 @@
       }
     }
 
-    // lava: heats, dries, water->steam, sometimes lava->stone
     for(let i=0;i<N;i++){
       if(grid[i] !== MAT.LAVA) continue;
       const n = randomNeighborIndex(i);
@@ -1406,7 +1388,6 @@
         const m = grid[i];
         if(m === MAT.EMPTY) continue;
 
-        // gases rise
         if(m === MAT.SMOKE || m === MAT.STEAM || m === MAT.FIRE){
           if(y > 0){
             const u = i - W;
@@ -1432,7 +1413,6 @@
 
         if(isSolid(m)) continue;
 
-        // powders
         if(isPowder(m)){
           if(y+1 < H){
             const b = i + W;
@@ -1460,7 +1440,6 @@
           continue;
         }
 
-        // liquids
         if(isLiquid(m)){
           if(y+1 < H){
             const b = i + W;
@@ -1518,7 +1497,6 @@
       const m = grid[i];
       let [r,g,b] = BASE_COLOR[m] || [255,0,255];
 
-      // tiny per-cell noise for life
       const n = (Math.random()*10)|0;
 
       if(m === MAT.FIRE){
@@ -1539,7 +1517,6 @@
         r = Math.min(255, r + t);
         g = Math.max(0, g - (t>>1));
       } else if(m === MAT.SOIL){
-        // soil shows wetness subtly even without overlay
         const cap = PROP[MAT.SOIL].moistCap;
         const wet = clamp01(moist[i] / cap);
         b = Math.min(255, b + Math.floor(30*wet));
@@ -1602,7 +1579,6 @@
     stTmax.textContent = `${Math.round(tmax)}°C`;
     stMoist.textContent = soilAvg.toFixed(2);
 
-    // soft score: plant growth + “alive time”
     const runSeconds = (performance.now() - runStart) / 1000;
     score = Math.max(score, Math.floor(plant*1.2 + runSeconds*0.3 + cooledStoneCounter*2));
     stScore.textContent = String(score);
@@ -1611,17 +1587,15 @@
   }
 
   function updateGoals(s){
-    // g1 plant count
     const g1 = GOALS[0];
     const p1 = Math.min(1, s.plant / g1.target);
     const d1 = p1 >= 1;
     setGoalProgress(g1.id, p1*100, goalComplete(g1.id, d1, g1.points));
 
-    // g2 soil moist sustain
     const g2 = GOALS[1];
     if(!goalState[g2.id]) goalState[g2.id] = { hold: 0, done:false };
     if(!goalState[g2.id].done){
-      if(s.soilAvg >= g2.target) goalState[g2.id].hold += 1/2; // stats runs ~2/s
+      if(s.soilAvg >= g2.target) goalState[g2.id].hold += 1/2;
       else goalState[g2.id].hold = Math.max(0, goalState[g2.id].hold - 1);
       const p2 = Math.min(1, goalState[g2.id].hold / g2.seconds);
       const d2 = p2 >= 1;
@@ -1630,11 +1604,10 @@
       setGoalProgress(g2.id, 100, true);
     }
 
-    // g3 gas total (we approximate: current gas count accumulated)
     const g3 = GOALS[2];
     if(!goalState[g3.id]) goalState[g3.id] = { acc: 0, done:false };
     if(!goalState[g3.id].done){
-      goalState[g3.id].acc += Math.min(6, s.gas) * 0.15; // gentle accumulation
+      goalState[g3.id].acc += Math.min(6, s.gas) * 0.15;
       const p3 = Math.min(1, goalState[g3.id].acc / g3.target);
       const d3 = p3 >= 1;
       setGoalProgress(g3.id, p3*100, goalComplete(g3.id, d3, g3.points));
@@ -1642,7 +1615,6 @@
       setGoalProgress(g3.id, 100, true);
     }
 
-    // g4 cooled stone counter
     const g4 = GOALS[3];
     const p4 = Math.min(1, cooledStoneCounter / g4.target);
     const d4 = p4 >= 1;
@@ -1697,8 +1669,7 @@
   // stats twice per second
   setInterval(computeStats, 500);
 
-  // ===== Tools: basic thermo/moist are already used, no extra =====
-
+  // ===== Done =====
 })();
 </script>
 </body>
