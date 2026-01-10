@@ -18,7 +18,6 @@
       --muted:rgba(231,234,240,.78);
       --acc:#5aa7ff;
       --good:#22c55e;
-      --warn:#fbbf24;
       --bad:#ef4444;
       --shadow: 0 14px 45px rgba(0,0,0,.35);
       --radius: 16px;
@@ -34,6 +33,25 @@
       color:var(--text);
     }
 
+    /* inline error banner (so we immediately see if JS crashed) */
+    #errBanner{
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 9999;
+      display: none;
+      background: rgba(239,68,68,.14);
+      border: 1px solid rgba(239,68,68,.55);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: pre-wrap;
+      line-height: 1.45;
+    }
+
     .app{
       display:grid;
       grid-template-columns: 360px 1fr;
@@ -42,9 +60,7 @@
       margin: 0 auto;
       padding: 14px;
     }
-    @media (max-width: 980px){
-      .app{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 980px){ .app{ grid-template-columns: 1fr; } }
 
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
@@ -62,9 +78,7 @@
       justify-content:space-between;
       gap:10px;
     }
-    .title{
-      display:flex; flex-direction:column; gap:2px;
-    }
+    .title{ display:flex; flex-direction:column; gap:2px; }
     .title b{ letter-spacing:.01em; }
     .title span{ font-size:12px; opacity:.8; }
 
@@ -79,9 +93,7 @@
     }
 
     .sidebarBody{ padding: 12px; display:grid; gap:12px; }
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap;
-    }
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
     .tab{
       border:1px solid var(--line2);
       background: rgba(11,17,24,.75);
@@ -96,7 +108,6 @@
       border-color: rgba(90,167,255,.9);
       box-shadow: 0 0 0 1px rgba(90,167,255,.22) inset;
     }
-
     .section{ display:none; }
     .section.active{ display:block; }
 
@@ -118,12 +129,9 @@
     }
     .btn.danger{ border-color: rgba(239,68,68,.55); }
     .btn.good{ border-color: rgba(34,197,94,.55); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
 
     .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    @media (max-width: 980px){
-      .grid2{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
 
     .control{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -139,6 +147,7 @@
     }
     .control b{ font-family: var(--mono); font-size: 12px; color: var(--text); }
     input[type="range"]{ width: 180px; accent-color: var(--acc); }
+
     .toggle{
       display:flex; gap:10px; align-items:center;
       font-size: 13px; color: var(--muted);
@@ -150,9 +159,8 @@
       grid-template-columns: repeat(2, 1fr);
       gap:8px;
     }
-    @media (max-width: 980px){
-      .elements{ grid-template-columns: repeat(3, 1fr); }
-    }
+    @media (max-width: 980px){ .elements{ grid-template-columns: repeat(3, 1fr); } }
+
     .el{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       border:1px solid var(--line2);
@@ -173,10 +181,7 @@
       border:1px solid rgba(255,255,255,.18);
       flex: 0 0 auto;
     }
-    .el small{
-      font-family: var(--mono);
-      opacity:.85;
-    }
+    .el small{ font-family: var(--mono); opacity:.85; }
 
     .hint{
       font-size: 12px;
@@ -197,25 +202,14 @@
       color: var(--text);
     }
 
-    .main{
-      display:grid;
-      gap:14px;
-    }
-    .stageWrap{
-      padding: 12px;
-      display:grid;
-      gap:12px;
-    }
-    .canvasWrap{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-    }
+    .main{ display:grid; gap:14px; }
+    .stageWrap{ padding: 12px; display:grid; gap:12px; }
+    .canvasWrap{ display:flex; justify-content:center; align-items:center; }
 
-    /* IMPORTANT: use stable, integer scaling (no height:auto) */
+    /* stable integer scaling so input mapping stays correct */
     canvas{
-      width: 1040px;   /* 2x of 520 */
-      height: 640px;   /* 2x of 320 */
+      width: 1040px;
+      height: 640px;
       image-rendering: pixelated;
       border-radius: 18px;
       border: 1px solid rgba(38,50,68,.95);
@@ -223,22 +217,18 @@
       box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset;
       touch-action: none;
       display:block;
+      pointer-events: auto;
     }
-    @media (max-width: 1100px){
-      canvas{ width: 780px; height: 480px; } /* 1.5x */
-    }
-    @media (max-width: 820px){
-      canvas{ width: 520px; height: 320px; } /* 1x */
-    }
+    @media (max-width: 1100px){ canvas{ width: 780px; height: 480px; } }
+    @media (max-width: 820px){ canvas{ width: 520px; height: 320px; } }
 
     .statsGrid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap:10px;
     }
-    @media (max-width: 980px){
-      .statsGrid{ grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 980px){ .statsGrid{ grid-template-columns: repeat(2, 1fr); } }
+
     .stat{
       border:1px solid var(--line);
       border-radius: 14px;
@@ -251,9 +241,7 @@
     .stat span{ font-size: 12px; color: var(--muted); }
     .stat b{ font-family: var(--mono); font-size: 13px; }
 
-    .goals{
-      display:grid; gap:10px;
-    }
+    .goals{ display:grid; gap:10px; }
     .goal{
       border:1px solid var(--line);
       border-radius: 14px;
@@ -262,9 +250,7 @@
       display:grid;
       gap:8px;
     }
-    .goalTop{
-      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
-    }
+    .goalTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
     .goalTop b{ font-size: 13px; }
     .goalTop span{ font-size: 12px; color: var(--muted); }
     .bar{
@@ -303,6 +289,8 @@
 </head>
 
 <body>
+  <div id="errBanner"></div>
+
   <div class="app">
     <!-- SIDEBAR -->
     <aside class="card">
@@ -393,8 +381,7 @@
           </div>
 
           <div class="hint" style="margin-top:10px;">
-            Tipp: Für „Pflanzen-Gameplay“: erst <b>Boden</b> (Soil), dann <b>Wasser</b>, dann <b>Samen</b>.
-            Warm halten (nicht zu heiß), dann wächst es organisch.
+            Tipp: Für „Pflanzen-Gameplay“: erst <b>Boden</b>, dann <b>Wasser</b>, dann <b>Samen</b>.
           </div>
         </div>
 
@@ -402,7 +389,7 @@
         <div class="section" id="tab-goals">
           <div class="goals" id="goals"></div>
           <div class="hint" style="margin-top:10px;">
-            Die Ziele sind bewusst „sandboxy“: Du kannst sie als Mini-Game nutzen oder ignorieren.
+            Ziele sind optional. Wenn JS irgendwo crasht, erscheint unten ein rotes Error-Banner.
           </div>
         </div>
       </div>
@@ -440,1237 +427,863 @@
   </div>
 
 <script>
+/* Robust error reporting: if anything breaks, you SEE it. */
 (() => {
-  // ===== Materials =====
-  const MAT = {
-    EMPTY: 0,
-    SAND: 1,
-    SOIL: 2,
-    SEED: 3,
-    WATER: 4,
-    ICE: 5,
-    PLANT: 6,
-    WOOD: 7,
-    STONE: 8,
-    METAL: 9,
-    OIL: 10,
-    ACID: 11,
-    FIRE: 12,
-    SMOKE: 13,
-    STEAM: 14,
-    LAVA: 15
+  const errBanner = document.getElementById("errBanner");
+  const showErr = (msg) => {
+    if(!errBanner) return;
+    errBanner.style.display = "block";
+    errBanner.textContent = String(msg);
   };
+  window.addEventListener("error", (e) => showErr("JS ERROR:\n" + (e?.message || e)));
+  window.addEventListener("unhandledrejection", (e) => showErr("PROMISE REJECTION:\n" + (e?.reason?.message || e?.reason || e)));
 
-  const MATERIALS = [
-    { id: MAT.SAND,  key:"1", name:"Sand",   color:[194,178,128], kind:"powder" },
-    { id: MAT.SOIL,  key:"2", name:"Boden",  color:[110, 78, 46], kind:"powder" },
-    { id: MAT.SEED,  key:"3", name:"Samen",  color:[200,180, 80], kind:"powder" },
-    { id: MAT.WATER, key:"4", name:"Wasser", color:[ 64,140,255], kind:"liquid" },
-    { id: MAT.ICE,   key:"5", name:"Eis",    color:[180,220,255], kind:"solid"  },
-    { id: MAT.PLANT, key:"6", name:"Pflanze",color:[ 70,200, 90], kind:"solid"  },
-    { id: MAT.WOOD,  key:"7", name:"Holz",   color:[140, 92, 46], kind:"solid"  },
-    { id: MAT.STONE, key:"8", name:"Stein",  color:[120,120,130], kind:"solid"  },
-    { id: MAT.METAL, key:"9", name:"Metall", color:[160,160,170], kind:"solid"  },
-    { id: MAT.OIL,   key:"O", name:"Öl",     color:[ 90, 90, 35], kind:"liquid" },
-    { id: MAT.ACID,  key:"A", name:"Säure",  color:[ 80,255,130], kind:"liquid" },
-    { id: MAT.FIRE,  key:"F", name:"Feuer",  color:[255,120, 40], kind:"fx"     },
-    { id: MAT.SMOKE, key:"K", name:"Rauch",  color:[170,170,180], kind:"gas"    },
-    { id: MAT.STEAM, key:"D", name:"Dampf",  color:[210,210,220], kind:"gas"    },
-    { id: MAT.LAVA,  key:"L", name:"Lava",   color:[255, 60, 20], kind:"liquid" }
-  ];
-
-  const MAT_NAMES = Object.fromEntries([[0,"Leer"], ...MATERIALS.map(m => [m.id, m.name])]);
-  const BASE_COLOR = { [MAT.EMPTY]: [0,0,0] };
-  for(const m of MATERIALS) BASE_COLOR[m.id] = m.color.slice();
-
-  // ===== Physics fields =====
-  const AMBIENT = 20.0;
-
-  const PROP = {
-    [MAT.EMPTY]: { conduct:0.02, heatCap:0.2, moistCap:0.0, moistCond:0.00, evap:0.00, fuel:0 },
-
-    [MAT.SAND]:  { conduct:0.10, heatCap:1.0, moistCap:0.12, moistCond:0.08, evap:0.06, fuel:0 },
-    [MAT.SOIL]:  { conduct:0.12, heatCap:1.2, moistCap:0.80, moistCond:0.26, evap:0.04, fuel:0 },
-
-    [MAT.SEED]:  { conduct:0.08, heatCap:1.3, moistCap:0.22, moistCond:0.20, evap:0.04, fuel:0 },
-    [MAT.PLANT]: { conduct:0.08, heatCap:1.6, moistCap:0.60, moistCond:0.34, evap:0.10, fuel:90 },
-
-    [MAT.WATER]: { conduct:0.14, heatCap:2.2, moistCap:1.00, moistCond:0.00, evap:0.00, fuel:0 },
-    [MAT.ICE]:   { conduct:0.11, heatCap:1.8, moistCap:0.10, moistCond:0.00, evap:0.00, fuel:0 },
-
-    [MAT.STONE]: { conduct:0.18, heatCap:1.6, moistCap:0.02, moistCond:0.02, evap:0.00, fuel:0 },
-    [MAT.METAL]: { conduct:0.55, heatCap:1.2, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
-    [MAT.WOOD]:  { conduct:0.06, heatCap:1.4, moistCap:0.25, moistCond:0.10, evap:0.08, fuel:140 },
-
-    [MAT.OIL]:   { conduct:0.09, heatCap:1.9, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:170 },
-    [MAT.ACID]:  { conduct:0.12, heatCap:2.0, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
-
-    [MAT.FIRE]:  { conduct:0.05, heatCap:0.6, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
-    [MAT.SMOKE]: { conduct:0.03, heatCap:0.5, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
-    [MAT.STEAM]: { conduct:0.04, heatCap:0.7, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
-
-    [MAT.LAVA]:  { conduct:0.16, heatCap:2.4, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 }
-  };
-
-  // ===== Canvas / world =====
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d', { alpha:false });
-  const W = canvas.width, H = canvas.height;
-  const N = W * H;
-
-  const grid  = new Uint8Array(N);
-  const temp  = new Float32Array(N);
-  const moist = new Float32Array(N);
-  const fuel  = new Uint16Array(N);
-  const life  = new Uint16Array(N);
-  const age   = new Uint16Array(N);
-
-  const idx = (x,y) => y*W + x;
-  const inBounds = (x,y) => x>=0 && x<W && y>=0 && y<H;
-
-  function clamp(v, lo, hi){ return v<lo ? lo : (v>hi ? hi : v); }
-  function clamp01(v){ return v<0 ? 0 : (v>1 ? 1 : v); }
-
-  function clearCellI(i){
-    grid[i] = MAT.EMPTY;
-    temp[i] = AMBIENT;
-    moist[i] = 0;
-    fuel[i] = 0;
-    life[i] = 0;
-    age[i] = 0;
-  }
-
-  function setCellI(i, mat){
-    grid[i] = mat;
-    age[i] = 0;
-
-    const p = PROP[mat] || PROP[MAT.EMPTY];
-    fuel[i] = p.fuel || 0;
-
-    if(mat === MAT.FIRE)  life[i] = 25 + (Math.random()*60|0);
-    else if(mat === MAT.SMOKE) life[i] = 60 + (Math.random()*160|0);
-    else if(mat === MAT.STEAM) life[i] = 40 + (Math.random()*120|0);
-    else life[i] = 0;
-
-    if(mat === MAT.LAVA) temp[i] = Math.max(temp[i], 900);
-    else if(mat === MAT.FIRE) temp[i] = Math.max(temp[i], 650);
-    else if(mat === MAT.ICE) temp[i] = Math.min(temp[i], -5);
-    else if(mat === MAT.WATER) temp[i] = Math.min(temp[i], 20);
-
-    const cap = p.moistCap || 0;
-    if(mat === MAT.SOIL)  moist[i] = Math.max(moist[i], 0.35);
-    else if(mat === MAT.PLANT) moist[i] = Math.max(moist[i], 0.40);
-    else if(mat === MAT.SEED)  moist[i] = Math.max(moist[i], 0.15);
-    else if(mat === MAT.WOOD)  moist[i] = Math.max(moist[i], 0.10);
-    else if(mat === MAT.WATER) moist[i] = 1.0;
-    else if(cap === 0) moist[i] = 0;
-    else moist[i] = Math.min(moist[i], cap);
-  }
-
-  function resetWorld(){
-    grid.fill(MAT.EMPTY);
-    temp.fill(AMBIENT);
-    moist.fill(0);
-    fuel.fill(0);
-    life.fill(0);
-    age.fill(0);
-    cooledStoneCounter = 0;
-    runStart = performance.now();
-    score = 0;
-    goalState = {};
-    renderGoals();
-  }
-
-  function swap(i1,i2){
-    let m = grid[i1]; grid[i1]=grid[i2]; grid[i2]=m;
-    let t = temp[i1]; temp[i1]=temp[i2]; temp[i2]=t;
-    let w = moist[i1]; moist[i1]=moist[i2]; moist[i2]=w;
-    let f = fuel[i1]; fuel[i1]=fuel[i2]; fuel[i2]=f;
-    let l = life[i1]; life[i1]=life[i2]; life[i2]=l;
-    let a = age[i1];  age[i1]=age[i2];   age[i2]=a;
-  }
-
-  function isGas(m){ return m === MAT.SMOKE || m === MAT.STEAM || m === MAT.FIRE; }
-  function isLiquid(m){ return m === MAT.WATER || m === MAT.OIL || m === MAT.ACID || m === MAT.LAVA; }
-  function isPowder(m){ return m === MAT.SAND || m === MAT.SOIL || m === MAT.SEED; }
-  function isSolid(m){
-    return m === MAT.STONE || m === MAT.METAL || m === MAT.WOOD || m === MAT.PLANT || m === MAT.ICE;
-  }
-
-  // ===== UI wiring =====
-  const statusText = document.getElementById('status');
-  const elementsEl = document.getElementById('elements');
-
-  const eraserBtn = document.getElementById('eraserBtn');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const clearBtn = document.getElementById('clearBtn');
-
-  const brushSlider = document.getElementById('brush');
-  const brushVal = document.getElementById('brushVal');
-  const tpfSlider = document.getElementById('tpf');
-  const tpfVal = document.getElementById('tpfVal');
-
-  const shapeCircle = document.getElementById('shapeCircle');
-  const shapeSquare = document.getElementById('shapeSquare');
-  const shapeVal = document.getElementById('shapeVal');
-
-  const thermoChk = document.getElementById('thermo');
-  const moistChk = document.getElementById('moist');
-
-  const runClock = document.getElementById('runClock');
-  const fpsEl = document.getElementById('fps');
-
-  const stPlant = document.getElementById('stPlant');
-  const stMoist = document.getElementById('stMoist');
-  const stWater = document.getElementById('stWater');
-  const stTmax = document.getElementById('stTmax');
-  const stGas = document.getElementById('stGas');
-  const stScore = document.getElementById('stScore');
-
-  const scGarden = document.getElementById('scGarden');
-  const scVolcano = document.getElementById('scVolcano');
-  const scLab = document.getElementById('scLab');
-
-  const saveLocal = document.getElementById('saveLocal');
-  const loadLocal = document.getElementById('loadLocal');
-  const exportJson = document.getElementById('exportJson');
-  const importJsonBtn = document.getElementById('importJsonBtn');
-  const importFile = document.getElementById('importFile');
-
-  const goalsEl = document.getElementById('goals');
-
-  // Tabs
-  document.querySelectorAll('.tab').forEach(t => {
-    t.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-      document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      document.getElementById(t.dataset.tab).classList.add('active');
-    });
+  // Run after DOM is fully ready (extra safe in odd hosts)
+  document.addEventListener("DOMContentLoaded", () => {
+    try{
+      main();
+    }catch(err){
+      showErr("INIT CRASH:\n" + (err?.stack || err));
+    }
   });
 
-  // Element buttons
-  let selected = MAT.SAND;
-  let eraser = false;
-  let running = true;
-  let brush = Number(brushSlider.value);
-  let ticksPerFrame = Number(tpfSlider.value);
-  let brushShape = "circle";
-  let showThermo = false;
-  let showMoist = false;
-
-  function renderElements(){
-    elementsEl.innerHTML = "";
-    for(const m of MATERIALS){
-      const div = document.createElement('div');
-      div.className = 'el';
-      div.dataset.mat = String(m.id);
-      div.innerHTML = `
-        <span style="display:flex; align-items:center; gap:10px;">
-          <i class="sw" style="background: rgb(${m.color[0]},${m.color[1]},${m.color[2]})"></i>
-          <span>${m.name}</span>
-        </span>
-        <small>${m.key}</small>
-      `;
-      div.addEventListener('click', () => {
-        selected = m.id;
-        eraser = false;
-        syncUI();
-      });
-      elementsEl.appendChild(div);
-    }
-  }
-
-  function syncUI(){
-    [...elementsEl.querySelectorAll('.el')].forEach(b => {
-      const id = Number(b.dataset.mat);
-      b.classList.toggle('active', id === selected && !eraser);
-    });
-
-    eraserBtn.classList.toggle('active', eraser);
-    pauseBtn.classList.toggle('active', !running);
-
-    brushVal.textContent = String(brush);
-    tpfVal.textContent = String(ticksPerFrame);
-
-    shapeCircle.classList.toggle('active', brushShape === "circle");
-    shapeSquare.classList.toggle('active', brushShape === "square");
-    shapeVal.textContent = brushShape === "circle" ? "Circle" : "Square";
-
-    pauseBtn.textContent = running ? "Pause (Space)" : "Play (Space)";
-    statusText.textContent = `Element: ${eraser ? "Radierer" : MAT_NAMES[selected]} • Brush: ${brush} • Ticks/Frame: ${ticksPerFrame}`;
-    stScore.textContent = String(score);
-  }
-
-  renderElements();
-  syncUI();
-
-  brushSlider.addEventListener('input', () => { brush = Number(brushSlider.value); syncUI(); });
-  tpfSlider.addEventListener('input', () => { ticksPerFrame = Number(tpfSlider.value); syncUI(); });
-
-  shapeCircle.addEventListener('click', () => { brushShape = "circle"; syncUI(); });
-  shapeSquare.addEventListener('click', () => { brushShape = "square"; syncUI(); });
-
-  thermoChk.addEventListener('change', () => showThermo = thermoChk.checked);
-  moistChk.addEventListener('change', () => showMoist = moistChk.checked);
-
-  eraserBtn.addEventListener('click', () => { eraser = !eraser; syncUI(); });
-  pauseBtn.addEventListener('click', () => { running = !running; syncUI(); });
-  clearBtn.addEventListener('click', () => { resetWorld(); syncUI(); });
-
-  window.addEventListener('keydown', (e) => {
-    const k = e.key;
-
-    if(k >= '1' && k <= '9'){
-      const n = Number(k);
-      const mat = MATERIALS[n-1];
-      if(mat){ selected = mat.id; eraser=false; syncUI(); }
-      return;
-    }
-
-    const u = k.toUpperCase();
-    const map = { O: MAT.OIL, A: MAT.ACID, F: MAT.FIRE, L: MAT.LAVA };
-    if(map[u]){ selected = map[u]; eraser=false; syncUI(); }
-
-    if(k === '['){ brush = Math.max(1, brush - 1); brushSlider.value = String(brush); syncUI(); }
-    if(k === ']'){ brush = Math.min(40, brush + 1); brushSlider.value = String(brush); syncUI(); }
-    if(u === 'R'){ eraser = !eraser; syncUI(); }
-    if(e.code === 'Space'){ e.preventDefault(); running = !running; syncUI(); }
-    if(u === 'C'){ resetWorld(); syncUI(); }
-  });
-
-  // ===== Scenarios =====
-  function fillRect(x0,y0,w,h,mat){
-    for(let y=y0; y<y0+h; y++){
-      for(let x=x0; x<x0+w; x++){
-        if(inBounds(x,y)) setCellI(idx(x,y), mat);
-      }
-    }
-  }
-  function sprinkle(x0,y0,w,h,mat,p=0.2){
-    for(let y=y0; y<y0+h; y++){
-      for(let x=x0; x<x0+w; x++){
-        if(inBounds(x,y) && Math.random() < p) setCellI(idx(x,y), mat);
-      }
-    }
-  }
-  function scenarioGarden(){
-    resetWorld();
-    fillRect(0, Math.floor(H*0.68), W, Math.ceil(H*0.32), MAT.SOIL);
-    sprinkle(0, Math.floor(H*0.70), W, Math.ceil(H*0.30), MAT.STONE, 0.04);
-    fillRect(Math.floor(W*0.10), Math.floor(H*0.60), Math.floor(W*0.18), Math.floor(H*0.08), MAT.WATER);
-    sprinkle(0, Math.floor(H*0.60), W, Math.floor(H*0.12), MAT.SEED, 0.03);
-    for(let i=0;i<N;i++){
-      if(grid[i]===MAT.SOIL) moist[i]=0.45 + Math.random()*0.12;
-    }
-    score = 0;
-    syncUI();
-  }
-  function scenarioVolcano(){
-    resetWorld();
-    fillRect(0, Math.floor(H*0.70), W, Math.ceil(H*0.30), MAT.STONE);
-    const cx = Math.floor(W*0.70), baseY = Math.floor(H*0.70);
-    for(let y=0; y<Math.floor(H*0.55); y++){
-      const yy = baseY - y;
-      const half = Math.floor(y*0.6);
-      for(let x=cx-half; x<=cx+half; x++){
-        if(inBounds(x,yy)) setCellI(idx(x,yy), MAT.STONE);
-      }
-    }
-    fillRect(Math.floor(W*0.68), Math.floor(H*0.25), Math.floor(W*0.06), Math.floor(H*0.15), MAT.LAVA);
-    fillRect(0, Math.floor(H*0.72), Math.floor(W*0.35), Math.ceil(H*0.28), MAT.SOIL);
-    sprinkle(0, Math.floor(H*0.60), Math.floor(W*0.35), Math.floor(H*0.10), MAT.SEED, 0.04);
-    for(let i=0;i<N;i++){
-      if(grid[i]===MAT.SOIL) moist[i]=0.35 + Math.random()*0.10;
-    }
-    score = 0;
-    syncUI();
-  }
-  function scenarioLab(){
-    resetWorld();
-    fillRect(0, Math.floor(H*0.78), W, Math.ceil(H*0.22), MAT.METAL);
-    fillRect(Math.floor(W*0.08), Math.floor(H*0.45), Math.floor(W*0.22), Math.floor(H*0.33), MAT.METAL);
-    fillRect(Math.floor(W*0.10), Math.floor(H*0.47), Math.floor(W*0.18), Math.floor(H*0.28), MAT.EMPTY);
-    fillRect(Math.floor(W*0.12), Math.floor(H*0.55), Math.floor(W*0.14), Math.floor(H*0.18), MAT.WATER);
-
-    fillRect(Math.floor(W*0.40), Math.floor(H*0.50), Math.floor(W*0.22), Math.floor(H*0.28), MAT.METAL);
-    fillRect(Math.floor(W*0.42), Math.floor(H*0.52), Math.floor(W*0.18), Math.floor(H*0.23), MAT.EMPTY);
-    fillRect(Math.floor(W*0.44), Math.floor(H*0.60), Math.floor(W*0.14), Math.floor(H*0.12), MAT.ACID);
-
-    fillRect(Math.floor(W*0.70), Math.floor(H*0.70), Math.floor(W*0.26), Math.floor(H*0.20), MAT.SOIL);
-    sprinkle(Math.floor(W*0.70), Math.floor(H*0.62), Math.floor(W*0.26), Math.floor(H*0.08), MAT.SEED, 0.05);
-    for(let i=0;i<N;i++){
-      if(grid[i]===MAT.SOIL) moist[i]=0.40 + Math.random()*0.12;
-    }
-    score = 0;
-    syncUI();
-  }
-
-  scGarden.addEventListener('click', scenarioGarden);
-  scVolcano.addEventListener('click', scenarioVolcano);
-  scLab.addEventListener('click', scenarioLab);
-
-  // ===== Save/Load =====
-  const STORE_KEY = "garden_lab_save_v1";
-  function snapshot(){
-    return {
-      w: W, h: H,
-      grid: Array.from(grid),
-      temp: Array.from(temp),
-      moist: Array.from(moist),
-      fuel: Array.from(fuel),
-      life: Array.from(life),
-      age:  Array.from(age),
-      score,
-      runStart,
-      cooledStoneCounter
+  function main(){
+    // ===== Materials =====
+    const MAT = {
+      EMPTY: 0, SAND: 1, SOIL: 2, SEED: 3, WATER: 4, ICE: 5, PLANT: 6, WOOD: 7,
+      STONE: 8, METAL: 9, OIL: 10, ACID: 11, FIRE: 12, SMOKE: 13, STEAM: 14, LAVA: 15
     };
-  }
-  function restore(s){
-    if(!s || s.w !== W || s.h !== H) return false;
-    grid.set(Uint8Array.from(s.grid));
-    temp.set(Float32Array.from(s.temp));
-    moist.set(Float32Array.from(s.moist));
-    fuel.set(Uint16Array.from(s.fuel));
-    life.set(Uint16Array.from(s.life));
-    age.set(Uint16Array.from(s.age));
-    score = Number(s.score || 0);
-    runStart = Number(s.runStart || performance.now());
-    cooledStoneCounter = Number(s.cooledStoneCounter || 0);
-    return true;
-  }
-  saveLocal.addEventListener('click', () => {
-    localStorage.setItem(STORE_KEY, JSON.stringify(snapshot()));
-  });
-  loadLocal.addEventListener('click', () => {
-    const raw = localStorage.getItem(STORE_KEY);
-    if(!raw) return;
-    try{
-      const s = JSON.parse(raw);
-      if(restore(s)) syncUI();
-    }catch(_){}
-  });
-  exportJson.addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(snapshot())], {type:"application/json"});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "garden_lab_save.json";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href), 250);
-  });
-  importJsonBtn.addEventListener('click', () => importFile.click());
-  importFile.addEventListener('change', async () => {
-    const f = importFile.files?.[0];
-    if(!f) return;
-    const text = await f.text();
-    try{
-      const s = JSON.parse(text);
-      if(restore(s)) syncUI();
-    }catch(_){}
-    importFile.value = "";
-  });
 
-  // ===== Goals =====
-  const GOALS = [
-    { id:"g1", title:"Grüner Teppich", desc:"Erreiche 160 Plant Cells.", type:"plantCount", target:160, points:200 },
-    { id:"g2", title:"Feuchter Boden", desc:"Ø Soil Moisture ≥ 0.45 (mind. 10s).", type:"soilMoistSustain", target:0.45, seconds:10, points:160 },
-    { id:"g3", title:"Dampfmaschine", desc:"Erzeuge 120 Steam/Smoke insgesamt.", type:"gasTotal", target:120, points:140 },
-    { id:"g4", title:"Vulkan-Management", desc:"Kühle Lava zu 40 Stein (durch Wasser).", type:"cooledStone", target:40, points:220 },
-  ];
+    const MATERIALS = [
+      { id: MAT.SAND,  key:"1", name:"Sand",   color:[194,178,128] },
+      { id: MAT.SOIL,  key:"2", name:"Boden",  color:[110, 78, 46] },
+      { id: MAT.SEED,  key:"3", name:"Samen",  color:[200,180, 80] },
+      { id: MAT.WATER, key:"4", name:"Wasser", color:[ 64,140,255] },
+      { id: MAT.ICE,   key:"5", name:"Eis",    color:[180,220,255] },
+      { id: MAT.PLANT, key:"6", name:"Pflanze",color:[ 70,200, 90] },
+      { id: MAT.WOOD,  key:"7", name:"Holz",   color:[140, 92, 46] },
+      { id: MAT.STONE, key:"8", name:"Stein",  color:[120,120,130] },
+      { id: MAT.METAL, key:"9", name:"Metall", color:[160,160,170] },
+      { id: MAT.OIL,   key:"O", name:"Öl",     color:[ 90, 90, 35] },
+      { id: MAT.ACID,  key:"A", name:"Säure",  color:[ 80,255,130] },
+      { id: MAT.FIRE,  key:"F", name:"Feuer",  color:[255,120, 40] },
+      { id: MAT.SMOKE, key:"K", name:"Rauch",  color:[170,170,180] },
+      { id: MAT.STEAM, key:"D", name:"Dampf",  color:[210,210,220] },
+      { id: MAT.LAVA,  key:"L", name:"Lava",   color:[255, 60, 20] }
+    ];
 
-  let goalState = {};
-  function renderGoals(){
-    goalsEl.innerHTML = "";
-    for(const g of GOALS){
-      const div = document.createElement('div');
-      div.className = 'goal';
-      div.id = `goal_${g.id}`;
-      div.innerHTML = `
-        <div class="goalTop">
-          <div>
-            <b>${g.title}</b>
-            <div><span>${g.desc}</span></div>
+    const MAT_NAMES = Object.fromEntries([[0,"Leer"], ...MATERIALS.map(m => [m.id, m.name])]);
+    const BASE_COLOR = { [MAT.EMPTY]: [0,0,0] };
+    for(const m of MATERIALS) BASE_COLOR[m.id] = m.color.slice();
+
+    // ===== Physics =====
+    const AMBIENT = 20.0;
+
+    const PROP = {
+      [MAT.EMPTY]: { conduct:0.02, heatCap:0.2, moistCap:0.0, moistCond:0.00, evap:0.00, fuel:0 },
+
+      [MAT.SAND]:  { conduct:0.10, heatCap:1.0, moistCap:0.12, moistCond:0.08, evap:0.06, fuel:0 },
+      [MAT.SOIL]:  { conduct:0.12, heatCap:1.2, moistCap:0.80, moistCond:0.26, evap:0.04, fuel:0 },
+
+      [MAT.SEED]:  { conduct:0.08, heatCap:1.3, moistCap:0.22, moistCond:0.20, evap:0.04, fuel:0 },
+      [MAT.PLANT]: { conduct:0.08, heatCap:1.6, moistCap:0.60, moistCond:0.34, evap:0.10, fuel:90 },
+
+      [MAT.WATER]: { conduct:0.14, heatCap:2.2, moistCap:1.00, moistCond:0.00, evap:0.00, fuel:0 },
+      [MAT.ICE]:   { conduct:0.11, heatCap:1.8, moistCap:0.10, moistCond:0.00, evap:0.00, fuel:0 },
+
+      [MAT.STONE]: { conduct:0.18, heatCap:1.6, moistCap:0.02, moistCond:0.02, evap:0.00, fuel:0 },
+      [MAT.METAL]: { conduct:0.55, heatCap:1.2, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
+      [MAT.WOOD]:  { conduct:0.06, heatCap:1.4, moistCap:0.25, moistCond:0.10, evap:0.08, fuel:140 },
+
+      [MAT.OIL]:   { conduct:0.09, heatCap:1.9, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:170 },
+      [MAT.ACID]:  { conduct:0.12, heatCap:2.0, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
+
+      [MAT.FIRE]:  { conduct:0.05, heatCap:0.6, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
+      [MAT.SMOKE]: { conduct:0.03, heatCap:0.5, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
+      [MAT.STEAM]: { conduct:0.04, heatCap:0.7, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 },
+
+      [MAT.LAVA]:  { conduct:0.16, heatCap:2.4, moistCap:0.00, moistCond:0.00, evap:0.00, fuel:0 }
+    };
+
+    // ===== Canvas / world =====
+    const canvas = document.getElementById('c');
+    if(!canvas) throw new Error("Canvas #c nicht gefunden");
+    const ctx = canvas.getContext('2d', { alpha:false });
+    if(!ctx) throw new Error("2D Context nicht verfügbar");
+
+    const W = canvas.width, H = canvas.height;
+    const N = W * H;
+
+    const grid  = new Uint8Array(N);
+    const temp  = new Float32Array(N);
+    const moist = new Float32Array(N);
+    const fuel  = new Uint16Array(N);
+    const life  = new Uint16Array(N);
+    const age   = new Uint16Array(N);
+
+    const idx = (x,y) => y*W + x;
+    const inBounds = (x,y) => x>=0 && x<W && y>=0 && y<H;
+
+    const clamp = (v,lo,hi)=> v<lo?lo:(v>hi?hi:v);
+    const clamp01=(v)=> v<0?0:(v>1?1:v);
+
+    function clearCellI(i){
+      grid[i]=MAT.EMPTY; temp[i]=AMBIENT; moist[i]=0; fuel[i]=0; life[i]=0; age[i]=0;
+    }
+    function setCellI(i, mat){
+      grid[i]=mat; age[i]=0;
+      const p = PROP[mat] || PROP[MAT.EMPTY];
+      fuel[i]=p.fuel||0;
+
+      if(mat===MAT.FIRE) life[i]=25+(Math.random()*60|0);
+      else if(mat===MAT.SMOKE) life[i]=60+(Math.random()*160|0);
+      else if(mat===MAT.STEAM) life[i]=40+(Math.random()*120|0);
+      else life[i]=0;
+
+      if(mat===MAT.LAVA) temp[i]=Math.max(temp[i],900);
+      else if(mat===MAT.FIRE) temp[i]=Math.max(temp[i],650);
+      else if(mat===MAT.ICE) temp[i]=Math.min(temp[i],-5);
+      else if(mat===MAT.WATER) temp[i]=Math.min(temp[i],20);
+
+      const cap = p.moistCap||0;
+      if(mat===MAT.SOIL) moist[i]=Math.max(moist[i],0.35);
+      else if(mat===MAT.PLANT) moist[i]=Math.max(moist[i],0.40);
+      else if(mat===MAT.SEED) moist[i]=Math.max(moist[i],0.15);
+      else if(mat===MAT.WOOD) moist[i]=Math.max(moist[i],0.10);
+      else if(mat===MAT.WATER) moist[i]=1.0;
+      else if(cap===0) moist[i]=0;
+      else moist[i]=Math.min(moist[i],cap);
+    }
+    function swap(i1,i2){
+      let v=grid[i1]; grid[i1]=grid[i2]; grid[i2]=v;
+      v=temp[i1]; temp[i1]=temp[i2]; temp[i2]=v;
+      v=moist[i1]; moist[i1]=moist[i2]; moist[i2]=v;
+      v=fuel[i1]; fuel[i1]=fuel[i2]; fuel[i2]=v;
+      v=life[i1]; life[i1]=life[i2]; life[i2]=v;
+      v=age[i1]; age[i1]=age[i2]; age[i2]=v;
+    }
+    const isGas = (m)=> m===MAT.SMOKE||m===MAT.STEAM||m===MAT.FIRE;
+    const isLiquid = (m)=> m===MAT.WATER||m===MAT.OIL||m===MAT.ACID||m===MAT.LAVA;
+    const isPowder = (m)=> m===MAT.SAND||m===MAT.SOIL||m===MAT.SEED;
+    const isSolid = (m)=> m===MAT.STONE||m===MAT.METAL||m===MAT.WOOD||m===MAT.PLANT||m===MAT.ICE;
+
+    // ===== UI =====
+    const statusText = document.getElementById('status');
+    const elementsEl = document.getElementById('elements');
+    const eraserBtn = document.getElementById('eraserBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const brushSlider = document.getElementById('brush');
+    const brushVal = document.getElementById('brushVal');
+    const tpfSlider = document.getElementById('tpf');
+    const tpfVal = document.getElementById('tpfVal');
+    const shapeCircle = document.getElementById('shapeCircle');
+    const shapeSquare = document.getElementById('shapeSquare');
+    const shapeVal = document.getElementById('shapeVal');
+    const thermoChk = document.getElementById('thermo');
+    const moistChk = document.getElementById('moist');
+    const runClock = document.getElementById('runClock');
+    const fpsEl = document.getElementById('fps');
+    const stPlant = document.getElementById('stPlant');
+    const stMoist = document.getElementById('stMoist');
+    const stWater = document.getElementById('stWater');
+    const stTmax = document.getElementById('stTmax');
+    const stGas = document.getElementById('stGas');
+    const stScore = document.getElementById('stScore');
+    const scGarden = document.getElementById('scGarden');
+    const scVolcano = document.getElementById('scVolcano');
+    const scLab = document.getElementById('scLab');
+    const goalsEl = document.getElementById('goals');
+
+    if(!elementsEl || !eraserBtn || !pauseBtn || !clearBtn || !brushSlider || !tpfSlider || !shapeCircle || !shapeSquare){
+      throw new Error("UI-Elemente fehlen (IDs prüfen).");
+    }
+
+    document.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        const target = document.getElementById(t.dataset.tab);
+        if(target) target.classList.add('active');
+      });
+    });
+
+    let selected = MAT.SAND;
+    let eraser = false;
+    let running = true;
+    let brush = Number(brushSlider.value);
+    let ticksPerFrame = Number(tpfSlider.value);
+    let brushShape = "circle";
+    let showThermo = false;
+    let showMoist = false;
+
+    let score = 0;
+    let runStart = performance.now();
+    let cooledStoneCounter = 0;
+    let goalState = {};
+
+    const GOALS = [
+      { id:"g1", title:"Grüner Teppich", desc:"Erreiche 160 Plant Cells.", target:160, points:200 },
+      { id:"g2", title:"Feuchter Boden", desc:"Ø Soil Moisture ≥ 0.45 (mind. 10s).", target:0.45, seconds:10, points:160 },
+      { id:"g3", title:"Dampfmaschine", desc:"Erzeuge 120 Steam/Smoke insgesamt.", target:120, points:140 },
+      { id:"g4", title:"Vulkan-Management", desc:"Kühle Lava zu 40 Stein (durch Wasser).", target:40, points:220 },
+    ];
+
+    function renderGoals(){
+      if(!goalsEl) return;
+      goalsEl.innerHTML = "";
+      for(const g of GOALS){
+        const div = document.createElement('div');
+        div.className = 'goal';
+        div.innerHTML = `
+          <div class="goalTop">
+            <div>
+              <b>${g.title}</b>
+              <div><span>${g.desc}</span></div>
+            </div>
+            <div class="badgeMini" id="goalBadge_${g.id}">0%</div>
           </div>
-          <div class="badgeMini" id="goalBadge_${g.id}">0%</div>
-        </div>
-        <div class="bar"><i id="goalBar_${g.id}"></i></div>
-      `;
-      goalsEl.appendChild(div);
-    }
-  }
-  renderGoals();
-
-  function setGoalProgress(id, pct, done){
-    const b = document.getElementById(`goalBar_${id}`);
-    const badge = document.getElementById(`goalBadge_${id}`);
-    if(b) b.style.width = `${Math.max(0, Math.min(100, pct))}%`;
-    if(badge) badge.textContent = done ? "DONE" : `${Math.round(pct)}%`;
-  }
-
-  // ===== Input painting (stable + line interpolation) =====
-  let painting = false;
-  let lastPt = null;
-
-  function canvasToCell(clientX, clientY){
-    const rect = canvas.getBoundingClientRect();
-    const x = Math.floor((clientX - rect.left) * canvas.width / rect.width);
-    const y = Math.floor((clientY - rect.top) * canvas.height / rect.height);
-    return {x,y};
-  }
-
-  function brushFill(cx, cy, mat){
-    const r = brush;
-    const circle = (brushShape === "circle");
-
-    for(let dy=-r; dy<=r; dy++){
-      for(let dx=-r; dx<=r; dx++){
-        if(circle && (dx*dx + dy*dy > r*r)) continue;
-        const x = cx + dx, y = cy + dy;
-        if(!inBounds(x,y)) continue;
-        const i = idx(x,y);
-        if(mat === MAT.EMPTY) clearCellI(i);
-        else {
-          setCellI(i, mat);
-          if(mat === MAT.WATER) hydrateNeighborhood(i, 0.35);
-        }
+          <div class="bar"><i id="goalBar_${g.id}"></i></div>
+        `;
+        goalsEl.appendChild(div);
       }
     }
-  }
-
-  function paintLine(x0,y0,x1,y1, mat){
-    const dx = Math.abs(x1-x0), dy = Math.abs(y1-y0);
-    const sx = x0 < x1 ? 1 : -1;
-    const sy = y0 < y1 ? 1 : -1;
-    let err = dx - dy;
-
-    let x=x0, y=y0;
-    while(true){
-      brushFill(x,y,mat);
-      if(x===x1 && y===y1) break;
-      const e2 = 2*err;
-      if(e2 > -dy){ err -= dy; x += sx; }
-      if(e2 < dx){ err += dx; y += sy; }
+    function setGoalProgress(id, pct, done){
+      const bar = document.getElementById(`goalBar_${id}`);
+      const badge = document.getElementById(`goalBadge_${id}`);
+      if(bar) bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+      if(badge) badge.textContent = done ? "DONE" : `${Math.round(pct)}%`;
     }
-  }
-
-  function hydrateNeighborhood(i, amount){
-    const x = i % W;
-    const y = (i / W) | 0;
-    const nbrs = [];
-    if(x>0) nbrs.push(i-1);
-    if(x<W-1) nbrs.push(i+1);
-    if(y>0) nbrs.push(i-W);
-    if(y<H-1) nbrs.push(i+W);
-
-    for(const ni of nbrs){
-      const nm = grid[ni];
-      const cap = PROP[nm]?.moistCap || 0;
-      if(cap > 0 && nm !== MAT.WATER){
-        moist[ni] = Math.min(cap, moist[ni] + amount);
+    function goalComplete(id, doneNow, points){
+      if(!goalState[id]) goalState[id] = { done:false };
+      if(doneNow && !goalState[id].done){
+        goalState[id].done = true;
+        score += points;
+        return true;
       }
+      return goalState[id].done;
     }
-  }
 
-  canvas.addEventListener('contextmenu', e => e.preventDefault());
-  canvas.addEventListener('pointerdown', (e) => {
-    painting = true;
-    canvas.setPointerCapture?.(e.pointerId);
-    const p = canvasToCell(e.clientX, e.clientY);
-    lastPt = p;
-    const mat = eraser ? MAT.EMPTY : selected;
-    brushFill(p.x, p.y, mat);
-  });
-  canvas.addEventListener('pointermove', (e) => {
-    if(!painting) return;
-    const p = canvasToCell(e.clientX, e.clientY);
-    const mat = eraser ? MAT.EMPTY : selected;
-    if(lastPt) paintLine(lastPt.x, lastPt.y, p.x, p.y, mat);
-    else brushFill(p.x, p.y, mat);
-    lastPt = p;
-  });
-  canvas.addEventListener('pointerup', () => { painting=false; lastPt=null; });
-  canvas.addEventListener('pointercancel', () => { painting=false; lastPt=null; });
-
-  // ===== Simulation steps =====
-  function thermalStep(){
-    for(let y=0; y<H; y++){
-      for(let x=0; x<W; x++){
-        const i = idx(x,y);
-        const mi = grid[i];
-        const pi = PROP[mi] || PROP[MAT.EMPTY];
-
-        if(mi === MAT.EMPTY){
-          temp[i] += (AMBIENT - temp[i]) * 0.04;
-        } else if(mi === MAT.SMOKE || mi === MAT.STEAM){
-          temp[i] += (AMBIENT - temp[i]) * 0.015;
-        }
-
-        if(x+1 < W){
-          const j = i + 1;
-          const mj = grid[j];
-          const pj = PROP[mj] || PROP[MAT.EMPTY];
-          const k = 0.5 * (pi.conduct + pj.conduct);
-          const d = (temp[j] - temp[i]) * k;
-          temp[i] += d / Math.max(0.2, pi.heatCap);
-          temp[j] -= d / Math.max(0.2, pj.heatCap);
-        }
-        if(y+1 < H){
-          const j = i + W;
-          const mj = grid[j];
-          const pj = PROP[mj] || PROP[MAT.EMPTY];
-          const k = 0.5 * (pi.conduct + pj.conduct);
-          const d = (temp[j] - temp[i]) * k;
-          temp[i] += d / Math.max(0.2, pi.heatCap);
-          temp[j] -= d / Math.max(0.2, pj.heatCap);
-        }
-      }
-    }
-  }
-
-  function moistureStep(){
-    // evaporation on porous mats
-    for(let i=0;i<N;i++){
-      const m = grid[i];
-      const p = PROP[m];
-      if(!p || p.moistCap <= 0) continue;
-
-      const T = temp[i];
-      const heatFactor = Math.max(0, (T - 30) / 70);
-      const evap = p.evap * heatFactor * 0.02;
-      if(evap > 0){
-        moist[i] = Math.max(0, moist[i] - evap);
-        if(T > 110 && moist[i] > 0.05 && Math.random() < 0.0015){
-          const n = randomNeighborIndex(i);
-          if(n !== -1 && grid[n] === MAT.EMPTY){
-            setCellI(n, MAT.STEAM);
-            temp[n] = Math.max(temp[n], Math.min(170, T));
-          }
-        }
+    function renderElements(){
+      elementsEl.innerHTML = "";
+      for(const m of MATERIALS){
+        const div = document.createElement('div');
+        div.className = 'el';
+        div.dataset.mat = String(m.id);
+        div.innerHTML = `
+          <span style="display:flex; align-items:center; gap:10px;">
+            <i class="sw" style="background: rgb(${m.color[0]},${m.color[1]},${m.color[2]})"></i>
+            <span>${m.name}</span>
+          </span>
+          <small>${m.key}</small>
+        `;
+        div.addEventListener('click', () => { selected = m.id; eraser=false; syncUI(); });
+        elementsEl.appendChild(div);
       }
     }
 
-    // diffuse moisture via right/down
-    for(let y=0;y<H;y++){
-      for(let x=0;x<W;x++){
-        const i = idx(x,y);
-        const mi = grid[i];
-        const pi = PROP[mi] || null;
-        if(!pi || pi.moistCap <= 0) continue;
+    function syncUI(){
+      [...elementsEl.querySelectorAll('.el')].forEach(b => {
+        const id = Number(b.dataset.mat);
+        b.classList.toggle('active', id === selected && !eraser);
+      });
 
-        if(x+1 < W){
-          const j = i + 1;
-          const mj = grid[j];
-          const pj = PROP[mj] || null;
-          if(pj && pj.moistCap > 0){
-            const k = 0.5*(pi.moistCond + pj.moistCond);
-            const d = (moist[j] - moist[i]) * k;
+      eraserBtn.classList.toggle('active', eraser);
+      pauseBtn.classList.toggle('active', !running);
 
-            const ci = Math.max(0.05, pi.moistCap);
-            const cj = Math.max(0.05, pj.moistCap);
+      if(brushVal) brushVal.textContent = String(brush);
+      if(tpfVal) tpfVal.textContent = String(ticksPerFrame);
 
-            moist[i] = clamp(moist[i] + d*0.35, 0, ci);
-            moist[j] = clamp(moist[j] - d*0.35, 0, cj);
-          }
-        }
-        if(y+1 < H){
-          const j = i + W;
-          const mj = grid[j];
-          const pj = PROP[mj] || null;
-          if(pj && pj.moistCap > 0){
-            const k = 0.5*(pi.moistCond + pj.moistCond);
-            const d = (moist[j] - moist[i]) * k;
+      shapeCircle.classList.toggle('active', brushShape === "circle");
+      shapeSquare.classList.toggle('active', brushShape === "square");
+      if(shapeVal) shapeVal.textContent = brushShape === "circle" ? "Circle" : "Square";
 
-            const ci = Math.max(0.05, pi.moistCap);
-            const cj = Math.max(0.05, pj.moistCap);
-
-            moist[i] = clamp(moist[i] + d*0.35, 0, ci);
-            moist[j] = clamp(moist[j] - d*0.35, 0, cj);
-          }
-        }
-      }
+      pauseBtn.textContent = running ? "Pause (Space)" : "Play (Space)";
+      if(statusText) statusText.textContent = `Element: ${eraser ? "Radierer" : MAT_NAMES[selected]} • Brush: ${brush} • Ticks/Frame: ${ticksPerFrame}`;
+      if(stScore) stScore.textContent = String(score);
     }
 
-    // water hydrates adjacent porous media
-    for(let i=0;i<N;i++){
-      if(grid[i] !== MAT.WATER) continue;
-      if(Math.random() < 0.25) hydrateNeighborhood(i, 0.08);
+    renderElements();
+    renderGoals();
+    syncUI();
+
+    brushSlider.addEventListener('input', () => { brush = Number(brushSlider.value); syncUI(); });
+    tpfSlider.addEventListener('input', () => { ticksPerFrame = Number(tpfSlider.value); syncUI(); });
+
+    shapeCircle.addEventListener('click', () => { brushShape = "circle"; syncUI(); });
+    shapeSquare.addEventListener('click', () => { brushShape = "square"; syncUI(); });
+
+    thermoChk?.addEventListener('change', () => showThermo = thermoChk.checked);
+    moistChk?.addEventListener('change', () => showMoist = moistChk.checked);
+
+    eraserBtn.addEventListener('click', () => { eraser = !eraser; syncUI(); });
+    pauseBtn.addEventListener('click', () => { running = !running; syncUI(); });
+    clearBtn.addEventListener('click', () => { scenarioGarden(); });
+
+    window.addEventListener('keydown', (e) => {
+      const k = e.key;
+      if(k >= '1' && k <= '9'){
+        const n = Number(k);
+        const mat = MATERIALS[n-1];
+        if(mat){ selected = mat.id; eraser=false; syncUI(); }
+        return;
+      }
+      const u = k.toUpperCase();
+      const map = { O: MAT.OIL, A: MAT.ACID, F: MAT.FIRE, L: MAT.LAVA };
+      if(map[u]){ selected = map[u]; eraser=false; syncUI(); }
+
+      if(k === '['){ brush = Math.max(1, brush - 1); brushSlider.value = String(brush); syncUI(); }
+      if(k === ']'){ brush = Math.min(40, brush + 1); brushSlider.value = String(brush); syncUI(); }
+      if(u === 'R'){ eraser = !eraser; syncUI(); }
+      if(e.code === 'Space'){ e.preventDefault(); running = !running; syncUI(); }
+      if(u === 'C'){ scenarioGarden(); }
+    });
+
+    // ===== Input =====
+    let painting = false;
+    let lastPt = null;
+
+    function canvasToCell(clientX, clientY){
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((clientX - rect.left) * canvas.width / rect.width);
+      const y = Math.floor((clientY - rect.top) * canvas.height / rect.height);
+      return {x,y};
     }
-  }
 
-  function randomNeighborIndex(i){
-    const x = i % W;
-    const y = (i / W) | 0;
-    const opts = [];
-    if(x>0) opts.push(i-1);
-    if(x<W-1) opts.push(i+1);
-    if(y>0) opts.push(i-W);
-    if(y<H-1) opts.push(i+W);
-    if(!opts.length) return -1;
-    return opts[(Math.random()*opts.length)|0];
-  }
-
-  function isOnSoil(i){
-    const y = (i / W) | 0;
-    if(y+1 >= H) return false;
-    return grid[i+W] === MAT.SOIL;
-  }
-  function neighborHas(i, mat){
-    const x = i % W;
-    const y = (i / W) | 0;
-    if(x>0 && grid[i-1]===mat) return true;
-    if(x<W-1 && grid[i+1]===mat) return true;
-    if(y>0 && grid[i-W]===mat) return true;
-    if(y<H-1 && grid[i+W]===mat) return true;
-    return false;
-  }
-
-  function pullMoistureFromNeighbors(i, amount){
-    const x = i % W;
-    const y = (i / W) | 0;
-    const targets = [];
-    if(x>0) targets.push(i-1);
-    if(x<W-1) targets.push(i+1);
-    if(y>0) targets.push(i-W);
-    if(y<H-1) targets.push(i+W);
-    targets.sort((a,b) => (grid[b]===MAT.SOIL) - (grid[a]===MAT.SOIL));
-
-    const capHere = PROP[grid[i]]?.moistCap || 0;
-    if(capHere <= 0) return;
-
-    for(const ni of targets){
-      const capN = PROP[grid[ni]]?.moistCap || 0;
-      if(capN <= 0) continue;
-      const take = Math.min(amount, moist[ni]);
-      if(take <= 0) continue;
-      moist[ni] -= take;
-      moist[i] = Math.min(capHere, moist[i] + take);
-      return;
-    }
-  }
-
-  function nearMoisture(i){
-    const x = i % W;
-    const y = (i / W) | 0;
-    const neigh = [];
-    if(x>0) neigh.push(i-1);
-    if(x<W-1) neigh.push(i+1);
-    if(y>0) neigh.push(i-W);
-    if(y<H-1) neigh.push(i+W);
-
-    for(const ni of neigh){
-      const nm = grid[ni];
-      if(nm === MAT.WATER) return true;
-      const cap = PROP[nm]?.moistCap || 0;
-      if(cap > 0 && moist[ni] > 0.10) return true;
-    }
-    return false;
-  }
-
-  function growPlantFrom(i){
-    const x = i % W;
-    const y = (i / W) | 0;
-
-    const candidates = [];
-    if(y>0) candidates.push(i - W);
-    if(y>0 && x>0) candidates.push(i - W - 1);
-    if(y>0 && x<W-1) candidates.push(i - W + 1);
-    if(x>0) candidates.push(i - 1);
-    if(x<W-1) candidates.push(i + 1);
-
-    for(const c of candidates){
-      if(grid[c] !== MAT.EMPTY) continue;
-      if(!nearMoisture(c)) continue;
-
-      setCellI(c, MAT.PLANT);
-      temp[c] = clamp(temp[c], 10, 32);
-
-      const give = Math.min(0.08, moist[i]);
-      moist[i] -= give;
-      moist[c] = clamp(moist[c] + give, 0.15, PROP[MAT.PLANT].moistCap);
-      age[c] = 0;
-
-      score += 1;
-      return true;
-    }
-    return false;
-  }
-
-  let cooledStoneCounter = 0;
-
-  function phaseAndReactions(){
-    for(let i=0;i<N;i++){
-      const m = grid[i];
-      const T = temp[i];
-
-      if(m === MAT.SEED || m === MAT.PLANT){
-        if(age[i] < 65000) age[i]++;
-      }
-
-      if(m === MAT.WATER){
-        if(T < -1 && Math.random() < 0.10) setCellI(i, MAT.ICE);
-        else if(T > 105 && Math.random() < 0.18) setCellI(i, MAT.STEAM);
-      } else if(m === MAT.ICE){
-        if(T > 1 && Math.random() < 0.12) setCellI(i, MAT.WATER);
-      } else if(m === MAT.STEAM){
-        if(life[i] > 0) life[i]--;
-        if(T < 90 && Math.random() < 0.04){
-          setCellI(i, MAT.WATER);
-        } else if(life[i] === 0 && Math.random() < 0.35){
-          clearCellI(i);
-        }
-      } else if(m === MAT.SMOKE){
-        if(life[i] > 0) life[i]--;
-        if(life[i] === 0 && Math.random() < 0.35) clearCellI(i);
-      }
-
-      if(m === MAT.FIRE){
-        temp[i] = Math.max(temp[i], 650);
-        if(life[i] > 0) life[i]--;
-        if(life[i] === 0){
-          setCellI(i, (Math.random()<0.8) ? MAT.SMOKE : MAT.EMPTY);
-          temp[i] = Math.max(temp[i], 120);
-          continue;
-        }
-      }
-
-      if(m === MAT.LAVA){
-        temp[i] = Math.max(temp[i], 900);
-        temp[i] += (AMBIENT - temp[i]) * 0.006;
-        if(temp[i] < 650 && Math.random() < 0.08){
-          setCellI(i, MAT.STONE);
-        }
-      }
-
-      if(m === MAT.SEED){
-        const soil = neighborHas(i, MAT.SOIL) || isOnSoil(i);
-        if(Math.random() < 0.20) pullMoistureFromNeighbors(i, 0.06);
-        const goodTemp = (T >= 8 && T <= 30);
-        if(soil && goodTemp && moist[i] > 0.12 && age[i] > 40 && Math.random() < 0.05){
-          setCellI(i, MAT.PLANT);
-          moist[i] = clamp(moist[i], 0.25, PROP[MAT.PLANT].moistCap);
-          score += 10;
-          continue;
-        }
-        if(T > 60 && Math.random() < 0.10){
-          setCellI(i, MAT.SAND);
-          continue;
-        }
-      }
-
-      if(m === MAT.PLANT){
-        moist[i] = Math.max(0, moist[i] - 0.003);
-        if(Math.random() < 0.35) pullMoistureFromNeighbors(i, 0.05);
-
-        const hasEnough = moist[i] > 0.10;
-        const goodTemp = (T >= 5 && T <= 38);
-
-        if(!hasEnough && Math.random() < 0.01){
-          setCellI(i, MAT.WOOD);
-          continue;
-        }
-        if(T > 55 && Math.random() < 0.12){
-          setCellI(i, MAT.WOOD);
-          continue;
-        }
-        if(hasEnough && goodTemp && age[i] > 25){
-          if(Math.random() < 0.06) growPlantFrom(i);
-        }
-      }
-
-      if(m === MAT.WOOD){
-        if(T > 280 && Math.random() < 0.08){
-          setCellI(i, MAT.FIRE);
-          continue;
-        }
-      }
-
-      if(m === MAT.OIL){
-        if(T > 240 && Math.random() < 0.12){
-          setCellI(i, MAT.FIRE);
-          continue;
-        }
-      }
-
-      if(m === MAT.ACID){
-        if(Math.random() < 0.10){
-          const n = randomNeighborIndex(i);
-          if(n !== -1){
-            const nm = grid[n];
-            if(nm === MAT.WOOD || nm === MAT.PLANT || nm === MAT.SAND || nm === MAT.SOIL || nm === MAT.SEED || nm === MAT.OIL){
-              if(Math.random() < 0.55) { clearCellI(n); score += 1; }
-              if(Math.random() < 0.25 && grid[i] === MAT.ACID){
-                setCellI(i, MAT.STEAM);
-                temp[i] = Math.max(temp[i], 120);
-              }
-            }
-            if(nm === MAT.WATER && Math.random() < 0.10){
-              setCellI(i, MAT.WATER);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  function fireInteractions(){
-    for(let i=0;i<N;i++){
-      if(grid[i] !== MAT.FIRE) continue;
-
+    function hydrateNeighborhood(i, amount){
       const x = i % W;
       const y = (i / W) | 0;
-
       const nbrs = [];
       if(x>0) nbrs.push(i-1);
       if(x<W-1) nbrs.push(i+1);
       if(y>0) nbrs.push(i-W);
       if(y<H-1) nbrs.push(i+W);
-
       for(const ni of nbrs){
         const nm = grid[ni];
-        temp[ni] = Math.max(temp[ni], temp[i] * 0.72);
-
         const cap = PROP[nm]?.moistCap || 0;
-        if(cap > 0) moist[ni] = Math.max(0, moist[ni] - 0.02);
+        if(cap > 0 && nm !== MAT.WATER){
+          moist[ni] = Math.min(cap, moist[ni] + amount);
+        }
+      }
+    }
+
+    function brushFill(cx, cy, mat){
+      const r = brush;
+      const circle = (brushShape === "circle");
+      for(let dy=-r; dy<=r; dy++){
+        for(let dx=-r; dx<=r; dx++){
+          if(circle && (dx*dx + dy*dy > r*r)) continue;
+          const x = cx + dx, y = cy + dy;
+          if(!inBounds(x,y)) continue;
+          const i = idx(x,y);
+          if(mat === MAT.EMPTY) clearCellI(i);
+          else{
+            setCellI(i, mat);
+            if(mat === MAT.WATER) hydrateNeighborhood(i, 0.35);
+          }
+        }
+      }
+    }
+
+    function paintLine(x0,y0,x1,y1, mat){
+      const dx = Math.abs(x1-x0), dy = Math.abs(y1-y0);
+      const sx = x0 < x1 ? 1 : -1;
+      const sy = y0 < y1 ? 1 : -1;
+      let err = dx - dy;
+      let x=x0, y=y0;
+      while(true){
+        brushFill(x,y,mat);
+        if(x===x1 && y===y1) break;
+        const e2 = 2*err;
+        if(e2 > -dy){ err -= dy; x += sx; }
+        if(e2 < dx){ err += dx; y += sy; }
+      }
+    }
+
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+    canvas.addEventListener('pointerdown', (e) => {
+      painting = true;
+      canvas.setPointerCapture?.(e.pointerId);
+      const p = canvasToCell(e.clientX, e.clientY);
+      lastPt = p;
+      const mat = eraser ? MAT.EMPTY : selected;
+      brushFill(p.x, p.y, mat);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if(!painting) return;
+      const p = canvasToCell(e.clientX, e.clientY);
+      const mat = eraser ? MAT.EMPTY : selected;
+      if(lastPt) paintLine(lastPt.x, lastPt.y, p.x, p.y, mat);
+      else brushFill(p.x, p.y, mat);
+      lastPt = p;
+    });
+    canvas.addEventListener('pointerup', () => { painting=false; lastPt=null; });
+    canvas.addEventListener('pointercancel', () => { painting=false; lastPt=null; });
+
+    // ===== Scenarios =====
+    function fillRect(x0,y0,w,h,mat){
+      for(let y=y0; y<y0+h; y++){
+        for(let x=x0; x<x0+w; x++){
+          if(inBounds(x,y)) setCellI(idx(x,y), mat);
+        }
+      }
+    }
+    function sprinkle(x0,y0,w,h,mat,p=0.2){
+      for(let y=y0; y<y0+h; y++){
+        for(let x=x0; x<x0+w; x++){
+          if(inBounds(x,y) && Math.random() < p) setCellI(idx(x,y), mat);
+        }
+      }
+    }
+
+    function scenarioGarden(){
+      // reset
+      grid.fill(MAT.EMPTY);
+      temp.fill(AMBIENT);
+      moist.fill(0);
+      fuel.fill(0);
+      life.fill(0);
+      age.fill(0);
+      cooledStoneCounter = 0;
+      score = 0;
+      goalState = {};
+      runStart = performance.now();
+      renderGoals();
+
+      fillRect(0, Math.floor(H*0.68), W, Math.ceil(H*0.32), MAT.SOIL);
+      sprinkle(0, Math.floor(H*0.70), W, Math.ceil(H*0.30), MAT.STONE, 0.04);
+      fillRect(Math.floor(W*0.10), Math.floor(H*0.60), Math.floor(W*0.18), Math.floor(H*0.08), MAT.WATER);
+      sprinkle(0, Math.floor(H*0.60), W, Math.floor(H*0.12), MAT.SEED, 0.03);
+
+      for(let i=0;i<N;i++){
+        if(grid[i]===MAT.SOIL) moist[i]=0.45 + Math.random()*0.12;
+      }
+      syncUI();
+    }
+
+    function scenarioVolcano(){
+      scenarioGarden();
+      // override with volcano-ish
+      fillRect(0, Math.floor(H*0.70), W, Math.ceil(H*0.30), MAT.STONE);
+      const cx = Math.floor(W*0.70), baseY = Math.floor(H*0.70);
+      for(let y=0; y<Math.floor(H*0.55); y++){
+        const yy = baseY - y;
+        const half = Math.floor(y*0.6);
+        for(let x=cx-half; x<=cx+half; x++){
+          if(inBounds(x,yy)) setCellI(idx(x,yy), MAT.STONE);
+        }
+      }
+      fillRect(Math.floor(W*0.68), Math.floor(H*0.25), Math.floor(W*0.06), Math.floor(H*0.15), MAT.LAVA);
+      syncUI();
+    }
+
+    function scenarioLab(){
+      scenarioGarden();
+      fillRect(0, Math.floor(H*0.78), W, Math.ceil(H*0.22), MAT.METAL);
+      syncUI();
+    }
+
+    scGarden?.addEventListener('click', scenarioGarden);
+    scVolcano?.addEventListener('click', scenarioVolcano);
+    scLab?.addEventListener('click', scenarioLab);
+
+    // ===== Simulation =====
+    function randomNeighborIndex(i){
+      const x = i % W;
+      const y = (i / W) | 0;
+      const opts = [];
+      if(x>0) opts.push(i-1);
+      if(x<W-1) opts.push(i+1);
+      if(y>0) opts.push(i-W);
+      if(y<H-1) opts.push(i+W);
+      if(!opts.length) return -1;
+      return opts[(Math.random()*opts.length)|0];
+    }
+
+    function thermalStep(){
+      for(let y=0; y<H; y++){
+        for(let x=0; x<W; x++){
+          const i = idx(x,y);
+          const mi = grid[i];
+          const pi = PROP[mi] || PROP[MAT.EMPTY];
+
+          if(mi === MAT.EMPTY) temp[i] += (AMBIENT - temp[i]) * 0.04;
+          else if(mi === MAT.SMOKE || mi === MAT.STEAM) temp[i] += (AMBIENT - temp[i]) * 0.015;
+
+          if(x+1 < W){
+            const j = i + 1;
+            const mj = grid[j];
+            const pj = PROP[mj] || PROP[MAT.EMPTY];
+            const k = 0.5*(pi.conduct + pj.conduct);
+            const d = (temp[j] - temp[i]) * k;
+            temp[i] += d / Math.max(0.2, pi.heatCap);
+            temp[j] -= d / Math.max(0.2, pj.heatCap);
+          }
+          if(y+1 < H){
+            const j = i + W;
+            const mj = grid[j];
+            const pj = PROP[mj] || PROP[MAT.EMPTY];
+            const k = 0.5*(pi.conduct + pj.conduct);
+            const d = (temp[j] - temp[i]) * k;
+            temp[i] += d / Math.max(0.2, pi.heatCap);
+            temp[j] -= d / Math.max(0.2, pj.heatCap);
+          }
+        }
+      }
+    }
+
+    function moistureStep(){
+      for(let i=0;i<N;i++){
+        const m = grid[i];
+        const p = PROP[m];
+        if(!p || p.moistCap <= 0) continue;
+
+        const T = temp[i];
+        const heatFactor = Math.max(0, (T - 30) / 70);
+        const evap = p.evap * heatFactor * 0.02;
+        if(evap > 0) moist[i] = Math.max(0, moist[i] - evap);
+      }
+
+      for(let y=0;y<H;y++){
+        for(let x=0;x<W;x++){
+          const i = idx(x,y);
+          const mi = grid[i];
+          const pi = PROP[mi];
+          if(!pi || pi.moistCap <= 0) continue;
+
+          if(x+1 < W){
+            const j = i + 1;
+            const pj = PROP[grid[j]];
+            if(pj && pj.moistCap > 0){
+              const k = 0.5*(pi.moistCond + pj.moistCond);
+              const d = (moist[j] - moist[i]) * k;
+              moist[i] = clamp(moist[i] + d*0.35, 0, pi.moistCap);
+              moist[j] = clamp(moist[j] - d*0.35, 0, pj.moistCap);
+            }
+          }
+          if(y+1 < H){
+            const j = i + W;
+            const pj = PROP[grid[j]];
+            if(pj && pj.moistCap > 0){
+              const k = 0.5*(pi.moistCond + pj.moistCond);
+              const d = (moist[j] - moist[i]) * k;
+              moist[i] = clamp(moist[i] + d*0.35, 0, pi.moistCap);
+              moist[j] = clamp(moist[j] - d*0.35, 0, pj.moistCap);
+            }
+          }
+        }
+      }
+
+      for(let i=0;i<N;i++){
+        if(grid[i] !== MAT.WATER) continue;
+        if(Math.random() < 0.25) hydrateNeighborhood(i, 0.08);
+      }
+    }
+
+    function phaseAndReactions(){
+      for(let i=0;i<N;i++){
+        const m = grid[i];
+        const T = temp[i];
+
+        if(m === MAT.SEED || m === MAT.PLANT){
+          if(age[i] < 65000) age[i]++;
+        }
+
+        if(m === MAT.WATER){
+          if(T < -1 && Math.random() < 0.10) setCellI(i, MAT.ICE);
+          else if(T > 105 && Math.random() < 0.18) setCellI(i, MAT.STEAM);
+        } else if(m === MAT.ICE){
+          if(T > 1 && Math.random() < 0.12) setCellI(i, MAT.WATER);
+        } else if(m === MAT.STEAM){
+          if(life[i] > 0) life[i]--;
+          if(T < 90 && Math.random() < 0.04) setCellI(i, MAT.WATER);
+          else if(life[i] === 0 && Math.random() < 0.35) clearCellI(i);
+        } else if(m === MAT.SMOKE){
+          if(life[i] > 0) life[i]--;
+          if(life[i] === 0 && Math.random() < 0.35) clearCellI(i);
+        }
+
+        if(m === MAT.FIRE){
+          temp[i] = Math.max(temp[i], 650);
+          if(life[i] > 0) life[i]--;
+          if(life[i] === 0) setCellI(i, (Math.random()<0.8) ? MAT.SMOKE : MAT.EMPTY);
+        }
+
+        if(m === MAT.LAVA){
+          temp[i] = Math.max(temp[i], 900);
+          temp[i] += (AMBIENT - temp[i]) * 0.006;
+          if(temp[i] < 650 && Math.random() < 0.08) setCellI(i, MAT.STONE);
+        }
+      }
+    }
+
+    function fireInteractions(){
+      for(let i=0;i<N;i++){
+        if(grid[i] !== MAT.FIRE) continue;
+        const n = randomNeighborIndex(i);
+        if(n === -1) continue;
+
+        temp[n] = Math.max(temp[n], temp[i]*0.72);
+        const nm = grid[n];
 
         if(nm === MAT.WATER || nm === MAT.ICE){
           if(Math.random() < 0.35){
-            if(nm === MAT.WATER && Math.random() < 0.45) setCellI(ni, MAT.STEAM);
+            if(nm === MAT.WATER && Math.random() < 0.45) setCellI(n, MAT.STEAM);
             if(Math.random() < 0.55) setCellI(i, MAT.SMOKE);
           }
-          continue;
-        }
-
-        if(nm === MAT.WOOD || nm === MAT.PLANT || nm === MAT.OIL || nm === MAT.SEED){
+        } else if(nm === MAT.WOOD || nm === MAT.PLANT || nm === MAT.OIL || nm === MAT.SEED){
           const ignitionT = (nm === MAT.OIL) ? 220 : 260;
-          if(temp[ni] > ignitionT && Math.random() < 0.18){
-            setCellI(ni, MAT.FIRE);
+          if(temp[n] > ignitionT && Math.random() < 0.18) setCellI(n, MAT.FIRE);
+        }
+      }
+
+      for(let i=0;i<N;i++){
+        if(grid[i] !== MAT.LAVA) continue;
+        const n = randomNeighborIndex(i);
+        if(n === -1) continue;
+
+        temp[n] = Math.max(temp[n], 700);
+
+        if(grid[n] === MAT.WATER && Math.random() < 0.40){
+          setCellI(n, MAT.STEAM);
+          if(Math.random() < 0.20){
+            setCellI(i, MAT.STONE);
+            cooledStoneCounter++;
           }
         }
       }
     }
 
-    for(let i=0;i<N;i++){
-      if(grid[i] !== MAT.LAVA) continue;
-      const n = randomNeighborIndex(i);
-      if(n === -1) continue;
+    function stepMovement(){
+      const lr = (Math.random() < 0.5) ? -1 : 1;
 
-      temp[n] = Math.max(temp[n], 700);
+      for(let y=H-1; y>=0; y--){
+        const leftToRight = ((y & 1) === 0);
+        let xStart = leftToRight ? 0 : W-1;
+        let xEnd = leftToRight ? W : -1;
+        let xStep = leftToRight ? 1 : -1;
 
-      const cap = PROP[grid[n]]?.moistCap || 0;
-      if(cap > 0) moist[n] = Math.max(0, moist[n] - 0.03);
+        for(let x=xStart; x!==xEnd; x+=xStep){
+          const i = idx(x,y);
+          const m = grid[i];
+          if(m === MAT.EMPTY) continue;
 
-      if(grid[n] === MAT.WATER && Math.random() < 0.40){
-        setCellI(n, MAT.STEAM);
-        if(Math.random() < 0.20){
-          setCellI(i, MAT.STONE);
-          cooledStoneCounter += 1;
+          if(m === MAT.SMOKE || m === MAT.STEAM || m === MAT.FIRE){
+            if(y > 0){
+              const u = i - W;
+              if(grid[u] === MAT.EMPTY){ swap(i,u); continue; }
+            }
+            const nx = x + lr;
+            if(nx>=0 && nx<W){
+              const s = idx(nx,y);
+              if(grid[s] === MAT.EMPTY && Math.random() < 0.35) swap(i,s);
+            }
+            continue;
+          }
+
+          if(isSolid(m)) continue;
+
+          if(isPowder(m)){
+            if(y+1 < H){
+              const b = i + W;
+              const bm = grid[b];
+              if(bm === MAT.EMPTY || isGas(bm) || isLiquid(bm)){ swap(i,b); continue; }
+              const nx1 = x + lr;
+              if(nx1>=0 && nx1<W){
+                const d = idx(nx1,y+1);
+                const dm = grid[d];
+                if(dm === MAT.EMPTY || isGas(dm) || isLiquid(dm)){ swap(i,d); continue; }
+              }
+            }
+            continue;
+          }
+
+          if(isLiquid(m)){
+            if(y+1 < H){
+              const b = i + W;
+              const bm = grid[b];
+              if(bm === MAT.EMPTY || isGas(bm)){ swap(i,b); continue; }
+              if(m === MAT.WATER && bm === MAT.OIL && Math.random() < 0.35){ swap(i,b); continue; }
+            }
+            const nx = x + lr;
+            if(nx>=0 && nx<W){
+              const s = idx(nx,y);
+              const sm = grid[s];
+              if(sm === MAT.EMPTY || isGas(sm)) swap(i,s);
+            }
+          }
         }
       }
-      if((grid[n] === MAT.WOOD || grid[n] === MAT.PLANT || grid[n] === MAT.OIL) && Math.random() < 0.25){
-        setCellI(n, MAT.FIRE);
-      }
     }
-  }
 
-  function stepMovement(){
-    const lr = (Math.random() < 0.5) ? -1 : 1;
+    // ===== Rendering =====
+    const img = ctx.createImageData(W, H);
+    const data = img.data;
 
-    for(let y=H-1; y>=0; y--){
-      const leftToRight = ((y & 1) === 0);
-      let xStart = leftToRight ? 0 : W-1;
-      let xEnd = leftToRight ? W : -1;
-      let xStep = leftToRight ? 1 : -1;
+    function thermoColor(T){
+      const t = (T + 20) / 920;
+      const a = clamp01(t);
+      const r = Math.floor(255 * clamp01((a - 0.30) / 0.70));
+      const g = Math.floor(255 * clamp01(1 - Math.abs(a - 0.55) / 0.55));
+      const b = Math.floor(255 * clamp01((0.55 - a) / 0.55));
+      return [r,g,b];
+    }
+    function moistColor(M){
+      const a = clamp01(M);
+      const r = Math.floor(40 * (1-a));
+      const g = Math.floor(110 * (1-a));
+      const b = Math.floor(255 * a);
+      return [r,g,b];
+    }
 
-      for(let x=xStart; x!==xEnd; x+=xStep){
-        const i = idx(x,y);
+    function render(){
+      for(let i=0;i<N;i++){
         const m = grid[i];
-        if(m === MAT.EMPTY) continue;
+        let [r,g,b] = BASE_COLOR[m] || [255,0,255];
 
-        if(m === MAT.SMOKE || m === MAT.STEAM || m === MAT.FIRE){
-          if(y > 0){
-            const u = i - W;
-            if(grid[u] === MAT.EMPTY){ swap(i,u); continue; }
-            const ux1 = x + lr;
-            if(ux1>=0 && ux1<W){
-              const du = idx(ux1, y-1);
-              if(grid[du] === MAT.EMPTY){ swap(i,du); continue; }
-            }
-            const ux2 = x - lr;
-            if(ux2>=0 && ux2<W){
-              const du2 = idx(ux2, y-1);
-              if(grid[du2] === MAT.EMPTY){ swap(i,du2); continue; }
-            }
-          }
-          const nx = x + lr;
-          if(nx>=0 && nx<W){
-            const s = idx(nx,y);
-            if(grid[s] === MAT.EMPTY && Math.random() < 0.35) swap(i,s);
-          }
-          continue;
+        if(m === MAT.FIRE){
+          const t = (Math.random()*32)|0;
+          r = Math.min(255, r + t);
+          g = Math.max(0, g - (t>>1));
+        } else if(m === MAT.SMOKE){
+          const n = (Math.random()*10)|0;
+          r = Math.max(0, r - n); g = Math.max(0, g - n); b = Math.max(0, b - n);
+        } else if(m === MAT.LAVA){
+          const t = (Math.random()*20)|0;
+          r = Math.min(255, r + t);
+          g = Math.max(0, g - (t>>1));
+        } else if(m === MAT.SOIL){
+          const wet = clamp01(moist[i] / Math.max(0.001, PROP[MAT.SOIL].moistCap));
+          b = Math.min(255, b + Math.floor(30*wet));
+          r = Math.max(0, r - Math.floor(20*wet));
         }
 
-        if(isSolid(m)) continue;
-
-        if(isPowder(m)){
-          if(y+1 < H){
-            const b = i + W;
-            const bm = grid[b];
-            if(bm === MAT.EMPTY || isGas(bm) || isLiquid(bm)){
-              swap(i,b);
-              continue;
-            }
-            const nx1 = x + lr;
-            if(nx1>=0 && nx1<W){
-              const d = idx(nx1,y+1);
-              const dm = grid[d];
-              if(dm === MAT.EMPTY || isGas(dm) || isLiquid(dm)){ swap(i,d); continue; }
-            }
-            const nx2 = x - lr;
-            if(nx2>=0 && nx2<W){
-              const d2 = idx(nx2,y+1);
-              const dm2 = grid[d2];
-              if(dm2 === MAT.EMPTY || isGas(dm2) || isLiquid(dm2)){ swap(i,d2); continue; }
-            }
+        if(showThermo){
+          const [tr,tg,tb] = thermoColor(temp[i]);
+          r = (r*0.58 + tr*0.42) | 0;
+          g = (g*0.58 + tg*0.42) | 0;
+          b = (b*0.58 + tb*0.42) | 0;
+        }
+        if(showMoist){
+          const cap = PROP[m]?.moistCap || 0;
+          if(cap > 0){
+            const [mr,mg,mb] = moistColor(moist[i] / Math.max(0.001, cap));
+            r = (r*0.55 + mr*0.45) | 0;
+            g = (g*0.55 + mg*0.45) | 0;
+            b = (b*0.55 + mb*0.45) | 0;
           }
-          if(m === MAT.SEED && y+1 < H && grid[i+W] === MAT.SOIL && Math.random() < 0.03){
-            swap(i, i+W);
-          }
-          continue;
         }
 
-        if(isLiquid(m)){
-          if(y+1 < H){
-            const b = i + W;
-            const bm = grid[b];
-            if(bm === MAT.EMPTY || isGas(bm)){
-              swap(i,b);
-              continue;
-            }
-            if(m === MAT.WATER && bm === MAT.OIL && Math.random() < 0.35){
-              swap(i,b);
-              continue;
-            }
-          }
-          const attempts = (m === MAT.LAVA) ? 1 : 2;
-          for(let a=0; a<attempts; a++){
-            const dx = (a===0) ? lr : -lr;
-            const nx = x + dx;
-            if(nx<0 || nx>=W) continue;
-            const s = idx(nx,y);
-            const sm = grid[s];
-            if(sm === MAT.EMPTY || isGas(sm)){
-              swap(i,s);
-              break;
-            }
-          }
-          if(m === MAT.LAVA && Math.random() < 0.35) continue;
-          continue;
+        const p = i*4;
+        data[p+0]=r; data[p+1]=g; data[p+2]=b; data[p+3]=255;
+      }
+      ctx.putImageData(img,0,0);
+    }
+
+    // ===== Stats + Goals =====
+    function fmtClock(ms){
+      const s = Math.max(0, Math.floor(ms/1000));
+      const mm = String(Math.floor(s/60)).padStart(2,'0');
+      const ss = String(s%60).padStart(2,'0');
+      return `${mm}:${ss}`;
+    }
+
+    function updateGoals(s){
+      const g1 = GOALS[0];
+      const p1 = Math.min(1, s.plant / g1.target);
+      setGoalProgress(g1.id, p1*100, goalComplete(g1.id, p1>=1, g1.points));
+
+      const g2 = GOALS[1];
+      if(!goalState[g2.id]) goalState[g2.id] = { hold: 0, done:false };
+      if(!goalState[g2.id].done){
+        if(s.soilAvg >= g2.target) goalState[g2.id].hold += 0.5; else goalState[g2.id].hold = Math.max(0, goalState[g2.id].hold - 1);
+        const p2 = Math.min(1, goalState[g2.id].hold / g2.seconds);
+        setGoalProgress(g2.id, p2*100, goalComplete(g2.id, p2>=1, g2.points));
+      } else setGoalProgress(g2.id, 100, true);
+
+      const g3 = GOALS[2];
+      if(!goalState[g3.id]) goalState[g3.id] = { acc: 0, done:false };
+      if(!goalState[g3.id].done){
+        goalState[g3.id].acc += Math.min(6, s.gas) * 0.15;
+        const p3 = Math.min(1, goalState[g3.id].acc / g3.target);
+        setGoalProgress(g3.id, p3*100, goalComplete(g3.id, p3>=1, g3.points));
+      } else setGoalProgress(g3.id, 100, true);
+
+      const g4 = GOALS[3];
+      const p4 = Math.min(1, cooledStoneCounter / g4.target);
+      setGoalProgress(g4.id, p4*100, goalComplete(g4.id, p4>=1, g4.points));
+    }
+
+    function computeStats(){
+      let plant=0, water=0, gas=0, tmax=-1e9;
+      let soilMoistSum=0, soilCount=0;
+
+      for(let i=0;i<N;i++){
+        const m = grid[i];
+        if(m === MAT.PLANT) plant++;
+        if(m === MAT.WATER) water++;
+        if(m === MAT.SMOKE || m === MAT.STEAM) gas++;
+        if(temp[i] > tmax) tmax = temp[i];
+        if(m === MAT.SOIL){
+          soilCount++;
+          soilMoistSum += moist[i] / Math.max(0.001, PROP[MAT.SOIL].moistCap);
         }
       }
-    }
-  }
+      const soilAvg = soilCount ? (soilMoistSum / soilCount) : 0;
 
-  // ===== Rendering =====
-  const img = ctx.createImageData(W, H);
-  const data = img.data;
+      stPlant && (stPlant.textContent = String(plant));
+      stWater && (stWater.textContent = String(water));
+      stGas && (stGas.textContent = String(gas));
+      stTmax && (stTmax.textContent = `${Math.round(tmax)}°C`);
+      stMoist && (stMoist.textContent = soilAvg.toFixed(2));
 
-  function thermoColor(T){
-    const t = (T + 20) / 920;
-    const a = clamp01(t);
-    const r = Math.floor(255 * clamp01((a - 0.30) / 0.70));
-    const g = Math.floor(255 * clamp01(1 - Math.abs(a - 0.55) / 0.55));
-    const b = Math.floor(255 * clamp01((0.55 - a) / 0.55));
-    return [r,g,b];
-  }
-  function moistColor(M){
-    const a = clamp01(M);
-    const r = Math.floor(40 * (1-a));
-    const g = Math.floor(110 * (1-a));
-    const b = Math.floor(255 * a);
-    return [r,g,b];
-  }
+      const runSeconds = (performance.now() - runStart) / 1000;
+      score = Math.max(score, Math.floor(plant*1.2 + runSeconds*0.3 + cooledStoneCounter*2));
+      stScore && (stScore.textContent = String(score));
 
-  function render(){
-    for(let i=0;i<N;i++){
-      const m = grid[i];
-      let [r,g,b] = BASE_COLOR[m] || [255,0,255];
-
-      const n = (Math.random()*10)|0;
-
-      if(m === MAT.FIRE){
-        const t = (Math.random()*32)|0;
-        r = Math.min(255, r + t);
-        g = Math.max(0, g - (t>>1));
-      } else if(m === MAT.SMOKE){
-        r = Math.max(0, r - n);
-        g = Math.max(0, g - n);
-        b = Math.max(0, b - n);
-      } else if(m === MAT.STEAM){
-        const t = (Math.random()*10)|0;
-        r = Math.min(255, r + t);
-        g = Math.min(255, g + t);
-        b = Math.min(255, b + t);
-      } else if(m === MAT.LAVA){
-        const t = (Math.random()*20)|0;
-        r = Math.min(255, r + t);
-        g = Math.max(0, g - (t>>1));
-      } else if(m === MAT.SOIL){
-        const cap = PROP[MAT.SOIL].moistCap;
-        const wet = clamp01(moist[i] / cap);
-        b = Math.min(255, b + Math.floor(30*wet));
-        r = Math.max(0, r - Math.floor(20*wet));
-      }
-
-      if(showThermo){
-        const [tr,tg,tb] = thermoColor(temp[i]);
-        r = (r*0.58 + tr*0.42) | 0;
-        g = (g*0.58 + tg*0.42) | 0;
-        b = (b*0.58 + tb*0.42) | 0;
-      }
-
-      if(showMoist){
-        const cap = PROP[m]?.moistCap || 0;
-        if(cap > 0){
-          const [mr,mg,mb] = moistColor(moist[i] / Math.max(0.001, cap));
-          r = (r*0.55 + mr*0.45) | 0;
-          g = (g*0.55 + mg*0.45) | 0;
-          b = (b*0.55 + mb*0.45) | 0;
-        }
-      }
-
-      const p = i*4;
-      data[p+0]=r; data[p+1]=g; data[p+2]=b; data[p+3]=255;
-    }
-    ctx.putImageData(img,0,0);
-  }
-
-  // ===== Stats + Goals =====
-  let score = 0;
-  let runStart = performance.now();
-
-  function fmtClock(ms){
-    const s = Math.max(0, Math.floor(ms/1000));
-    const mm = String(Math.floor(s/60)).padStart(2,'0');
-    const ss = String(s%60).padStart(2,'0');
-    return `${mm}:${ss}`;
-  }
-
-  function computeStats(){
-    let plant=0, water=0, gas=0, tmax=-1e9;
-    let soilMoistSum=0, soilCount=0;
-
-    for(let i=0;i<N;i++){
-      const m = grid[i];
-      if(m === MAT.PLANT) plant++;
-      if(m === MAT.WATER) water++;
-      if(m === MAT.SMOKE || m === MAT.STEAM) gas++;
-      if(temp[i] > tmax) tmax = temp[i];
-      if(m === MAT.SOIL){
-        soilCount++;
-        soilMoistSum += moist[i] / Math.max(0.001, PROP[MAT.SOIL].moistCap);
-      }
-    }
-    const soilAvg = soilCount ? (soilMoistSum / soilCount) : 0;
-    stPlant.textContent = String(plant);
-    stWater.textContent = String(water);
-    stGas.textContent = String(gas);
-    stTmax.textContent = `${Math.round(tmax)}°C`;
-    stMoist.textContent = soilAvg.toFixed(2);
-
-    const runSeconds = (performance.now() - runStart) / 1000;
-    score = Math.max(score, Math.floor(plant*1.2 + runSeconds*0.3 + cooledStoneCounter*2));
-    stScore.textContent = String(score);
-
-    updateGoals({plant, water, gas, soilAvg, tmax, runSeconds});
-  }
-
-  function updateGoals(s){
-    const g1 = GOALS[0];
-    const p1 = Math.min(1, s.plant / g1.target);
-    const d1 = p1 >= 1;
-    setGoalProgress(g1.id, p1*100, goalComplete(g1.id, d1, g1.points));
-
-    const g2 = GOALS[1];
-    if(!goalState[g2.id]) goalState[g2.id] = { hold: 0, done:false };
-    if(!goalState[g2.id].done){
-      if(s.soilAvg >= g2.target) goalState[g2.id].hold += 1/2;
-      else goalState[g2.id].hold = Math.max(0, goalState[g2.id].hold - 1);
-      const p2 = Math.min(1, goalState[g2.id].hold / g2.seconds);
-      const d2 = p2 >= 1;
-      setGoalProgress(g2.id, p2*100, goalComplete(g2.id, d2, g2.points));
-    } else {
-      setGoalProgress(g2.id, 100, true);
-    }
-
-    const g3 = GOALS[2];
-    if(!goalState[g3.id]) goalState[g3.id] = { acc: 0, done:false };
-    if(!goalState[g3.id].done){
-      goalState[g3.id].acc += Math.min(6, s.gas) * 0.15;
-      const p3 = Math.min(1, goalState[g3.id].acc / g3.target);
-      const d3 = p3 >= 1;
-      setGoalProgress(g3.id, p3*100, goalComplete(g3.id, d3, g3.points));
-    } else {
-      setGoalProgress(g3.id, 100, true);
-    }
-
-    const g4 = GOALS[3];
-    const p4 = Math.min(1, cooledStoneCounter / g4.target);
-    const d4 = p4 >= 1;
-    setGoalProgress(g4.id, p4*100, goalComplete(g4.id, d4, g4.points));
-  }
-
-  function goalComplete(id, doneNow, points){
-    if(!goalState[id]) goalState[id] = { done:false };
-    if(doneNow && !goalState[id].done){
-      goalState[id].done = true;
-      score += points;
+      updateGoals({plant, water, gas, soilAvg, tmax, runSeconds});
       syncUI();
-      return true;
-    }
-    return goalState[id].done;
-  }
-
-  // ===== Main loop =====
-  let fpsLast = performance.now();
-  let fpsFrames = 0;
-
-  function loop(){
-    fpsFrames++;
-    const now = performance.now();
-    const dt = now - fpsLast;
-    if(dt >= 1000){
-      const f = Math.round((fpsFrames * 1000) / dt);
-      fpsEl.textContent = `FPS: ${f}`;
-      fpsFrames = 0;
-      fpsLast = now;
     }
 
-    runClock.textContent = fmtClock(now - runStart);
+    // ===== Main loop =====
+    let fpsLast = performance.now();
+    let fpsFrames = 0;
 
-    if(running){
-      for(let t=0; t<ticksPerFrame; t++){
-        thermalStep();
-        moistureStep();
-        phaseAndReactions();
-        fireInteractions();
-        stepMovement();
+    function loop(){
+      fpsFrames++;
+      const now = performance.now();
+      const dt = now - fpsLast;
+      if(dt >= 1000){
+        const f = Math.round((fpsFrames * 1000) / dt);
+        fpsEl && (fpsEl.textContent = `FPS: ${f}`);
+        fpsFrames = 0;
+        fpsLast = now;
       }
+
+      runClock && (runClock.textContent = fmtClock(now - runStart));
+
+      if(running){
+        for(let t=0; t<ticksPerFrame; t++){
+          thermalStep();
+          moistureStep();
+          phaseAndReactions();
+          fireInteractions();
+          stepMovement();
+        }
+      }
+
+      render();
+      requestAnimationFrame(loop);
     }
 
-    render();
+    // Start immediately with a visible scene
+    scenarioGarden();
+    setInterval(computeStats, 500);
     requestAnimationFrame(loop);
   }
-
-  // ===== Start default scenario =====
-  scenarioGarden();
-
-  // stats twice per second
-  setInterval(computeStats, 500);
-
-  // ===== Done =====
 })();
 </script>
 </body>
 </html>
+
