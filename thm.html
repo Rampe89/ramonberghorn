@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>THM Command Generator</title>
+  <title>THM Room Command Center</title>
   <style>
     :root{
       --bg:#0b0f14;
@@ -25,9 +25,10 @@
       margin:0;
       font-family:var(--sans);
       color:var(--text);
-      background:radial-gradient(1100px 700px at 20% -10%, rgba(110,231,255,.12), transparent 60%),
-                 radial-gradient(900px 600px at 80% 0%, rgba(167,139,250,.12), transparent 55%),
-                 var(--bg);
+      background:
+        radial-gradient(1100px 700px at 18% -10%, rgba(110,231,255,.12), transparent 60%),
+        radial-gradient(900px 600px at 82% 0%, rgba(167,139,250,.12), transparent 55%),
+        var(--bg);
     }
     header{
       position:sticky; top:0; z-index:5;
@@ -35,17 +36,18 @@
       backdrop-filter: blur(10px);
       border-bottom:1px solid var(--line);
     }
-    .wrap{max-width:1200px; margin:0 auto; padding:16px}
-    h1{margin:0; font-size:18px; letter-spacing:.2px}
-    .sub{margin-top:4px; color:var(--muted); font-size:13px}
-    main .wrap{padding-top:18px}
-    .grid{
+    .wrap{max-width:1280px; margin:0 auto; padding:16px}
+    h1{margin:0; font-size:16px; letter-spacing:.2px}
+    .sub{margin-top:4px; color:var(--muted); font-size:13px; line-height:1.35}
+    main .wrap{padding-top:16px}
+    .layout{
       display:grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: 380px 1fr;
       gap:14px;
+      align-items:start;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
+    @media (max-width: 1020px){
+      .layout{grid-template-columns:1fr}
     }
     .card{
       border:1px solid var(--line);
@@ -56,22 +58,24 @@
     }
     .card h2{
       margin:0 0 10px;
-      font-size:14px;
+      font-size:13px;
       color:#dbe7f7;
       display:flex;
       align-items:center;
+      justify-content:space-between;
       gap:8px;
     }
     .pill{
-      font-size:12px;
+      font-size:11px;
       color:var(--muted);
       border:1px solid var(--line);
       padding:3px 8px;
       border-radius:999px;
       background:rgba(0,0,0,.20);
+      white-space:nowrap;
     }
     label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
-    input[type="text"], input[type="number"], select{
+    input[type="text"], input[type="number"], textarea, select{
       width:100%;
       padding:10px 10px;
       border-radius:12px;
@@ -80,37 +84,12 @@
       color:var(--text);
       outline:none;
     }
-    input[type="text"]::placeholder{color:#6f86a3}
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .row3{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width: 520px){
-      .row, .row3{grid-template-columns:1fr}
-    }
-    .checks{display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px}
-    .checks .chk{
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px;
-      background:rgba(0,0,0,.16);
-      display:flex; align-items:flex-start; gap:10px;
-    }
-    .chk input{margin-top:3px}
-    .chk b{display:block; font-size:12px; margin-bottom:2px}
-    .chk span{display:block; font-size:11px; color:var(--muted); line-height:1.25}
-    .actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
-    }
+    textarea{min-height:110px; resize:vertical; font-family:var(--mono); font-size:12px; line-height:1.35}
+    input::placeholder, textarea::placeholder{color:#6f86a3}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+    .row3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px}
+    @media (max-width: 520px){ .row,.row3{grid-template-columns:1fr} }
+    .actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
     button{
       border:1px solid var(--line);
       background:rgba(0,0,0,.18);
@@ -132,12 +111,30 @@
       border-color: rgba(251,191,36,.35);
       background: rgba(251,191,36,.10);
     }
+    button.bad{
+      border-color: rgba(251,113,133,.35);
+      background: rgba(251,113,133,.08);
+    }
     button:active{transform: translateY(1px)}
     .muted{color:var(--muted)}
-    .tools{
-      display:flex; gap:8px; flex-wrap:wrap;
-      margin-bottom:10px;
+    .small{font-size:11px}
+    .divider{height:1px; background:var(--line); margin:12px 0}
+    .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .chip{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.16);
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      display:flex; gap:8px; align-items:center;
     }
+    .chip b{color:var(--text); font-weight:700}
+    .chip.ok{border-color: rgba(52,211,153,.35)}
+    .chip.warn{border-color: rgba(251,191,36,.35)}
+    .chip.purple{border-color: rgba(167,139,250,.35)}
+    .chip .x{opacity:.7; cursor:pointer; user-select:none}
+    .toolTabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px}
     .toolTab{
       padding:8px 10px;
       border-radius:999px;
@@ -172,10 +169,9 @@
     .cmdHead{
       display:flex; align-items:center; justify-content:space-between;
       gap:8px; margin-bottom:8px;
+      flex-wrap:wrap;
     }
-    .cmdHead .left{
-      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
-    }
+    .cmdHead .left{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
     .badge{
       font-family:var(--mono);
       font-size:11px;
@@ -184,16 +180,6 @@
       border:1px solid var(--line);
       color:var(--muted);
       background: rgba(0,0,0,.14);
-    }
-    .note{
-      margin-top:10px;
-      border:1px dashed rgba(110,231,255,.35);
-      background: rgba(110,231,255,.06);
-      border-radius:14px;
-      padding:10px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.4;
     }
     .toast{
       position:fixed;
@@ -211,167 +197,198 @@
       box-shadow: 0 12px 28px rgba(0,0,0,.35);
     }
     .toast.show{opacity:1; transform: translateY(0)}
-    .small{font-size:11px}
-    .divider{height:1px; background:var(--line); margin:12px 0}
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.12);
+      margin-top:10px;
+    }
+    .table th, .table td{
+      padding:8px 10px;
+      border-bottom:1px solid var(--line);
+      font-size:12px;
+      text-align:left;
+    }
+    .table th{color:var(--muted); font-weight:600; background: rgba(0,0,0,.10)}
+    .table tr:last-child td{border-bottom:none}
+    .note{
+      margin-top:10px;
+      border:1px dashed rgba(110,231,255,.35);
+      background: rgba(110,231,255,.06);
+      border-radius:14px;
+      padding:10px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.4;
+    }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="wrap">
-      <h1>THM Command Generator <span class="pill">single-file</span></h1>
-      <div class="sub">Ziel-IP/Host rein, Optionen klicken, Befehle copy-pasten. (nmap, gobuster, ffuf, nikto, whatweb, feroxbuster, smb, ldap …)</div>
+<header>
+  <div class="wrap">
+    <h1>THM Room Command Center <span class="pill">Profiles • Port/Service parse • Wordlist picker • Export</span></h1>
+    <div class="sub">
+      Ziel rein → optional nmap Output pasten → Ports/Services erkannt → passende Commands (nmap, ffuf, gobuster, ferox, smb, snmp, ftp, ssh, dns) + Export als Markdown.
     </div>
-  </header>
+  </div>
+</header>
 
-  <main>
-    <div class="wrap">
-      <div class="grid">
-        <!-- LEFT: Inputs -->
-        <section class="card">
-          <h2>Target & Defaults <span class="pill">Input</span></h2>
+<main>
+  <div class="wrap">
+    <div class="layout">
 
-          <label for="target">Ziel (IP / Host)</label>
-          <input id="target" type="text" placeholder="z.B. 10.10.10.10 oder thm.local" value="10.10.10.10" />
+      <!-- LEFT -->
+      <section class="card">
+        <h2>
+          Room & Target
+          <span class="pill" id="profilePill">kein Profil</span>
+        </h2>
 
-          <div class="row">
-            <div>
-              <label for="proto">Protokoll</label>
-              <select id="proto">
-                <option value="http">http</option>
-                <option value="https">https</option>
-              </select>
-            </div>
-            <div>
-              <label for="portWeb">Web-Port</label>
-              <input id="portWeb" type="number" min="1" max="65535" value="80" />
-            </div>
+        <label for="roomName">Room/Profil-Name</label>
+        <input id="roomName" type="text" placeholder="z.B. Billing, Blue, Startup ..." />
+
+        <div class="actions">
+          <button class="primary" id="saveProfile">Profil speichern</button>
+          <button id="loadProfile">Profil laden</button>
+          <button class="bad" id="deleteProfile">Profil löschen</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <label for="target">Ziel (IP / Host)</label>
+        <input id="target" type="text" placeholder="z.B. 10.10.10.10 oder thm.local" value="10.10.10.10" />
+
+        <div class="row">
+          <div>
+            <label for="proto">Protokoll (Default Web)</label>
+            <select id="proto">
+              <option value="http">http</option>
+              <option value="https">https</option>
+            </select>
           </div>
-
-          <div class="row">
-            <div>
-              <label for="wordlist">Wordlist (Default)</label>
-              <input id="wordlist" type="text" value="/usr/share/wordlists/dirb/common.txt" />
-            </div>
-            <div>
-              <label for="threads">Threads</label>
-              <input id="threads" type="number" min="1" max="400" value="50" />
-            </div>
+          <div>
+            <label for="threads">Threads</label>
+            <input id="threads" type="number" min="1" max="400" value="50" />
           </div>
+        </div>
 
-          <div class="row">
-            <div>
-              <label for="exts">Extensions</label>
-              <input id="exts" type="text" placeholder="php,txt,html" value="php,txt,html" />
-            </div>
-            <div>
-              <label for="statusFilter">Status-Filter</label>
-              <input id="statusFilter" type="text" placeholder="z.B. 200,204,301,302,307,401,403" value="200,204,301,302,307,401,403" />
-            </div>
+        <div class="row">
+          <div>
+            <label for="vhost">VHOST / Domain (optional)</label>
+            <input id="vhost" type="text" placeholder="z.B. site.thm oder domain.local" />
           </div>
-
-          <label for="vhost">VHOST / Domain (optional)</label>
-          <input id="vhost" type="text" placeholder="z.B. thm.local (für Host-Header / vhost fuzz)" />
-
-          <div class="checks">
-            <div class="chk">
-              <input id="sudo" type="checkbox" />
-              <div>
-                <b>sudo</b>
-                <span>setzt bei nmap/lowports „sudo “ davor</span>
-              </div>
-            </div>
-            <div class="chk">
-              <input id="aggressive" type="checkbox" checked />
-              <div>
-                <b>Default: „schnell & sinnvoll“</b>
-                <span>nutzt praxisnahe Defaults (kein Overkill)</span>
-              </div>
-            </div>
-            <div class="chk">
-              <input id="saveFiles" type="checkbox" checked />
-              <div>
-                <b>Output in Dateien</b>
-                <span>nmap -oA, ffuf -o json, etc.</span>
-              </div>
-            </div>
-            <div class="chk">
-              <input id="useUrl" type="checkbox" checked />
-              <div>
-                <b>Web-URL bauen</b>
-                <span>proto://target:port für Web-Tools</span>
-              </div>
-            </div>
+          <div>
+            <label for="statusFilter">ffuf Match Codes</label>
+            <input id="statusFilter" type="text" value="200,204,301,302,307,401,403" />
           </div>
+        </div>
 
-          <div class="actions">
-            <button class="primary" id="presetWeb">Preset: Web-Enum</button>
-            <button class="primary" id="presetSMB">Preset: SMB-Enum</button>
-            <button class="primary" id="presetAD">Preset: AD/LDAP</button>
-            <button class="warn" id="resetAll">Reset</button>
+        <label for="exts">Extensions</label>
+        <input id="exts" type="text" value="php,txt,html" placeholder="php,txt,html" />
+
+        <div class="divider"></div>
+
+        <h2 style="margin-top:0">Wordlists <span class="pill">Kali paths</span></h2>
+
+        <div class="row">
+          <div>
+            <label for="wlCategory">Kategorie</label>
+            <select id="wlCategory"></select>
           </div>
-
-          <div class="note">
-            <b class="muted">Hinweis:</b> Du kannst überall IP oder Host eingeben. Für VHOST/Host-Header setz „VHOST/Domain“.
-            Extensions: kommasepariert. Wordlist: Pfad wie auf Kali/AttackBox.
+          <div>
+            <label for="wlPreset">Preset</label>
+            <select id="wlPreset"></select>
           </div>
-        </section>
+        </div>
 
-        <!-- RIGHT: Commands -->
-        <section class="card">
-          <h2>Command Sets <span class="pill">Generator</span></h2>
+        <label for="wordlist">Wordlist Pfad</label>
+        <input id="wordlist" type="text" value="/usr/share/wordlists/dirb/common.txt" />
 
-          <div class="tools" id="toolTabs"></div>
+        <div class="note small">
+          Tipp: Du kannst immer noch manuell überschreiben. Presets sind typische Kali/AttackBox Pfade.
+        </div>
 
-          <div id="toolOptions"></div>
+        <div class="divider"></div>
 
-          <div class="divider"></div>
+        <h2 style="margin-top:0">Ports & Services <span class="pill">paste nmap output</span></h2>
 
-          <div id="commands"></div>
+        <label for="nmapPaste">nmap Output (optional)</label>
+        <textarea id="nmapPaste" placeholder="Paste z.B. nmap -sV output ODER nmap -oG output hier rein..."></textarea>
 
-          <div class="note small">
-            <b class="muted">Pro-Tipp:</b> Web-Port = 443? Stell Protokoll auf https. Bei mehreren Web-Ports: einfach Port wechseln und copy-pasten.
-          </div>
-        </section>
-      </div>
+        <div class="actions">
+          <button class="primary" id="parseNmap">Ports/Services erkennen</button>
+          <button id="clearPorts">Ports reset</button>
+        </div>
+
+        <div class="chips" id="serviceChips"></div>
+
+        <table class="table" id="portsTable" style="display:none">
+          <thead>
+            <tr>
+              <th>Port</th>
+              <th>Proto</th>
+              <th>Service</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="portsTbody"></tbody>
+        </table>
+
+        <div class="note">
+          <b class="muted">Wie du das am besten nutzt:</b><br/>
+          1) Erst nmap laufen lassen (z.B. -sV) → Output hier rein → parse.<br/>
+          2) Rechts bekommst du automatisch Web/SMB/etc passende Befehle, pro Port generiert.
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <section class="card">
+        <h2>Commands & Export <span class="pill" id="summaryPill">ready</span></h2>
+
+        <div class="toolTabs" id="toolTabs"></div>
+
+        <div id="toolOptions"></div>
+
+        <div class="actions">
+          <button class="good" id="copyRunbook">Copy Runbook</button>
+          <button id="copyMarkdown">Copy Markdown</button>
+          <button class="primary" id="downloadMarkdown">Download .md</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div id="commands"></div>
+
+        <div class="note small">
+          Export enthält auch die erkannte Portliste + Services. Wenn du willst, kann ich dir als nächsten Schritt auch “Notion/Obsidian Template” + Sections (Recon/Web/SMB/PrivEsc) reinbauen.
+        </div>
+      </section>
+
     </div>
-  </main>
+  </div>
+</main>
 
-  <div class="toast" id="toast">Copied ✓</div>
+<div class="toast" id="toast">Copied ✓</div>
 
 <script>
 (() => {
   // ---------- Helpers ----------
   const $ = (id) => document.getElementById(id);
+  const safe = (s) => String(s ?? "").trim();
+  const csvToList = (s) => safe(s).split(",").map(x=>x.trim()).filter(Boolean);
+  const joinExts = (exts) => csvToList(exts).join(",");
+  const isEmpty = (s) => !safe(s);
 
   const showToast = (msg="Copied ✓") => {
     const t = $("toast");
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(showToast._tm);
-    showToast._tm = setTimeout(() => t.classList.remove("show"), 900);
-  };
-
-  const safe = (s) => String(s ?? "").trim();
-  const csvToList = (s) => safe(s).split(",").map(x=>x.trim()).filter(Boolean);
-  const joinExts = (exts) => csvToList(exts).join(",");
-  const isEmpty = (s) => !safe(s);
-
-  const buildBaseUrl = (st) => {
-    const proto = safe(st.proto);
-    const host = safe(st.target);
-    const port = Number(st.portWeb || 80);
-    if (!st.useUrl) return host;
-    const standard = (proto === "http" && port === 80) || (proto === "https" && port === 443);
-    return standard ? `${proto}://${host}` : `${proto}://${host}:${port}`;
-  };
-
-  const prefixSudo = (st) => st.sudo ? "sudo " : "";
-
-  const fileTag = () => {
-    const d = new Date();
-    const pad = (n)=> String(n).padStart(2,"0");
-    return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+    showToast._tm = setTimeout(() => t.classList.remove("show"), 950);
   };
 
   async function copyToClipboard(text){
@@ -379,7 +396,6 @@
       await navigator.clipboard.writeText(text);
       showToast("Copied ✓");
     }catch(e){
-      // fallback
       const ta = document.createElement("textarea");
       ta.value = text;
       document.body.appendChild(ta);
@@ -390,29 +406,58 @@
     }
   }
 
-  // ---------- State ----------
-  const state = {
-    activeTool: "nmap",
-    toolState: {
-      nmap: { scanType:"default", udp:false, topPorts:true, scripts:true, vuln:false },
-      web:  { whatweb:true, nikto:false, curl:true, headers:false, robots:true },
-      gobuster: { mode:"dir", dns:false, useExt:true, addSlash:false, ua:true },
-      ffuf: { mode:"dir", vhost:false, rec:true, match:"status", follow:false, ac:false },
-      ferox: { depth:2, recurse:true, autoB:true, extractLinks:true },
-      smb: { enum4:true, smbclient:true, crackmapexec:false, sharesOnly:false },
-      snmp: { snmpwalk:true, community:"public", v2c:true },
-      ftp: { nmapScripts:true, hydra:false, user:"anonymous", pass:"anonymous" },
-      ssh: { nmapScripts:true, hydra:false, user:"root" },
-      dns: { dig:true, dnsrecon:false, sublist3r:false },
-    }
+  function fileTag(){
+    const d = new Date();
+    const pad = (n)=> String(n).padStart(2,"0");
+    return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+  }
+
+  // ---------- Wordlist Presets (Kali-ish) ----------
+  const WORDLISTS = {
+    "Web: Directories": [
+      { name: "dirb common", path: "/usr/share/wordlists/dirb/common.txt" },
+      { name: "dirbuster small", path: "/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt" },
+      { name: "dirbuster medium", path: "/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt" },
+      { name: "raft small dirs", path: "/usr/share/seclists/Discovery/Web-Content/raft-small-directories.txt" },
+      { name: "raft small files", path: "/usr/share/seclists/Discovery/Web-Content/raft-small-files.txt" },
+      { name: "quickhits", path: "/usr/share/seclists/Discovery/Web-Content/quickhits.txt" }
+    ],
+    "Web: Files & Extensions": [
+      { name: "raft medium files", path: "/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt" },
+      { name: "raft large files", path: "/usr/share/seclists/Discovery/Web-Content/raft-large-files.txt" },
+      { name: "common extensions", path: "/usr/share/seclists/Discovery/Web-Content/web-extensions.txt" }
+    ],
+    "Web: Params/Fuzz": [
+      { name: "burp params (short)", path: "/usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt" },
+      { name: "raft params", path: "/usr/share/seclists/Discovery/Web-Content/raft-large-words.txt" }
+    ],
+    "VHOST/Subdomains": [
+      { name: "subdomains top1M 5k", path: "/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt" },
+      { name: "subdomains top1M 20k", path: "/usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt" },
+      { name: "bitquark subdomains", path: "/usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt" }
+    ],
+    "Users": [
+      { name: "names (short)", path: "/usr/share/seclists/Usernames/top-usernames-shortlist.txt" },
+      { name: "xato net 10k", path: "/usr/share/seclists/Usernames/xato-net-10-million-usernames-dup.txt" }
+    ],
+    "Passwords": [
+      { name: "rockyou", path: "/usr/share/wordlists/rockyou.txt" },
+      { name: "xato 10k", path: "/usr/share/seclists/Passwords/xato-net-10-million-passwords-10000.txt" },
+      { name: "common creds", path: "/usr/share/seclists/Passwords/Common-Credentials/10k-most-common.txt" }
+    ],
+    "SMB/Enum": [
+      { name: "share names", path: "/usr/share/seclists/Discovery/SMB/combined_shares.txt" },
+      { name: "rpc endpoints", path: "/usr/share/seclists/Discovery/SMB/rpc-endpoints.txt" }
+    ]
   };
 
-  // ---------- Tool Registry ----------
+  // ---------- Tooling ----------
   const tools = [
+    { id:"runbook", label:"Runbook" },
     { id:"nmap", label:"nmap" },
-    { id:"web", label:"web basics" },
-    { id:"gobuster", label:"gobuster" },
+    { id:"web", label:"web" },
     { id:"ffuf", label:"ffuf" },
+    { id:"gobuster", label:"gobuster" },
     { id:"ferox", label:"feroxbuster" },
     { id:"smb", label:"SMB" },
     { id:"snmp", label:"SNMP" },
@@ -421,24 +466,114 @@
     { id:"dns", label:"DNS" },
   ];
 
+  // ---------- State ----------
+  const state = {
+    activeTool: "runbook",
+    ports: [], // {port, proto, service, note}
+    toolState: {
+      nmap: { scanType:"default", udp:false, scripts:true, vuln:false },
+      web:  { whatweb:true, nikto:false, curl:true, robots:true },
+      gobuster: { mode:"dir", useExt:true, ua:true },
+      ffuf: { mode:"dir", rec:true, match:"status", follow:false, ac:true },
+      ferox: { depth:2, extractLinks:true, autoB:true },
+      smb: { enum4:true, smbclient:true, cme:false },
+      snmp: { snmpwalk:true, community:"public", v2c:true },
+      ftp: { nmapScripts:true },
+      ssh: { nmapScripts:true },
+      dns: { dig:true }
+    }
+  };
+
+  // ---------- Inputs ----------
   function getInputs(){
     return {
+      roomName: safe($("roomName").value),
       target: safe($("target").value),
       proto: $("proto").value,
-      portWeb: Number($("portWeb").value || 80),
-      wordlist: safe($("wordlist").value),
       threads: Number($("threads").value || 50),
-      exts: safe($("exts").value),
-      statusFilter: safe($("statusFilter").value),
       vhost: safe($("vhost").value),
-      sudo: $("sudo").checked,
-      aggressive: $("aggressive").checked,
-      saveFiles: $("saveFiles").checked,
-      useUrl: $("useUrl").checked,
+      statusFilter: safe($("statusFilter").value),
+      exts: safe($("exts").value),
+      wordlist: safe($("wordlist").value),
     };
   }
 
-  // ---------- UI: Tabs ----------
+  function baseUrlFor(port, st){
+    const proto = st.proto;
+    const host = st.target;
+    const p = Number(port || (proto==="https"?443:80));
+    const standard = (proto === "http" && p === 80) || (proto === "https" && p === 443);
+    return standard ? `${proto}://${host}` : `${proto}://${host}:${p}`;
+  }
+
+  function webPorts(){
+    // if parsed, take all likely web ports; else fallback 80/443 based on proto
+    const likely = state.ports
+      .filter(p => p.proto === "tcp")
+      .filter(p => {
+        const s = (p.service||"").toLowerCase();
+        return s.includes("http") || [80,443,8080,8000,8008,8443,8888,3000,5000,9000].includes(Number(p.port));
+      })
+      .map(p => Number(p.port));
+    const unique = [...new Set(likely)].sort((a,b)=>a-b);
+    if(unique.length) return unique;
+    return [state.toolState.webDefaultPort || (getInputs().proto==="https" ? 443 : 80)];
+  }
+
+  // ---------- Render Wordlists ----------
+  function renderWordlists(){
+    const catSel = $("wlCategory");
+    const preSel = $("wlPreset");
+    catSel.innerHTML = "";
+    Object.keys(WORDLISTS).forEach(cat => {
+      const o = document.createElement("option");
+      o.value = cat;
+      o.textContent = cat;
+      catSel.appendChild(o);
+    });
+
+    const fillPresets = () => {
+      preSel.innerHTML = "";
+      const cat = catSel.value;
+      const items = WORDLISTS[cat] || [];
+      items.forEach((it, idx) => {
+        const o = document.createElement("option");
+        o.value = String(idx);
+        o.textContent = it.name;
+        preSel.appendChild(o);
+      });
+      // update wordlist
+      if(items[0]) $("wordlist").value = items[0].path;
+      renderAll();
+    };
+
+    catSel.onchange = fillPresets;
+    preSel.onchange = () => {
+      const cat = catSel.value;
+      const items = WORDLISTS[cat] || [];
+      const idx = Number(preSel.value || 0);
+      if(items[idx]) $("wordlist").value = items[idx].path;
+      renderAll();
+    };
+
+    // initial: pick category based on current wordlist
+    const current = safe($("wordlist").value);
+    let found = null;
+    for(const cat of Object.keys(WORDLISTS)){
+      const idx = WORDLISTS[cat].findIndex(x => x.path === current);
+      if(idx >= 0){ found = {cat, idx}; break; }
+    }
+    if(found){
+      catSel.value = found.cat;
+      fillPresets();
+      preSel.value = String(found.idx);
+    }else{
+      catSel.value = Object.keys(WORDLISTS)[0];
+      fillPresets();
+    }
+  }
+
+  // ---------- Tabs ----------
   function renderTabs(){
     const el = $("toolTabs");
     el.innerHTML = "";
@@ -451,525 +586,446 @@
     });
   }
 
-  // ---------- UI: Options ----------
+  // ---------- Options (minimal but useful) ----------
   function renderOptions(){
     const st = getInputs();
-    const ts = state.toolState[state.activeTool];
-    const host = st.target;
-
+    const ts = state.toolState[state.activeTool] || {};
     const container = $("toolOptions");
     container.innerHTML = "";
 
+    // lightweight, only for tools where it matters
     const title = document.createElement("div");
     title.className = "muted small";
-    title.textContent = `Optionen für: ${state.activeTool}`;
+    title.textContent = `Optionen: ${state.activeTool}`;
     container.appendChild(title);
 
-    const wrap = document.createElement("div");
-    wrap.className = "checks";
-    container.appendChild(wrap);
+    const row = document.createElement("div");
+    row.className = "row3";
+    row.style.marginTop = "10px";
+    container.appendChild(row);
 
-    function addCheck(key, label, help){
-      const box = document.createElement("div");
-      box.className = "chk";
+    const mkToggle = (label, checked, onChange) => {
+      const w = document.createElement("div");
+      w.style.border = "1px solid var(--line)";
+      w.style.borderRadius = "12px";
+      w.style.padding = "10px";
+      w.style.background = "rgba(0,0,0,.16)";
+      const b = document.createElement("div");
+      b.style.fontSize = "12px";
+      b.style.color = "var(--muted)";
+      b.textContent = label;
       const inp = document.createElement("input");
       inp.type = "checkbox";
-      inp.checked = !!ts[key];
-      inp.onchange = () => { ts[key] = inp.checked; renderCommands(); };
-      const txt = document.createElement("div");
-      txt.innerHTML = `<b>${label}</b><span>${help}</span>`;
-      box.appendChild(inp); box.appendChild(txt);
-      wrap.appendChild(box);
-    }
+      inp.checked = !!checked;
+      inp.style.marginTop = "8px";
+      inp.onchange = () => onChange(inp.checked);
+      w.appendChild(b); w.appendChild(inp);
+      return w;
+    };
 
-    function addSelect(key, label, options, help){
-      const block = document.createElement("div");
-      block.style.gridColumn = "1 / -1";
-      block.style.border = "1px solid var(--line)";
-      block.style.borderRadius = "12px";
-      block.style.padding = "10px";
-      block.style.background = "rgba(0,0,0,.16)";
-      const l = document.createElement("div");
-      l.style.fontSize = "12px";
-      l.style.color = "var(--muted)";
-      l.style.marginBottom = "6px";
-      l.textContent = label;
+    const mkSelect = (label, value, opts, onChange) => {
+      const w = document.createElement("div");
+      w.style.border = "1px solid var(--line)";
+      w.style.borderRadius = "12px";
+      w.style.padding = "10px";
+      w.style.background = "rgba(0,0,0,.16)";
+      const b = document.createElement("div");
+      b.style.fontSize = "12px";
+      b.style.color = "var(--muted)";
+      b.textContent = label;
       const sel = document.createElement("select");
-      sel.style.width = "100%";
-      options.forEach(o=>{
+      sel.style.marginTop = "8px";
+      opts.forEach(o=>{
         const op = document.createElement("option");
         op.value = o.value;
         op.textContent = o.text;
         sel.appendChild(op);
       });
-      sel.value = ts[key];
-      sel.onchange = () => { ts[key] = sel.value; renderCommands(); };
-      const h = document.createElement("div");
-      h.className = "small muted";
-      h.style.marginTop = "6px";
-      h.textContent = help || "";
-      block.appendChild(l); block.appendChild(sel); if(help) block.appendChild(h);
-      container.appendChild(block);
-    }
+      sel.value = value;
+      sel.onchange = () => onChange(sel.value);
+      w.appendChild(b); w.appendChild(sel);
+      return w;
+    };
 
-    function addInput(key, label, placeholder, help){
-      const block = document.createElement("div");
-      block.style.gridColumn = "1 / -1";
-      block.style.border = "1px solid var(--line)";
-      block.style.borderRadius = "12px";
-      block.style.padding = "10px";
-      block.style.background = "rgba(0,0,0,.16)";
-      const l = document.createElement("div");
-      l.style.fontSize = "12px";
-      l.style.color = "var(--muted)";
-      l.style.marginBottom = "6px";
-      l.textContent = label;
-      const inp = document.createElement("input");
-      inp.type = "text";
-      inp.value = ts[key] ?? "";
-      inp.placeholder = placeholder || "";
-      inp.oninput = () => { ts[key] = inp.value; renderCommands(); };
-      const h = document.createElement("div");
-      h.className = "small muted";
-      h.style.marginTop = "6px";
-      h.textContent = help || "";
-      block.appendChild(l); block.appendChild(inp); if(help) block.appendChild(h);
-      container.appendChild(block);
-    }
-
-    function addNumber(key, label, min, max, help){
-      const block = document.createElement("div");
-      block.style.gridColumn = "1 / -1";
-      block.style.border = "1px solid var(--line)";
-      block.style.borderRadius = "12px";
-      block.style.padding = "10px";
-      block.style.background = "rgba(0,0,0,.16)";
-      const l = document.createElement("div");
-      l.style.fontSize = "12px";
-      l.style.color = "var(--muted)";
-      l.style.marginBottom = "6px";
-      l.textContent = label;
-      const inp = document.createElement("input");
-      inp.type = "number";
-      inp.min = min; inp.max = max;
-      inp.value = ts[key];
-      inp.oninput = () => { ts[key] = Number(inp.value || 0); renderCommands(); };
-      const h = document.createElement("div");
-      h.className = "small muted";
-      h.style.marginTop = "6px";
-      h.textContent = help || "";
-      block.appendChild(l); block.appendChild(inp); if(help) block.appendChild(h);
-      container.appendChild(block);
-    }
-
-    // tool specific
     if(state.activeTool === "nmap"){
-      addSelect("scanType", "Scan-Profil", [
-        {value:"default", text:"Default (Top 1000 TCP + Version + Scripts)"},
-        {value:"quick", text:"Quick (Top 100 TCP + Version)"},
-        {value:"full", text:"Full TCP (1-65535 + Version + Scripts)"},
-        {value:"stealth", text:"Stealth (SYN + Version)"},
-      ], "Wähle ein Profil. Ergänzungen via Checkboxen unten.");
-      addCheck("topPorts", "Top Ports (wenn Profil erlaubt)", "setzt --top-ports (schnell) wo sinnvoll");
-      addCheck("scripts", "Default Scripts", "setzt -sC (common scripts)");
-      addCheck("udp", "UDP (Top 50)", "setzt -sU --top-ports 50 (langsam!)");
-      addCheck("vuln", "Vuln Scripts (vorsichtig)", "setzt --script vuln (kann noisy sein)");
-    }
-
-    if(state.activeTool === "web"){
-      addCheck("curl", "curl Request", "Basis-Request + optional Headers");
-      addCheck("headers", "Headers anzeigen", "curl -I / -v je nach Modus");
-      addCheck("robots", "robots.txt & sitemap", "schnell prüfen");
-      addCheck("whatweb", "whatweb", "Technologie-Fingerprinting");
-      addCheck("nikto", "nikto", "Noisy Webscanner (eher wenn nötig)");
-    }
-
-    if(state.activeTool === "gobuster"){
-      addSelect("mode", "Mode", [
-        {value:"dir", text:"dir (Directories/Files)"},
-        {value:"dns", text:"dns (Subdomains)"},
-      ], "dns braucht Domain (Target oder VHOST).");
-      addCheck("useExt", "Extensions nutzen", "nimmt Extensions aus dem Default-Feld");
-      addCheck("addSlash", "Slash erzwingen", "nützlich für dir-mode manchmal");
-      addCheck("ua", "User-Agent setzen", "setzt -a 'Mozilla/5.0'");
-    }
-
-    if(state.activeTool === "ffuf"){
-      addSelect("mode", "Mode", [
-        {value:"dir", text:"dir/file fuzz (FUZZ in URL path)"},
-        {value:"param", text:"param fuzz (FUZZ in ?q=)"},
-        {value:"vhost", text:"vhost fuzz (Host: FUZZ.domain)"},
-      ], "vhost fuzz: VHOST/Domain Feld nutzen.");
-      addSelect("match", "Match/Filter", [
-        {value:"status", text:"Match Status (Default Status-Filter)"},
-        {value:"filter", text:"Filter Status (alles außer …)"},
-        {value:"size", text:"Filter Size (manuell)"},
-      ], "Für viele Targets ist Status-Match okay; Filter ist manchmal besser.");
-      addCheck("follow", "Follow Redirects", "-r");
-      addCheck("rec", "Recursive", "-rec (bei dir fuzz)");
-      addCheck("ac", "AutoCalibrate", "-ac (hilft bei Wildcards)");
-    }
-
-    if(state.activeTool === "ferox"){
-      addNumber("depth", "Depth", 1, 20, "Tiefe der Rekursion (typisch 2–4).");
-      addCheck("recurse", "Recurse", "Standard-Rekursion");
-      addCheck("autoB", "Auto filter 404-ish", "ferox auto-tuning");
-      addCheck("extractLinks", "Extract links", "HTML-Links extrahieren, wenn unterstützt");
-    }
-
-    if(state.activeTool === "smb"){
-      addCheck("enum4", "enum4linux-ng", "gute SMB-Enum Default");
-      addCheck("smbclient", "smbclient -L", "Shares listen");
-      addCheck("crackmapexec", "crackmapexec", "wenn vorhanden (cme smb)");
-      addCheck("sharesOnly", "Nur Shares Fokus", "reduziert Output");
-    }
-
-    if(state.activeTool === "snmp"){
-      addCheck("snmpwalk", "snmpwalk", "Basis walk");
-      addInput("community", "Community", "public", "SNMP Community String");
-      addCheck("v2c", "Version 2c", "sonst v1");
-    }
-
-    if(state.activeTool === "ftp"){
-      addCheck("nmapScripts", "nmap ftp scripts", "ftp-anon, ftp-syst, etc.");
-      addCheck("hydra", "hydra brute (nur wenn nötig)", "User/Pass unten");
-      addInput("user", "User", "anonymous", "Für hydra / ftp login");
-      addInput("pass", "Pass", "anonymous", "Für hydra / ftp login");
-    }
-
-    if(state.activeTool === "ssh"){
-      addCheck("nmapScripts", "nmap ssh scripts", "ssh-hostkey etc.");
-      addCheck("hydra", "hydra brute (nur wenn nötig)", "User unten");
-      addInput("user", "User", "root", "Für hydra ssh");
-    }
-
-    if(state.activeTool === "dns"){
-      addCheck("dig", "dig basics", "A/AAAA/NS/MX + zone transfers attempt");
-      addCheck("dnsrecon", "dnsrecon", "wenn installiert");
-      addCheck("sublist3r", "sublist3r", "wenn installiert");
+      row.appendChild(mkSelect("Profil", ts.scanType, [
+        {value:"default", text:"Default (Top1000 + -sV -sC)"},
+        {value:"quick", text:"Quick (Top100 + -sV)"},
+        {value:"full", text:"Full TCP (-p- + -sV -sC)"},
+      ], v => { ts.scanType = v; renderAll(); }));
+      row.appendChild(mkToggle("UDP Top50", ts.udp, v => { ts.udp = v; renderAll(); }));
+      row.appendChild(mkToggle("Vuln NSE", ts.vuln, v => { ts.vuln = v; renderAll(); }));
+    } else if(state.activeTool === "ffuf"){
+      row.appendChild(mkSelect("Mode", ts.mode, [
+        {value:"dir", text:"Dir/File"},
+        {value:"param", text:"Param"},
+        {value:"vhost", text:"VHOST"},
+      ], v => { ts.mode = v; renderAll(); }));
+      row.appendChild(mkToggle("Recursive", ts.rec, v => { ts.rec = v; renderAll(); }));
+      row.appendChild(mkToggle("AutoCalibrate", ts.ac, v => { ts.ac = v; renderAll(); }));
+    } else if(state.activeTool === "gobuster"){
+      row.appendChild(mkSelect("Mode", ts.mode, [
+        {value:"dir", text:"dir"},
+        {value:"dns", text:"dns"},
+      ], v => { ts.mode = v; renderAll(); }));
+      row.appendChild(mkToggle("Extensions", ts.useExt, v => { ts.useExt = v; renderAll(); }));
+      row.appendChild(mkToggle("User-Agent", ts.ua, v => { ts.ua = v; renderAll(); }));
+    } else if(state.activeTool === "ferox"){
+      row.appendChild(mkSelect("Depth", String(ts.depth), [
+        {value:"1", text:"1"},
+        {value:"2", text:"2"},
+        {value:"3", text:"3"},
+        {value:"4", text:"4"},
+      ], v => { ts.depth = Number(v); renderAll(); }));
+      row.appendChild(mkToggle("Extract links", ts.extractLinks, v => { ts.extractLinks = v; renderAll(); }));
+      row.appendChild(mkToggle("Auto-bail", ts.autoB, v => { ts.autoB = v; renderAll(); }));
+    } else {
+      // keep it minimal; show nothing else
+      const msg = document.createElement("div");
+      msg.className = "small muted";
+      msg.style.marginTop = "8px";
+      msg.textContent = "Für dieses Tool keine extra Optionen – die Defaults sind praxisnah.";
+      container.appendChild(msg);
     }
   }
 
-  // ---------- Command Builders ----------
+  // ---------- Parse nmap output ----------
+  function normalizeService(s){
+    s = (s||"").toLowerCase();
+    if(s.includes("microsoft-ds") || s.includes("netbios-ssn") || s.includes("smb")) return "smb";
+    if(s.includes("ssh")) return "ssh";
+    if(s.includes("ftp")) return "ftp";
+    if(s.includes("snmp")) return "snmp";
+    if(s.includes("domain") || s.includes("dns")) return "dns";
+    if(s.includes("http")) return "http";
+    if(s.includes("ldap")) return "ldap";
+    if(s.includes("kerberos")) return "kerberos";
+    if(s.includes("rdp")) return "rdp";
+    return s || "unknown";
+  }
+
+  function parseNmap(text){
+    const lines = safe(text).split(/\r?\n/);
+    const ports = [];
+
+    // Case 1: Grepable -oG lines contain "Ports: 22/open/tcp//ssh///, 80/open/tcp//http///"
+    for(const ln of lines){
+      if(ln.includes("Ports:")){
+        const part = ln.split("Ports:")[1] || "";
+        const items = part.split(",").map(x=>x.trim()).filter(Boolean);
+        for(const it of items){
+          // format: 80/open/tcp//http///
+          const seg = it.split("/");
+          const port = seg[0];
+          const state = seg[1];
+          const proto = seg[2];
+          const service = seg[4] || "";
+          if(state === "open"){
+            ports.push({ port:Number(port), proto:proto || "tcp", service:normalizeService(service), note:"from -oG" });
+          }
+        }
+      }
+    }
+
+    // Case 2: normal nmap output table lines like "22/tcp open ssh OpenSSH 8.2p1 ..."
+    // Only if none yet or to enrich
+    const re = /^(\d+)\/(tcp|udp)\s+open\s+([^\s]+)\s*(.*)$/i;
+    for(const ln of lines){
+      const m = ln.match(re);
+      if(m){
+        const port = Number(m[1]);
+        const proto = m[2].toLowerCase();
+        const svc = normalizeService(m[3]);
+        const rest = safe(m[4]);
+        ports.push({ port, proto, service:svc, note: rest ? rest.slice(0,60) : "from table" });
+      }
+    }
+
+    // merge unique
+    const map = new Map();
+    for(const p of ports){
+      const key = `${p.port}/${p.proto}`;
+      if(!map.has(key)) map.set(key, p);
+      else{
+        const cur = map.get(key);
+        // prefer more informative note
+        if((cur.note||"").length < (p.note||"").length) map.set(key, p);
+      }
+    }
+
+    state.ports = [...map.values()].sort((a,b)=> a.port - b.port || a.proto.localeCompare(b.proto));
+    autoSuggestFromPorts();
+  }
+
+  // ---------- Auto-suggest tools from ports ----------
+  function autoSuggestFromPorts(){
+    const services = new Set(state.ports.map(p => normalizeService(p.service)));
+    // Flip proto based on 443/https-ish
+    if(state.ports.some(p => Number(p.port)===443 || (p.service||"").toLowerCase().includes("https"))){
+      $("proto").value = "https";
+    }
+    // helpful tool focus: if web exists -> runbook by default; else nmap
+    if(services.has("http")) state.activeTool = "runbook";
+    else if(services.has("smb")) state.activeTool = "smb";
+    else state.activeTool = "nmap";
+  }
+
+  // ---------- Services UI ----------
+  function renderPortsAndServices(){
+    const chips = $("serviceChips");
+    chips.innerHTML = "";
+
+    const tbody = $("portsTbody");
+    tbody.innerHTML = "";
+
+    const table = $("portsTable");
+    if(state.ports.length === 0){
+      table.style.display = "none";
+      $("summaryPill").textContent = "no ports parsed";
+      return;
+    }
+    table.style.display = "";
+    $("summaryPill").textContent = `${state.ports.length} ports`;
+
+    // services summary
+    const svcCount = {};
+    for(const p of state.ports){
+      const s = normalizeService(p.service);
+      svcCount[s] = (svcCount[s]||0) + 1;
+    }
+    Object.entries(svcCount)
+      .sort((a,b)=>b[1]-a[1])
+      .forEach(([svc,cnt])=>{
+        const c = document.createElement("div");
+        c.className = "chip ok";
+        if(svc === "http") c.className = "chip purple";
+        if(["rdp","kerberos","ldap"].includes(svc)) c.className = "chip warn";
+        c.innerHTML = `<b>${svc}</b><span>${cnt}</span>`;
+        chips.appendChild(c);
+      });
+
+    // ports table
+    for(const p of state.ports){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${p.port}</td>
+        <td>${p.proto}</td>
+        <td>${p.service}</td>
+        <td class="muted">${escapeHtml(p.note||"")}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, (c)=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
+
+  // ---------- Commands ----------
   function buildCommands(){
     const st = getInputs();
-    const ts = state.toolState[state.activeTool];
-    const target = st.target;
-    const url = buildBaseUrl(st);
     const exts = joinExts(st.exts);
-    const threads = st.threads;
     const wl = st.wordlist;
+    const threads = st.threads;
     const sf = st.statusFilter;
     const tag = fileTag();
 
-    if(isEmpty(target)){
-      return [{ title:"Input fehlt", meta:"", cmd:"# Bitte Ziel-IP/Host eingeben.", hint:"" }];
+    if(isEmpty(st.target)){
+      return [{ title:"Input fehlt", meta:"", cmd:"# Bitte Ziel-IP/Host eingeben." }];
     }
 
     const cmds = [];
 
+    const add = (title, meta, cmd) => cmds.push({ title, meta, cmd });
+
+    // Convenience: ports by service
+    const tcpOpen = state.ports.filter(p => p.proto === "tcp").map(p=>Number(p.port));
+    const has = (svc) => state.ports.some(p => normalizeService(p.service) === svc);
+    const smbPort = state.ports.find(p => normalizeService(p.service)==="smb")?.port || 445;
+
+    // --- runbook (best order) ---
+    if(state.activeTool === "runbook"){
+      add("Recon: nmap (default)", "Step 1", nmapCmd(st, tag, "default"));
+      add("Recon: nmap full TCP", "Step 2", nmapCmd(st, tag, "full"));
+      add("Recon: nmap UDP (optional)", "Optional", `sudo nmap -sU --top-ports 50 -sV ${st.target} -oA nmap_udp_${st.target}_${tag}`);
+
+      if(has("http")){
+        const ports = webPorts();
+        for(const p of ports){
+          const url = baseUrlFor(p, st);
+          add(`Web quick check (${p})`, "Web", `curl -sS "${url}/"`);
+          add(`whatweb (${p})`, "Web", `whatweb "${url}/"`);
+          add(`ffuf dir (${p})`, "Web", ffufDirCmd(st, url, wl, threads, exts, sf, tag));
+          add(`ferox (${p})`, "Web", feroxCmd(st, url, wl, threads, exts, tag));
+        }
+      }
+
+      if(has("smb")){
+        add("SMB enum4linux-ng", "SMB", `enum4linux-ng -A ${st.target}`);
+        add("SMB shares", "SMB", `smbclient -L //${st.target}/ -N`);
+        add("SMB nmap scripts", "SMB", `sudo nmap -p ${smbPort} --script smb-os-discovery,smb-enum-shares,smb-enum-users ${st.target}`);
+      }
+
+      if(has("ssh")){
+        add("SSH nmap scripts", "SSH", `sudo nmap -p 22 --script ssh-hostkey,ssh2-enum-algos ${st.target}`);
+        add("SSH connect", "SSH", `ssh <user>@${st.target}`);
+      }
+
+      if(has("ftp")){
+        add("FTP nmap scripts", "FTP", `sudo nmap -p 21 --script ftp-anon,ftp-syst,ftp-bounce ${st.target}`);
+        add("FTP login", "FTP", `ftp ${st.target}`);
+      }
+
+      if(has("snmp")){
+        add("SNMP walk (sysDescr)", "SNMP", `snmpwalk -v 2c -c public ${st.target} 1.3.6.1.2.1.1`);
+        add("SNMP nmap info", "SNMP", `sudo nmap -p 161 --script snmp-info ${st.target}`);
+      }
+
+      if(has("dns")){
+        const dom = st.vhost || "<domain>";
+        add("DNS dig A", "DNS", `dig A ${dom}`);
+        add("DNS dig NS", "DNS", `dig NS ${dom}`);
+        add("DNS zone xfer (try)", "DNS", `dig axfr ${dom} @ns1.${dom}`);
+      }
+
+      return cmds;
+    }
+
     // --- nmap ---
     if(state.activeTool === "nmap"){
-      const sudo = prefixSudo(st);
-      let base = `${sudo}nmap`;
-      const out = st.saveFiles ? ` -oA nmap_${target}_${tag}` : "";
-
-      if(ts.scanType === "quick"){
-        base += ` --top-ports 100 -sV`;
-        if(ts.scripts) base += ` -sC`;
-      }else if(ts.scanType === "full"){
-        base += ` -p- -sV`;
-        if(ts.scripts) base += ` -sC`;
-      }else if(ts.scanType === "stealth"){
-        base += ` -sS -sV`;
-        if(ts.scripts) base += ` -sC`;
-      }else{ // default
-        base += ` -sV`;
-        if(ts.topPorts) base += ` --top-ports 1000`;
-        if(ts.scripts) base += ` -sC`;
+      add("TCP Scan (default)", "Discovery", nmapCmd(st, tag, state.toolState.nmap.scanType));
+      if(state.toolState.nmap.udp){
+        add("UDP Top50", "Slow", `sudo nmap -sU --top-ports 50 -sV ${st.target} -oA nmap_udp_${st.target}_${tag}`);
       }
-
-      if(ts.vuln) base += ` --script vuln`;
-      base += ` ${target}${out}`;
-
-      cmds.push({
-        title:"TCP Scan",
-        meta:"Discovery",
-        cmd: base
-      });
-
-      if(ts.udp){
-        const uout = st.saveFiles ? ` -oA nmap_udp_${target}_${tag}` : "";
-        cmds.push({
-          title:"UDP Scan (Top 50)",
-          meta:"Slow",
-          cmd: `${sudo}nmap -sU --top-ports 50 -sV ${target}${uout}`
-        });
+      if(state.toolState.nmap.vuln){
+        add("NSE vuln", "Noisy", `sudo nmap -sV -sC --script vuln ${st.target} -oA nmap_vuln_${st.target}_${tag}`);
       }
-
-      cmds.push({
-        title:"Live hosts (Ping sweep /24)",
-        meta:"Optional",
-        cmd: `${sudo}nmap -sn ${target}/24`
-      });
-
-      cmds.push({
-        title:"NSE: HTTP enum on port",
-        meta:"When web found",
-        cmd: `${sudo}nmap -p ${st.portWeb} --script http-enum,http-title,http-headers ${target}`
-      });
+      add("Ping sweep /24", "Optional", `sudo nmap -sn ${st.target}/24`);
     }
 
-    // --- web basics ---
+    // --- web ---
     if(state.activeTool === "web"){
-      if(ts.curl){
-        const hdr = ts.headers ? "-i " : "";
-        const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
-        cmds.push({
-          title:"curl (base request)",
-          meta:"HTTP",
-          cmd: `curl ${hdr}-sS ${hostHdr} "${url}/"`
-        });
-      }
-      if(ts.robots){
-        cmds.push({
-          title:"robots.txt",
-          meta:"HTTP",
-          cmd: `curl -sS "${url}/robots.txt"`
-        });
-        cmds.push({
-          title:"sitemap.xml",
-          meta:"HTTP",
-          cmd: `curl -sS "${url}/sitemap.xml"`
-        });
-      }
-      if(ts.whatweb){
-        const hostHdr = st.vhost ? ` --header "Host: ${st.vhost}"` : "";
-        cmds.push({
-          title:"whatweb",
-          meta:"Fingerprint",
-          cmd: `whatweb ${hostHdr} "${url}/"`
-        });
-      }
-      if(ts.nikto){
-        const host = st.vhost ? ` -vhost ${st.vhost}` : "";
-        cmds.push({
-          title:"nikto",
-          meta:"Noisy",
-          cmd: `nikto -h "${url}"${host}`
-        });
-      }
-    }
-
-    // --- gobuster ---
-    if(state.activeTool === "gobuster"){
-      const ua = ts.ua ? ` -a "Mozilla/5.0"` : "";
-      if(ts.mode === "dns"){
-        const domain = st.vhost || target;
-        cmds.push({
-          title:"gobuster dns",
-          meta:"Subdomains",
-          cmd: `gobuster dns -d ${domain} -w ${wl} -t ${threads}${ua}`
-        });
-      } else {
-        const u = st.useUrl ? url : target;
-        const e = (ts.useExt && exts) ? ` -x ${exts}` : "";
-        const slash = ts.addSlash ? " -f" : "";
-        const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
-        const out = st.saveFiles ? ` -o gobuster_${target}_${tag}.txt` : "";
-        cmds.push({
-          title:"gobuster dir",
-          meta:"Web content",
-          cmd: `gobuster dir -u "${u}/" -w ${wl} -t ${threads}${e}${slash}${ua}${hostHdr}${out}`
-        });
+      const ports = webPorts();
+      for(const p of ports){
+        const url = baseUrlFor(p, st);
+        add(`curl (${p})`, "HTTP", `curl -sS "${url}/"`);
+        add(`robots/sitemap (${p})`, "HTTP", `curl -sS "${url}/robots.txt" && echo && curl -sS "${url}/sitemap.xml"`);
+        add(`whatweb (${p})`, "Fingerprint", `whatweb "${url}/"`);
+        if(state.toolState.web.nikto) add(`nikto (${p})`, "Noisy", `nikto -h "${url}"`);
       }
     }
 
     // --- ffuf ---
     if(state.activeTool === "ffuf"){
-      const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
-      const out = st.saveFiles ? ` -o ffuf_${target}_${tag}.json -of json` : "";
-      const follow = ts.follow ? " -r" : "";
-      const ac = ts.ac ? " -ac" : "";
-      const rec = (ts.rec && ts.mode === "dir") ? " -rec -rec-depth 2" : "";
-
-      let filter = "";
-      if(ts.match === "status"){
-        filter = sf ? ` -mc ${sf}` : "";
-      } else if(ts.match === "filter"){
-        // filter everything EXCEPT these statuses (common alt mode)
-        filter = sf ? ` -fc ${sf}` : "";
-      } else if(ts.match === "size"){
-        filter = ` -fs 0`;
+      const ports = webPorts();
+      for(const p of ports){
+        const url = baseUrlFor(p, st);
+        if(state.toolState.ffuf.mode === "param"){
+          add(`ffuf param (${p})`, "Fuzz", `ffuf -w ${wl} -u "${url}/?q=FUZZ" -t ${threads} -mc ${sf} -ac -o ffuf_${st.target}_${p}_${tag}.json -of json`);
+        } else if(state.toolState.ffuf.mode === "vhost"){
+          const dom = st.vhost || "<domain>";
+          add(`ffuf vhost (${p})`, "Fuzz", `ffuf -w ${wl} -u "${url}/" -H "Host: FUZZ.${dom}" -t ${threads} -mc ${sf} -ac -o ffuf_vhost_${st.target}_${p}_${tag}.json -of json`);
+        } else {
+          add(`ffuf dir (${p})`, "Fuzz", ffufDirCmd(st, url, wl, threads, exts, sf, tag, p));
+        }
       }
+    }
 
-      if(ts.mode === "vhost"){
-        const dom = st.vhost || target;
-        cmds.push({
-          title:"ffuf vhost fuzz",
-          meta:"Host header",
-          cmd: `ffuf -w ${wl} -u "${url}/" -H "Host: FUZZ.${dom}" -t ${threads}${filter}${follow}${ac}${out}`
-        });
-      } else if(ts.mode === "param"){
-        cmds.push({
-          title:"ffuf param fuzz",
-          meta:"Query string",
-          cmd: `ffuf -w ${wl} -u "${url}/?q=FUZZ" -t ${threads}${filter}${follow}${ac}${out}`
-        });
+    // --- gobuster ---
+    if(state.activeTool === "gobuster"){
+      if(state.toolState.gobuster.mode === "dns"){
+        const dom = st.vhost || st.target;
+        add("gobuster dns", "Subdomains", `gobuster dns -d ${dom} -w ${wl} -t ${threads}`);
       } else {
-        const e = exts ? ` -e .${csvToList(st.exts).join(",.")}` : "";
-        cmds.push({
-          title:"ffuf dir/file fuzz",
-          meta:"Path fuzz",
-          cmd: `ffuf -w ${wl} -u "${url}/FUZZ" -t ${threads}${e}${filter}${follow}${ac}${rec}${hostHdr}${out}`
-        });
+        const ports = webPorts();
+        for(const p of ports){
+          const url = baseUrlFor(p, st);
+          const ua = state.toolState.gobuster.ua ? ` -a "Mozilla/5.0"` : "";
+          const x = (state.toolState.gobuster.useExt && exts) ? ` -x ${exts}` : "";
+          add(`gobuster dir (${p})`, "Enum", `gobuster dir -u "${url}/" -w ${wl} -t ${threads}${x}${ua} -o gobuster_${st.target}_${p}_${tag}.txt`);
+        }
       }
     }
 
-    // --- feroxbuster ---
+    // --- ferox ---
     if(state.activeTool === "ferox"){
-      const u = url;
-      const out = st.saveFiles ? ` -o ferox_${target}_${tag}.txt` : "";
-      const depth = Math.max(1, Number(ts.depth || 2));
-      const ex = exts ? ` -x ${exts}` : "";
-      const rec = ts.recurse ? "" : " --no-recursion";
-      const ab = ts.autoB ? " --auto-bail" : "";
-      const el = ts.extractLinks ? " --extract-links" : "";
-      const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
-      cmds.push({
-        title:"feroxbuster",
-        meta:"Fast enum",
-        cmd: `feroxbuster -u "${u}/" -w ${wl} -t ${threads} -d ${depth}${ex}${rec}${ab}${el}${hostHdr}${out}`
-      });
+      const ports = webPorts();
+      for(const p of ports){
+        const url = baseUrlFor(p, st);
+        add(`ferox (${p})`, "Enum", feroxCmd(st, url, wl, threads, exts, tag, p));
+      }
     }
 
-    // --- SMB ---
+    // --- smb ---
     if(state.activeTool === "smb"){
-      if(ts.enum4){
-        cmds.push({
-          title:"enum4linux-ng",
-          meta:"SMB enum",
-          cmd: `enum4linux-ng -A ${target}`
-        });
-      }
-      if(ts.smbclient){
-        cmds.push({
-          title:"smbclient shares",
-          meta:"List shares",
-          cmd: `smbclient -L //${target}/ -N`
-        });
-        cmds.push({
-          title:"smbclient connect (example)",
-          meta:"Try share",
-          cmd: `smbclient //${target}/SHARE -N`
-        });
-      }
-      if(ts.crackmapexec){
-        cmds.push({
-          title:"crackmapexec smb",
-          meta:"If installed",
-          cmd: `crackmapexec smb ${target} --shares`
-        });
-      }
-      if(!ts.sharesOnly){
-        cmds.push({
-          title:"nmap smb scripts",
-          meta:"SMB NSE",
-          cmd: `${prefixSudo(st)}nmap -p 445 --script smb-os-discovery,smb-enum-shares,smb-enum-users ${target}`
-        });
+      add("enum4linux-ng", "SMB", `enum4linux-ng -A ${st.target}`);
+      add("smbclient shares", "SMB", `smbclient -L //${st.target}/ -N`);
+      add("nmap smb scripts", "SMB", `sudo nmap -p 445 --script smb-os-discovery,smb-enum-shares,smb-enum-users ${st.target}`);
+      if(state.toolState.smb.cme){
+        add("crackmapexec shares", "SMB", `crackmapexec smb ${st.target} --shares`);
       }
     }
 
-    // --- SNMP ---
+    // --- snmp ---
     if(state.activeTool === "snmp"){
-      const comm = safe(ts.community || "public");
-      const ver = ts.v2c ? "2c" : "1";
-      if(ts.snmpwalk){
-        cmds.push({
-          title:"snmpwalk",
-          meta:"Enum",
-          cmd: `snmpwalk -v ${ver} -c ${comm} ${target} 1.3.6.1.2.1.1`
-        });
-        cmds.push({
-          title:"snmpwalk full (can be huge)",
-          meta:"Enum",
-          cmd: `snmpwalk -v ${ver} -c ${comm} ${target} 1.3.6.1.2.1`
-        });
-      }
-      cmds.push({
-        title:"nmap snmp-info",
-        meta:"NSE",
-        cmd: `${prefixSudo(st)}nmap -p 161 --script snmp-info ${target}`
-      });
+      const comm = safe(state.toolState.snmp.community || "public");
+      const ver = state.toolState.snmp.v2c ? "2c" : "1";
+      add("snmpwalk sysDescr", "SNMP", `snmpwalk -v ${ver} -c ${comm} ${st.target} 1.3.6.1.2.1.1`);
+      add("snmpwalk full", "SNMP", `snmpwalk -v ${ver} -c ${comm} ${st.target} 1.3.6.1.2.1`);
+      add("nmap snmp-info", "SNMP", `sudo nmap -p 161 --script snmp-info ${st.target}`);
     }
 
-    // --- FTP ---
+    // --- ftp ---
     if(state.activeTool === "ftp"){
-      if(ts.nmapScripts){
-        cmds.push({
-          title:"nmap ftp scripts",
-          meta:"NSE",
-          cmd: `${prefixSudo(st)}nmap -p 21 --script ftp-anon,ftp-syst,ftp-bounce,ftp-proftpd-backdoor ${target}`
-        });
-      }
-      cmds.push({
-        title:"ftp login",
-        meta:"Try",
-        cmd: `ftp ${target}`
-      });
-      if(ts.hydra){
-        const u = safe(ts.user || "anonymous");
-        const p = safe(ts.pass || "anonymous");
-        cmds.push({
-          title:"hydra ftp (single cred)",
-          meta:"Brute (careful)",
-          cmd: `hydra -l ${u} -p ${p} ftp://${target}`
-        });
-      }
+      add("nmap ftp scripts", "FTP", `sudo nmap -p 21 --script ftp-anon,ftp-syst,ftp-bounce ${st.target}`);
+      add("ftp login", "FTP", `ftp ${st.target}`);
     }
 
-    // --- SSH ---
+    // --- ssh ---
     if(state.activeTool === "ssh"){
-      if(ts.nmapScripts){
-        cmds.push({
-          title:"nmap ssh scripts",
-          meta:"NSE",
-          cmd: `${prefixSudo(st)}nmap -p 22 --script ssh-hostkey,ssh2-enum-algos ${target}`
-        });
-      }
-      cmds.push({
-        title:"ssh connect",
-        meta:"Try",
-        cmd: `ssh ${safe(ts.user || "root")}@${target}`
-      });
-      if(ts.hydra){
-        const u = safe(ts.user || "root");
-        cmds.push({
-          title:"hydra ssh (wordlist pass)",
-          meta:"Brute (careful)",
-          cmd: `hydra -l ${u} -P ${wl} ssh://${target}`
-        });
-      }
+      add("nmap ssh scripts", "SSH", `sudo nmap -p 22 --script ssh-hostkey,ssh2-enum-algos ${st.target}`);
+      add("ssh connect", "SSH", `ssh <user>@${st.target}`);
     }
 
-    // --- DNS ---
+    // --- dns ---
     if(state.activeTool === "dns"){
-      const domain = st.vhost || target;
-      if(ts.dig){
-        cmds.push({ title:"dig A", meta:"DNS", cmd:`dig A ${domain}` });
-        cmds.push({ title:"dig NS", meta:"DNS", cmd:`dig NS ${domain}` });
-        cmds.push({ title:"dig MX", meta:"DNS", cmd:`dig MX ${domain}` });
-        cmds.push({ title:"Zone transfer attempt", meta:"DNS", cmd:`dig axfr ${domain} @ns1.${domain}` });
-      }
-      if(ts.dnsrecon){
-        cmds.push({ title:"dnsrecon", meta:"DNS", cmd:`dnsrecon -d ${domain} -t std` });
-      }
-      if(ts.sublist3r){
-        cmds.push({ title:"sublist3r", meta:"OSINT", cmd:`sublist3r -d ${domain}` });
-      }
+      const dom = st.vhost || "<domain>";
+      add("dig A", "DNS", `dig A ${dom}`);
+      add("dig NS", "DNS", `dig NS ${dom}`);
+      add("zone transfer try", "DNS", `dig axfr ${dom} @ns1.${dom}`);
     }
 
     return cmds;
+  }
+
+  function nmapCmd(st, tag, profile){
+    if(profile === "quick"){
+      return `sudo nmap --top-ports 100 -sV ${st.target} -oA nmap_quick_${st.target}_${tag}`;
+    }
+    if(profile === "full"){
+      return `sudo nmap -p- -sV -sC ${st.target} -oA nmap_full_${st.target}_${tag}`;
+    }
+    // default
+    return `sudo nmap --top-ports 1000 -sV -sC ${st.target} -oA nmap_${st.target}_${tag}`;
+  }
+
+  function ffufDirCmd(st, url, wl, threads, exts, sf, tag, port){
+    const e = exts ? ` -e .${csvToList(st.exts).join(",.")}` : "";
+    const rec = state.toolState.ffuf.rec ? " -rec -rec-depth 2" : "";
+    const ac = state.toolState.ffuf.ac ? " -ac" : "";
+    const out = ` -o ffuf_${st.target}_${port||"web"}_${tag}.json -of json`;
+    return `ffuf -w ${wl} -u "${url}/FUZZ" -t ${threads}${e} -mc ${sf}${rec}${ac}${out}`;
+  }
+
+  function feroxCmd(st, url, wl, threads, exts, tag, port){
+    const depth = Math.max(1, Number(state.toolState.ferox.depth || 2));
+    const ex = exts ? ` -x ${exts}` : "";
+    const el = state.toolState.ferox.extractLinks ? " --extract-links" : "";
+    const ab = state.toolState.ferox.autoB ? " --auto-bail" : "";
+    const out = ` -o ferox_${st.target}_${port||"web"}_${tag}.txt`;
+    return `feroxbuster -u "${url}/" -w ${wl} -t ${threads} -d ${depth}${ex}${el}${ab}${out}`;
   }
 
   // ---------- Render Commands ----------
@@ -978,7 +1034,7 @@
     const root = $("commands");
     root.innerHTML = "";
 
-    list.forEach((item, idx) => {
+    list.forEach((item) => {
       const box = document.createElement("div");
       box.className = "cmd";
 
@@ -1009,12 +1065,7 @@
       copyBtn.textContent = "Copy";
       copyBtn.onclick = () => copyToClipboard(item.cmd);
 
-      const copyLineBtn = document.createElement("button");
-      copyLineBtn.textContent = "Copy (1-line)";
-      copyLineBtn.onclick = () => copyToClipboard(item.cmd.replace(/\s*\n\s*/g, " ").trim());
-
       btns.appendChild(copyBtn);
-      btns.appendChild(copyLineBtn);
 
       head.appendChild(left);
       head.appendChild(btns);
@@ -1028,90 +1079,222 @@
     });
   }
 
-  // ---------- Presets ----------
-  function applyPreset(kind){
+  // ---------- Markdown Export ----------
+  function makeMarkdown(){
     const st = getInputs();
-    if(kind === "web"){
-      $("proto").value = "http";
-      $("portWeb").value = 80;
-      state.activeTool = "nmap";
-      state.toolState.nmap.scanType = "default";
-      state.toolState.nmap.scripts = true;
-      state.toolState.nmap.vuln = false;
-      state.toolState.web.nikto = false;
-      state.toolState.ffuf.mode = "dir";
-    } else if(kind === "smb"){
-      state.activeTool = "smb";
-      // nmap focus SMB
-      state.toolState.smb.enum4 = true;
-      state.toolState.smb.smbclient = true;
-      state.toolState.smb.crackmapexec = false;
-    } else if(kind === "ad"){
-      // lightweight: DNS/LDAP-ish (user can add their own)
-      state.activeTool = "dns";
-      $("vhost").value = $("vhost").value || "domain.local";
-    }
-    renderAll();
-    showToast("Preset angewendet");
+    const list = buildCommands();
+    const tag = fileTag();
+
+    const portsMd = state.ports.length
+      ? state.ports.map(p => `- \`${p.port}/${p.proto}\` **${p.service}**  ${p.note ? `(${p.note})` : ""}`).join("\n")
+      : "- (keine Ports geparsed)";
+
+    const cmdsMd = list.map(x => `### ${x.title}\n*${x.meta || ""}*\n\`\`\`bash\n${x.cmd}\n\`\`\``).join("\n\n");
+
+    return `# THM Room Notes: ${st.roomName || "(no-name)"}\n\n` +
+      `**Target:** \`${st.target}\`\n\n` +
+      (st.vhost ? `**VHOST/Domain:** \`${st.vhost}\`\n\n` : "") +
+      `**Generated:** ${tag}\n\n` +
+      `## Ports / Services\n${portsMd}\n\n` +
+      `## Commands\n\n${cmdsMd}\n`;
   }
 
-  function resetAll(){
-    $("target").value = "10.10.10.10";
-    $("proto").value = "http";
-    $("portWeb").value = 80;
-    $("wordlist").value = "/usr/share/wordlists/dirb/common.txt";
-    $("threads").value = 50;
-    $("exts").value = "php,txt,html";
-    $("statusFilter").value = "200,204,301,302,307,401,403";
-    $("vhost").value = "";
-    $("sudo").checked = false;
-    $("aggressive").checked = true;
-    $("saveFiles").checked = true;
-    $("useUrl").checked = true;
+  // ---------- Profiles (LocalStorage) ----------
+  const LS_KEY = "thm_room_cmd_center_profiles_v1";
 
-    // reset tool state quickly
-    state.activeTool = "nmap";
-    state.toolState = {
-      nmap: { scanType:"default", udp:false, topPorts:true, scripts:true, vuln:false },
-      web:  { whatweb:true, nikto:false, curl:true, headers:false, robots:true },
-      gobuster: { mode:"dir", dns:false, useExt:true, addSlash:false, ua:true },
-      ffuf: { mode:"dir", vhost:false, rec:true, match:"status", follow:false, ac:false },
-      ferox: { depth:2, recurse:true, autoB:true, extractLinks:true },
-      smb: { enum4:true, smbclient:true, crackmapexec:false, sharesOnly:false },
-      snmp: { snmpwalk:true, community:"public", v2c:true },
-      ftp: { nmapScripts:true, hydra:false, user:"anonymous", pass:"anonymous" },
-      ssh: { nmapScripts:true, hydra:false, user:"root" },
-      dns: { dig:true, dnsrecon:false, sublist3r:false },
+  function loadProfiles(){
+    try{
+      return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+    }catch(e){
+      return {};
+    }
+  }
+  function saveProfiles(obj){
+    localStorage.setItem(LS_KEY, JSON.stringify(obj));
+  }
+
+  function setProfilePill(name){
+    $("profilePill").textContent = name ? `Profil: ${name}` : "kein Profil";
+  }
+
+  function saveProfile(){
+    const st = getInputs();
+    const name = st.roomName;
+    if(!name){ showToast("Room/Profil-Name fehlt"); return; }
+
+    const profiles = loadProfiles();
+    profiles[name] = {
+      inputs: {
+        target: st.target, proto: st.proto, threads: st.threads, vhost: st.vhost,
+        statusFilter: st.statusFilter, exts: st.exts, wordlist: st.wordlist,
+        wlCategory: $("wlCategory").value, wlPreset: $("wlPreset").value,
+        nmapPaste: $("nmapPaste").value
+      },
+      ports: state.ports,
+      toolState: state.toolState
+    };
+    saveProfiles(profiles);
+    setProfilePill(name);
+    showToast("Profil gespeichert ✓");
+  }
+
+  function loadProfile(){
+    const name = safe($("roomName").value);
+    if(!name){ showToast("Room/Profil-Name fehlt"); return; }
+    const profiles = loadProfiles();
+    const p = profiles[name];
+    if(!p){ showToast("Profil nicht gefunden"); return; }
+
+    // inputs
+    $("target").value = p.inputs?.target ?? $("target").value;
+    $("proto").value = p.inputs?.proto ?? $("proto").value;
+    $("threads").value = p.inputs?.threads ?? $("threads").value;
+    $("vhost").value = p.inputs?.vhost ?? "";
+    $("statusFilter").value = p.inputs?.statusFilter ?? $("statusFilter").value;
+    $("exts").value = p.inputs?.exts ?? $("exts").value;
+    $("wordlist").value = p.inputs?.wordlist ?? $("wordlist").value;
+    $("nmapPaste").value = p.inputs?.nmapPaste ?? "";
+
+    // wordlist selectors
+    if(p.inputs?.wlCategory) $("wlCategory").value = p.inputs.wlCategory;
+    // refill presets then set
+    refillWLPresets();
+    if(p.inputs?.wlPreset) $("wlPreset").value = p.inputs.wlPreset;
+    // ensure wordlist consistent with selection if desired (but keep saved path)
+    $("wordlist").value = p.inputs?.wordlist ?? $("wordlist").value;
+
+    state.ports = Array.isArray(p.ports) ? p.ports : [];
+    state.toolState = p.toolState || state.toolState;
+
+    autoSuggestFromPorts();
+    setProfilePill(name);
+    showToast("Profil geladen ✓");
+    renderAll();
+  }
+
+  function deleteProfile(){
+    const name = safe($("roomName").value);
+    if(!name){ showToast("Room/Profil-Name fehlt"); return; }
+    const profiles = loadProfiles();
+    if(!profiles[name]){ showToast("Profil nicht gefunden"); return; }
+    delete profiles[name];
+    saveProfiles(profiles);
+    setProfilePill("");
+    showToast("Profil gelöscht ✓");
+  }
+
+  // ---------- Wordlist preset helper ----------
+  function refillWLPresets(){
+    const catSel = $("wlCategory");
+    const preSel = $("wlPreset");
+    preSel.innerHTML = "";
+    const cat = catSel.value;
+    const items = WORDLISTS[cat] || [];
+    items.forEach((it, idx) => {
+      const o = document.createElement("option");
+      o.value = String(idx);
+      o.textContent = it.name;
+      preSel.appendChild(o);
+    });
+  }
+
+  // ---------- Wire UI ----------
+  function wireBasics(){
+    // Inputs rerender
+    ["target","proto","threads","vhost","statusFilter","exts","wordlist"].forEach(id=>{
+      $(id).addEventListener("input", renderAll);
+      $(id).addEventListener("change", renderAll);
+    });
+
+    $("parseNmap").onclick = () => {
+      parseNmap($("nmapPaste").value);
+      renderAll();
+      showToast(state.ports.length ? "Ports erkannt ✓" : "Keine Ports gefunden");
+    };
+    $("clearPorts").onclick = () => {
+      state.ports = [];
+      renderAll();
+      showToast("Ports reset");
     };
 
-    renderAll();
-    showToast("Reset ✓");
+    $("saveProfile").onclick = saveProfile;
+    $("loadProfile").onclick = loadProfile;
+    $("deleteProfile").onclick = deleteProfile;
+
+    $("copyRunbook").onclick = () => {
+      const prev = state.activeTool;
+      state.activeTool = "runbook";
+      const txt = buildCommands().map(x => x.cmd).join("\n\n");
+      state.activeTool = prev;
+      copyToClipboard(txt);
+    };
+
+    $("copyMarkdown").onclick = () => copyToClipboard(makeMarkdown());
+
+    $("downloadMarkdown").onclick = () => {
+      const md = makeMarkdown();
+      const blob = new Blob([md], {type:"text/markdown;charset=utf-8"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      const st = getInputs();
+      a.download = `thm_${(st.roomName || "room").replace(/[^\w\-]+/g,"_")}_${fileTag()}.md`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast("Download gestartet");
+    };
   }
 
   // ---------- Render All ----------
   function renderAll(){
     renderTabs();
     renderOptions();
+    renderPortsAndServices();
     renderCommands();
+    // profile pill if roomName exists and saved
+    const name = safe($("roomName").value);
+    const profiles = loadProfiles();
+    setProfilePill(name && profiles[name] ? name : (name ? "(unsaved)" : ""));
   }
 
-  // ---------- Wire inputs ----------
-  ["target","proto","portWeb","wordlist","threads","exts","statusFilter","vhost","sudo","aggressive","saveFiles","useUrl"]
-    .forEach(id => {
-      const el = $(id);
-      const ev = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" : "input";
-      el.addEventListener(ev, () => {
-        renderCommands();
-      });
+  // ---------- Init ----------
+  function init(){
+    renderWordlists();
+
+    // set category/preset initial controls properly
+    $("wlCategory").onchange = () => {
+      refillWLPresets();
+      const cat = $("wlCategory").value;
+      const items = WORDLISTS[cat] || [];
+      if(items[0]) $("wordlist").value = items[0].path;
+      renderAll();
+    };
+    $("wlPreset").onchange = () => {
+      const cat = $("wlCategory").value;
+      const items = WORDLISTS[cat] || [];
+      const idx = Number($("wlPreset").value || 0);
+      if(items[idx]) $("wordlist").value = items[idx].path;
+      renderAll();
+    };
+
+    wireBasics();
+    renderAll();
+  }
+
+  // make tabs clickable
+  function renderTabs(){
+    const el = $("toolTabs");
+    el.innerHTML = "";
+    tools.forEach(t => {
+      const b = document.createElement("div");
+      b.className = "toolTab" + (state.activeTool === t.id ? " active" : "");
+      b.textContent = t.label;
+      b.onclick = () => { state.activeTool = t.id; renderAll(); };
+      el.appendChild(b);
     });
+  }
 
-  $("presetWeb").onclick = () => applyPreset("web");
-  $("presetSMB").onclick = () => applyPreset("smb");
-  $("presetAD").onclick = () => applyPreset("ad");
-  $("resetAll").onclick = resetAll;
-
-  // initial
-  renderAll();
+  init();
 })();
 </script>
 </body>
