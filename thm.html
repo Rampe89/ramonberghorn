@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THM Command Generator</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1620;
+      --panel2:#0c131c;
+      --text:#e8eef6;
+      --muted:#9db0c7;
+      --line:#1d2a3a;
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:radial-gradient(1100px 700px at 20% -10%, rgba(110,231,255,.12), transparent 60%),
+                 radial-gradient(900px 600px at 80% 0%, rgba(167,139,250,.12), transparent 55%),
+                 var(--bg);
+    }
+    header{
+      position:sticky; top:0; z-index:5;
+      background:linear-gradient(to bottom, rgba(11,15,20,.92), rgba(11,15,20,.70));
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .wrap{max-width:1200px; margin:0 auto; padding:16px}
+    h1{margin:0; font-size:18px; letter-spacing:.2px}
+    .sub{margin-top:4px; color:var(--muted); font-size:13px}
+    main .wrap{padding-top:18px}
+    .grid{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(15,22,32,.85), rgba(12,19,28,.85));
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.25);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:14px;
+      color:#dbe7f7;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(0,0,0,.20);
+    }
+    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
+    input[type="text"], input[type="number"], select{
+      width:100%;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.20);
+      color:var(--text);
+      outline:none;
+    }
+    input[type="text"]::placeholder{color:#6f86a3}
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .row3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 520px){
+      .row, .row3{grid-template-columns:1fr}
+    }
+    .checks{display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px}
+    .checks .chk{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px;
+      background:rgba(0,0,0,.16);
+      display:flex; align-items:flex-start; gap:10px;
+    }
+    .chk input{margin-top:3px}
+    .chk b{display:block; font-size:12px; margin-bottom:2px}
+    .chk span{display:block; font-size:11px; color:var(--muted); line-height:1.25}
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+    button{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      padding:9px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:12px;
+    }
+    button.primary{
+      border-color: rgba(110,231,255,.35);
+      background: rgba(110,231,255,.10);
+    }
+    button.good{
+      border-color: rgba(52,211,153,.35);
+      background: rgba(52,211,153,.10);
+    }
+    button.warn{
+      border-color: rgba(251,191,36,.35);
+      background: rgba(251,191,36,.10);
+    }
+    button:active{transform: translateY(1px)}
+    .muted{color:var(--muted)}
+    .tools{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .toolTab{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      cursor:pointer;
+      font-size:12px;
+      user-select:none;
+    }
+    .toolTab.active{
+      color: var(--text);
+      border-color: rgba(167,139,250,.35);
+      background: rgba(167,139,250,.10);
+    }
+    .cmd{
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      border-radius:14px;
+      padding:10px;
+      margin-top:10px;
+    }
+    pre{
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-family:var(--mono);
+      font-size:12.5px;
+      line-height:1.35;
+      color:#eaf3ff;
+    }
+    .cmdHead{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:8px; margin-bottom:8px;
+    }
+    .cmdHead .left{
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    }
+    .badge{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background: rgba(0,0,0,.14);
+    }
+    .note{
+      margin-top:10px;
+      border:1px dashed rgba(110,231,255,.35);
+      background: rgba(110,231,255,.06);
+      border-radius:14px;
+      padding:10px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .toast{
+      position:fixed;
+      right:14px; bottom:14px;
+      background: rgba(15,22,32,.95);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--text);
+      font-size:12px;
+      opacity:0;
+      transform: translateY(8px);
+      transition: .22s ease;
+      pointer-events:none;
+      box-shadow: 0 12px 28px rgba(0,0,0,.35);
+    }
+    .toast.show{opacity:1; transform: translateY(0)}
+    .small{font-size:11px}
+    .divider{height:1px; background:var(--line); margin:12px 0}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <h1>THM Command Generator <span class="pill">single-file</span></h1>
+      <div class="sub">Ziel-IP/Host rein, Optionen klicken, Befehle copy-pasten. (nmap, gobuster, ffuf, nikto, whatweb, feroxbuster, smb, ldap …)</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="grid">
+        <!-- LEFT: Inputs -->
+        <section class="card">
+          <h2>Target & Defaults <span class="pill">Input</span></h2>
+
+          <label for="target">Ziel (IP / Host)</label>
+          <input id="target" type="text" placeholder="z.B. 10.10.10.10 oder thm.local" value="10.10.10.10" />
+
+          <div class="row">
+            <div>
+              <label for="proto">Protokoll</label>
+              <select id="proto">
+                <option value="http">http</option>
+                <option value="https">https</option>
+              </select>
+            </div>
+            <div>
+              <label for="portWeb">Web-Port</label>
+              <input id="portWeb" type="number" min="1" max="65535" value="80" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="wordlist">Wordlist (Default)</label>
+              <input id="wordlist" type="text" value="/usr/share/wordlists/dirb/common.txt" />
+            </div>
+            <div>
+              <label for="threads">Threads</label>
+              <input id="threads" type="number" min="1" max="400" value="50" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="exts">Extensions</label>
+              <input id="exts" type="text" placeholder="php,txt,html" value="php,txt,html" />
+            </div>
+            <div>
+              <label for="statusFilter">Status-Filter</label>
+              <input id="statusFilter" type="text" placeholder="z.B. 200,204,301,302,307,401,403" value="200,204,301,302,307,401,403" />
+            </div>
+          </div>
+
+          <label for="vhost">VHOST / Domain (optional)</label>
+          <input id="vhost" type="text" placeholder="z.B. thm.local (für Host-Header / vhost fuzz)" />
+
+          <div class="checks">
+            <div class="chk">
+              <input id="sudo" type="checkbox" />
+              <div>
+                <b>sudo</b>
+                <span>setzt bei nmap/lowports „sudo “ davor</span>
+              </div>
+            </div>
+            <div class="chk">
+              <input id="aggressive" type="checkbox" checked />
+              <div>
+                <b>Default: „schnell & sinnvoll“</b>
+                <span>nutzt praxisnahe Defaults (kein Overkill)</span>
+              </div>
+            </div>
+            <div class="chk">
+              <input id="saveFiles" type="checkbox" checked />
+              <div>
+                <b>Output in Dateien</b>
+                <span>nmap -oA, ffuf -o json, etc.</span>
+              </div>
+            </div>
+            <div class="chk">
+              <input id="useUrl" type="checkbox" checked />
+              <div>
+                <b>Web-URL bauen</b>
+                <span>proto://target:port für Web-Tools</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="presetWeb">Preset: Web-Enum</button>
+            <button class="primary" id="presetSMB">Preset: SMB-Enum</button>
+            <button class="primary" id="presetAD">Preset: AD/LDAP</button>
+            <button class="warn" id="resetAll">Reset</button>
+          </div>
+
+          <div class="note">
+            <b class="muted">Hinweis:</b> Du kannst überall IP oder Host eingeben. Für VHOST/Host-Header setz „VHOST/Domain“.
+            Extensions: kommasepariert. Wordlist: Pfad wie auf Kali/AttackBox.
+          </div>
+        </section>
+
+        <!-- RIGHT: Commands -->
+        <section class="card">
+          <h2>Command Sets <span class="pill">Generator</span></h2>
+
+          <div class="tools" id="toolTabs"></div>
+
+          <div id="toolOptions"></div>
+
+          <div class="divider"></div>
+
+          <div id="commands"></div>
+
+          <div class="note small">
+            <b class="muted">Pro-Tipp:</b> Web-Port = 443? Stell Protokoll auf https. Bei mehreren Web-Ports: einfach Port wechseln und copy-pasten.
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">Copied ✓</div>
+
+<script>
+(() => {
+  // ---------- Helpers ----------
+  const $ = (id) => document.getElementById(id);
+
+  const showToast = (msg="Copied ✓") => {
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(showToast._tm);
+    showToast._tm = setTimeout(() => t.classList.remove("show"), 900);
+  };
+
+  const safe = (s) => String(s ?? "").trim();
+  const csvToList = (s) => safe(s).split(",").map(x=>x.trim()).filter(Boolean);
+  const joinExts = (exts) => csvToList(exts).join(",");
+  const isEmpty = (s) => !safe(s);
+
+  const buildBaseUrl = (st) => {
+    const proto = safe(st.proto);
+    const host = safe(st.target);
+    const port = Number(st.portWeb || 80);
+    if (!st.useUrl) return host;
+    const standard = (proto === "http" && port === 80) || (proto === "https" && port === 443);
+    return standard ? `${proto}://${host}` : `${proto}://${host}:${port}`;
+  };
+
+  const prefixSudo = (st) => st.sudo ? "sudo " : "";
+
+  const fileTag = () => {
+    const d = new Date();
+    const pad = (n)=> String(n).padStart(2,"0");
+    return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+  };
+
+  async function copyToClipboard(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      showToast("Copied ✓");
+    }catch(e){
+      // fallback
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      showToast("Copied ✓ (fallback)");
+    }
+  }
+
+  // ---------- State ----------
+  const state = {
+    activeTool: "nmap",
+    toolState: {
+      nmap: { scanType:"default", udp:false, topPorts:true, scripts:true, vuln:false },
+      web:  { whatweb:true, nikto:false, curl:true, headers:false, robots:true },
+      gobuster: { mode:"dir", dns:false, useExt:true, addSlash:false, ua:true },
+      ffuf: { mode:"dir", vhost:false, rec:true, match:"status", follow:false, ac:false },
+      ferox: { depth:2, recurse:true, autoB:true, extractLinks:true },
+      smb: { enum4:true, smbclient:true, crackmapexec:false, sharesOnly:false },
+      snmp: { snmpwalk:true, community:"public", v2c:true },
+      ftp: { nmapScripts:true, hydra:false, user:"anonymous", pass:"anonymous" },
+      ssh: { nmapScripts:true, hydra:false, user:"root" },
+      dns: { dig:true, dnsrecon:false, sublist3r:false },
+    }
+  };
+
+  // ---------- Tool Registry ----------
+  const tools = [
+    { id:"nmap", label:"nmap" },
+    { id:"web", label:"web basics" },
+    { id:"gobuster", label:"gobuster" },
+    { id:"ffuf", label:"ffuf" },
+    { id:"ferox", label:"feroxbuster" },
+    { id:"smb", label:"SMB" },
+    { id:"snmp", label:"SNMP" },
+    { id:"ftp", label:"FTP" },
+    { id:"ssh", label:"SSH" },
+    { id:"dns", label:"DNS" },
+  ];
+
+  function getInputs(){
+    return {
+      target: safe($("target").value),
+      proto: $("proto").value,
+      portWeb: Number($("portWeb").value || 80),
+      wordlist: safe($("wordlist").value),
+      threads: Number($("threads").value || 50),
+      exts: safe($("exts").value),
+      statusFilter: safe($("statusFilter").value),
+      vhost: safe($("vhost").value),
+      sudo: $("sudo").checked,
+      aggressive: $("aggressive").checked,
+      saveFiles: $("saveFiles").checked,
+      useUrl: $("useUrl").checked,
+    };
+  }
+
+  // ---------- UI: Tabs ----------
+  function renderTabs(){
+    const el = $("toolTabs");
+    el.innerHTML = "";
+    tools.forEach(t => {
+      const b = document.createElement("div");
+      b.className = "toolTab" + (state.activeTool === t.id ? " active" : "");
+      b.textContent = t.label;
+      b.onclick = () => { state.activeTool = t.id; renderAll(); };
+      el.appendChild(b);
+    });
+  }
+
+  // ---------- UI: Options ----------
+  function renderOptions(){
+    const st = getInputs();
+    const ts = state.toolState[state.activeTool];
+    const host = st.target;
+
+    const container = $("toolOptions");
+    container.innerHTML = "";
+
+    const title = document.createElement("div");
+    title.className = "muted small";
+    title.textContent = `Optionen für: ${state.activeTool}`;
+    container.appendChild(title);
+
+    const wrap = document.createElement("div");
+    wrap.className = "checks";
+    container.appendChild(wrap);
+
+    function addCheck(key, label, help){
+      const box = document.createElement("div");
+      box.className = "chk";
+      const inp = document.createElement("input");
+      inp.type = "checkbox";
+      inp.checked = !!ts[key];
+      inp.onchange = () => { ts[key] = inp.checked; renderCommands(); };
+      const txt = document.createElement("div");
+      txt.innerHTML = `<b>${label}</b><span>${help}</span>`;
+      box.appendChild(inp); box.appendChild(txt);
+      wrap.appendChild(box);
+    }
+
+    function addSelect(key, label, options, help){
+      const block = document.createElement("div");
+      block.style.gridColumn = "1 / -1";
+      block.style.border = "1px solid var(--line)";
+      block.style.borderRadius = "12px";
+      block.style.padding = "10px";
+      block.style.background = "rgba(0,0,0,.16)";
+      const l = document.createElement("div");
+      l.style.fontSize = "12px";
+      l.style.color = "var(--muted)";
+      l.style.marginBottom = "6px";
+      l.textContent = label;
+      const sel = document.createElement("select");
+      sel.style.width = "100%";
+      options.forEach(o=>{
+        const op = document.createElement("option");
+        op.value = o.value;
+        op.textContent = o.text;
+        sel.appendChild(op);
+      });
+      sel.value = ts[key];
+      sel.onchange = () => { ts[key] = sel.value; renderCommands(); };
+      const h = document.createElement("div");
+      h.className = "small muted";
+      h.style.marginTop = "6px";
+      h.textContent = help || "";
+      block.appendChild(l); block.appendChild(sel); if(help) block.appendChild(h);
+      container.appendChild(block);
+    }
+
+    function addInput(key, label, placeholder, help){
+      const block = document.createElement("div");
+      block.style.gridColumn = "1 / -1";
+      block.style.border = "1px solid var(--line)";
+      block.style.borderRadius = "12px";
+      block.style.padding = "10px";
+      block.style.background = "rgba(0,0,0,.16)";
+      const l = document.createElement("div");
+      l.style.fontSize = "12px";
+      l.style.color = "var(--muted)";
+      l.style.marginBottom = "6px";
+      l.textContent = label;
+      const inp = document.createElement("input");
+      inp.type = "text";
+      inp.value = ts[key] ?? "";
+      inp.placeholder = placeholder || "";
+      inp.oninput = () => { ts[key] = inp.value; renderCommands(); };
+      const h = document.createElement("div");
+      h.className = "small muted";
+      h.style.marginTop = "6px";
+      h.textContent = help || "";
+      block.appendChild(l); block.appendChild(inp); if(help) block.appendChild(h);
+      container.appendChild(block);
+    }
+
+    function addNumber(key, label, min, max, help){
+      const block = document.createElement("div");
+      block.style.gridColumn = "1 / -1";
+      block.style.border = "1px solid var(--line)";
+      block.style.borderRadius = "12px";
+      block.style.padding = "10px";
+      block.style.background = "rgba(0,0,0,.16)";
+      const l = document.createElement("div");
+      l.style.fontSize = "12px";
+      l.style.color = "var(--muted)";
+      l.style.marginBottom = "6px";
+      l.textContent = label;
+      const inp = document.createElement("input");
+      inp.type = "number";
+      inp.min = min; inp.max = max;
+      inp.value = ts[key];
+      inp.oninput = () => { ts[key] = Number(inp.value || 0); renderCommands(); };
+      const h = document.createElement("div");
+      h.className = "small muted";
+      h.style.marginTop = "6px";
+      h.textContent = help || "";
+      block.appendChild(l); block.appendChild(inp); if(help) block.appendChild(h);
+      container.appendChild(block);
+    }
+
+    // tool specific
+    if(state.activeTool === "nmap"){
+      addSelect("scanType", "Scan-Profil", [
+        {value:"default", text:"Default (Top 1000 TCP + Version + Scripts)"},
+        {value:"quick", text:"Quick (Top 100 TCP + Version)"},
+        {value:"full", text:"Full TCP (1-65535 + Version + Scripts)"},
+        {value:"stealth", text:"Stealth (SYN + Version)"},
+      ], "Wähle ein Profil. Ergänzungen via Checkboxen unten.");
+      addCheck("topPorts", "Top Ports (wenn Profil erlaubt)", "setzt --top-ports (schnell) wo sinnvoll");
+      addCheck("scripts", "Default Scripts", "setzt -sC (common scripts)");
+      addCheck("udp", "UDP (Top 50)", "setzt -sU --top-ports 50 (langsam!)");
+      addCheck("vuln", "Vuln Scripts (vorsichtig)", "setzt --script vuln (kann noisy sein)");
+    }
+
+    if(state.activeTool === "web"){
+      addCheck("curl", "curl Request", "Basis-Request + optional Headers");
+      addCheck("headers", "Headers anzeigen", "curl -I / -v je nach Modus");
+      addCheck("robots", "robots.txt & sitemap", "schnell prüfen");
+      addCheck("whatweb", "whatweb", "Technologie-Fingerprinting");
+      addCheck("nikto", "nikto", "Noisy Webscanner (eher wenn nötig)");
+    }
+
+    if(state.activeTool === "gobuster"){
+      addSelect("mode", "Mode", [
+        {value:"dir", text:"dir (Directories/Files)"},
+        {value:"dns", text:"dns (Subdomains)"},
+      ], "dns braucht Domain (Target oder VHOST).");
+      addCheck("useExt", "Extensions nutzen", "nimmt Extensions aus dem Default-Feld");
+      addCheck("addSlash", "Slash erzwingen", "nützlich für dir-mode manchmal");
+      addCheck("ua", "User-Agent setzen", "setzt -a 'Mozilla/5.0'");
+    }
+
+    if(state.activeTool === "ffuf"){
+      addSelect("mode", "Mode", [
+        {value:"dir", text:"dir/file fuzz (FUZZ in URL path)"},
+        {value:"param", text:"param fuzz (FUZZ in ?q=)"},
+        {value:"vhost", text:"vhost fuzz (Host: FUZZ.domain)"},
+      ], "vhost fuzz: VHOST/Domain Feld nutzen.");
+      addSelect("match", "Match/Filter", [
+        {value:"status", text:"Match Status (Default Status-Filter)"},
+        {value:"filter", text:"Filter Status (alles außer …)"},
+        {value:"size", text:"Filter Size (manuell)"},
+      ], "Für viele Targets ist Status-Match okay; Filter ist manchmal besser.");
+      addCheck("follow", "Follow Redirects", "-r");
+      addCheck("rec", "Recursive", "-rec (bei dir fuzz)");
+      addCheck("ac", "AutoCalibrate", "-ac (hilft bei Wildcards)");
+    }
+
+    if(state.activeTool === "ferox"){
+      addNumber("depth", "Depth", 1, 20, "Tiefe der Rekursion (typisch 2–4).");
+      addCheck("recurse", "Recurse", "Standard-Rekursion");
+      addCheck("autoB", "Auto filter 404-ish", "ferox auto-tuning");
+      addCheck("extractLinks", "Extract links", "HTML-Links extrahieren, wenn unterstützt");
+    }
+
+    if(state.activeTool === "smb"){
+      addCheck("enum4", "enum4linux-ng", "gute SMB-Enum Default");
+      addCheck("smbclient", "smbclient -L", "Shares listen");
+      addCheck("crackmapexec", "crackmapexec", "wenn vorhanden (cme smb)");
+      addCheck("sharesOnly", "Nur Shares Fokus", "reduziert Output");
+    }
+
+    if(state.activeTool === "snmp"){
+      addCheck("snmpwalk", "snmpwalk", "Basis walk");
+      addInput("community", "Community", "public", "SNMP Community String");
+      addCheck("v2c", "Version 2c", "sonst v1");
+    }
+
+    if(state.activeTool === "ftp"){
+      addCheck("nmapScripts", "nmap ftp scripts", "ftp-anon, ftp-syst, etc.");
+      addCheck("hydra", "hydra brute (nur wenn nötig)", "User/Pass unten");
+      addInput("user", "User", "anonymous", "Für hydra / ftp login");
+      addInput("pass", "Pass", "anonymous", "Für hydra / ftp login");
+    }
+
+    if(state.activeTool === "ssh"){
+      addCheck("nmapScripts", "nmap ssh scripts", "ssh-hostkey etc.");
+      addCheck("hydra", "hydra brute (nur wenn nötig)", "User unten");
+      addInput("user", "User", "root", "Für hydra ssh");
+    }
+
+    if(state.activeTool === "dns"){
+      addCheck("dig", "dig basics", "A/AAAA/NS/MX + zone transfers attempt");
+      addCheck("dnsrecon", "dnsrecon", "wenn installiert");
+      addCheck("sublist3r", "sublist3r", "wenn installiert");
+    }
+  }
+
+  // ---------- Command Builders ----------
+  function buildCommands(){
+    const st = getInputs();
+    const ts = state.toolState[state.activeTool];
+    const target = st.target;
+    const url = buildBaseUrl(st);
+    const exts = joinExts(st.exts);
+    const threads = st.threads;
+    const wl = st.wordlist;
+    const sf = st.statusFilter;
+    const tag = fileTag();
+
+    if(isEmpty(target)){
+      return [{ title:"Input fehlt", meta:"", cmd:"# Bitte Ziel-IP/Host eingeben.", hint:"" }];
+    }
+
+    const cmds = [];
+
+    // --- nmap ---
+    if(state.activeTool === "nmap"){
+      const sudo = prefixSudo(st);
+      let base = `${sudo}nmap`;
+      const out = st.saveFiles ? ` -oA nmap_${target}_${tag}` : "";
+
+      if(ts.scanType === "quick"){
+        base += ` --top-ports 100 -sV`;
+        if(ts.scripts) base += ` -sC`;
+      }else if(ts.scanType === "full"){
+        base += ` -p- -sV`;
+        if(ts.scripts) base += ` -sC`;
+      }else if(ts.scanType === "stealth"){
+        base += ` -sS -sV`;
+        if(ts.scripts) base += ` -sC`;
+      }else{ // default
+        base += ` -sV`;
+        if(ts.topPorts) base += ` --top-ports 1000`;
+        if(ts.scripts) base += ` -sC`;
+      }
+
+      if(ts.vuln) base += ` --script vuln`;
+      base += ` ${target}${out}`;
+
+      cmds.push({
+        title:"TCP Scan",
+        meta:"Discovery",
+        cmd: base
+      });
+
+      if(ts.udp){
+        const uout = st.saveFiles ? ` -oA nmap_udp_${target}_${tag}` : "";
+        cmds.push({
+          title:"UDP Scan (Top 50)",
+          meta:"Slow",
+          cmd: `${sudo}nmap -sU --top-ports 50 -sV ${target}${uout}`
+        });
+      }
+
+      cmds.push({
+        title:"Live hosts (Ping sweep /24)",
+        meta:"Optional",
+        cmd: `${sudo}nmap -sn ${target}/24`
+      });
+
+      cmds.push({
+        title:"NSE: HTTP enum on port",
+        meta:"When web found",
+        cmd: `${sudo}nmap -p ${st.portWeb} --script http-enum,http-title,http-headers ${target}`
+      });
+    }
+
+    // --- web basics ---
+    if(state.activeTool === "web"){
+      if(ts.curl){
+        const hdr = ts.headers ? "-i " : "";
+        const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
+        cmds.push({
+          title:"curl (base request)",
+          meta:"HTTP",
+          cmd: `curl ${hdr}-sS ${hostHdr} "${url}/"`
+        });
+      }
+      if(ts.robots){
+        cmds.push({
+          title:"robots.txt",
+          meta:"HTTP",
+          cmd: `curl -sS "${url}/robots.txt"`
+        });
+        cmds.push({
+          title:"sitemap.xml",
+          meta:"HTTP",
+          cmd: `curl -sS "${url}/sitemap.xml"`
+        });
+      }
+      if(ts.whatweb){
+        const hostHdr = st.vhost ? ` --header "Host: ${st.vhost}"` : "";
+        cmds.push({
+          title:"whatweb",
+          meta:"Fingerprint",
+          cmd: `whatweb ${hostHdr} "${url}/"`
+        });
+      }
+      if(ts.nikto){
+        const host = st.vhost ? ` -vhost ${st.vhost}` : "";
+        cmds.push({
+          title:"nikto",
+          meta:"Noisy",
+          cmd: `nikto -h "${url}"${host}`
+        });
+      }
+    }
+
+    // --- gobuster ---
+    if(state.activeTool === "gobuster"){
+      const ua = ts.ua ? ` -a "Mozilla/5.0"` : "";
+      if(ts.mode === "dns"){
+        const domain = st.vhost || target;
+        cmds.push({
+          title:"gobuster dns",
+          meta:"Subdomains",
+          cmd: `gobuster dns -d ${domain} -w ${wl} -t ${threads}${ua}`
+        });
+      } else {
+        const u = st.useUrl ? url : target;
+        const e = (ts.useExt && exts) ? ` -x ${exts}` : "";
+        const slash = ts.addSlash ? " -f" : "";
+        const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
+        const out = st.saveFiles ? ` -o gobuster_${target}_${tag}.txt` : "";
+        cmds.push({
+          title:"gobuster dir",
+          meta:"Web content",
+          cmd: `gobuster dir -u "${u}/" -w ${wl} -t ${threads}${e}${slash}${ua}${hostHdr}${out}`
+        });
+      }
+    }
+
+    // --- ffuf ---
+    if(state.activeTool === "ffuf"){
+      const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
+      const out = st.saveFiles ? ` -o ffuf_${target}_${tag}.json -of json` : "";
+      const follow = ts.follow ? " -r" : "";
+      const ac = ts.ac ? " -ac" : "";
+      const rec = (ts.rec && ts.mode === "dir") ? " -rec -rec-depth 2" : "";
+
+      let filter = "";
+      if(ts.match === "status"){
+        filter = sf ? ` -mc ${sf}` : "";
+      } else if(ts.match === "filter"){
+        // filter everything EXCEPT these statuses (common alt mode)
+        filter = sf ? ` -fc ${sf}` : "";
+      } else if(ts.match === "size"){
+        filter = ` -fs 0`;
+      }
+
+      if(ts.mode === "vhost"){
+        const dom = st.vhost || target;
+        cmds.push({
+          title:"ffuf vhost fuzz",
+          meta:"Host header",
+          cmd: `ffuf -w ${wl} -u "${url}/" -H "Host: FUZZ.${dom}" -t ${threads}${filter}${follow}${ac}${out}`
+        });
+      } else if(ts.mode === "param"){
+        cmds.push({
+          title:"ffuf param fuzz",
+          meta:"Query string",
+          cmd: `ffuf -w ${wl} -u "${url}/?q=FUZZ" -t ${threads}${filter}${follow}${ac}${out}`
+        });
+      } else {
+        const e = exts ? ` -e .${csvToList(st.exts).join(",.")}` : "";
+        cmds.push({
+          title:"ffuf dir/file fuzz",
+          meta:"Path fuzz",
+          cmd: `ffuf -w ${wl} -u "${url}/FUZZ" -t ${threads}${e}${filter}${follow}${ac}${rec}${hostHdr}${out}`
+        });
+      }
+    }
+
+    // --- feroxbuster ---
+    if(state.activeTool === "ferox"){
+      const u = url;
+      const out = st.saveFiles ? ` -o ferox_${target}_${tag}.txt` : "";
+      const depth = Math.max(1, Number(ts.depth || 2));
+      const ex = exts ? ` -x ${exts}` : "";
+      const rec = ts.recurse ? "" : " --no-recursion";
+      const ab = ts.autoB ? " --auto-bail" : "";
+      const el = ts.extractLinks ? " --extract-links" : "";
+      const hostHdr = st.vhost ? ` -H "Host: ${st.vhost}"` : "";
+      cmds.push({
+        title:"feroxbuster",
+        meta:"Fast enum",
+        cmd: `feroxbuster -u "${u}/" -w ${wl} -t ${threads} -d ${depth}${ex}${rec}${ab}${el}${hostHdr}${out}`
+      });
+    }
+
+    // --- SMB ---
+    if(state.activeTool === "smb"){
+      if(ts.enum4){
+        cmds.push({
+          title:"enum4linux-ng",
+          meta:"SMB enum",
+          cmd: `enum4linux-ng -A ${target}`
+        });
+      }
+      if(ts.smbclient){
+        cmds.push({
+          title:"smbclient shares",
+          meta:"List shares",
+          cmd: `smbclient -L //${target}/ -N`
+        });
+        cmds.push({
+          title:"smbclient connect (example)",
+          meta:"Try share",
+          cmd: `smbclient //${target}/SHARE -N`
+        });
+      }
+      if(ts.crackmapexec){
+        cmds.push({
+          title:"crackmapexec smb",
+          meta:"If installed",
+          cmd: `crackmapexec smb ${target} --shares`
+        });
+      }
+      if(!ts.sharesOnly){
+        cmds.push({
+          title:"nmap smb scripts",
+          meta:"SMB NSE",
+          cmd: `${prefixSudo(st)}nmap -p 445 --script smb-os-discovery,smb-enum-shares,smb-enum-users ${target}`
+        });
+      }
+    }
+
+    // --- SNMP ---
+    if(state.activeTool === "snmp"){
+      const comm = safe(ts.community || "public");
+      const ver = ts.v2c ? "2c" : "1";
+      if(ts.snmpwalk){
+        cmds.push({
+          title:"snmpwalk",
+          meta:"Enum",
+          cmd: `snmpwalk -v ${ver} -c ${comm} ${target} 1.3.6.1.2.1.1`
+        });
+        cmds.push({
+          title:"snmpwalk full (can be huge)",
+          meta:"Enum",
+          cmd: `snmpwalk -v ${ver} -c ${comm} ${target} 1.3.6.1.2.1`
+        });
+      }
+      cmds.push({
+        title:"nmap snmp-info",
+        meta:"NSE",
+        cmd: `${prefixSudo(st)}nmap -p 161 --script snmp-info ${target}`
+      });
+    }
+
+    // --- FTP ---
+    if(state.activeTool === "ftp"){
+      if(ts.nmapScripts){
+        cmds.push({
+          title:"nmap ftp scripts",
+          meta:"NSE",
+          cmd: `${prefixSudo(st)}nmap -p 21 --script ftp-anon,ftp-syst,ftp-bounce,ftp-proftpd-backdoor ${target}`
+        });
+      }
+      cmds.push({
+        title:"ftp login",
+        meta:"Try",
+        cmd: `ftp ${target}`
+      });
+      if(ts.hydra){
+        const u = safe(ts.user || "anonymous");
+        const p = safe(ts.pass || "anonymous");
+        cmds.push({
+          title:"hydra ftp (single cred)",
+          meta:"Brute (careful)",
+          cmd: `hydra -l ${u} -p ${p} ftp://${target}`
+        });
+      }
+    }
+
+    // --- SSH ---
+    if(state.activeTool === "ssh"){
+      if(ts.nmapScripts){
+        cmds.push({
+          title:"nmap ssh scripts",
+          meta:"NSE",
+          cmd: `${prefixSudo(st)}nmap -p 22 --script ssh-hostkey,ssh2-enum-algos ${target}`
+        });
+      }
+      cmds.push({
+        title:"ssh connect",
+        meta:"Try",
+        cmd: `ssh ${safe(ts.user || "root")}@${target}`
+      });
+      if(ts.hydra){
+        const u = safe(ts.user || "root");
+        cmds.push({
+          title:"hydra ssh (wordlist pass)",
+          meta:"Brute (careful)",
+          cmd: `hydra -l ${u} -P ${wl} ssh://${target}`
+        });
+      }
+    }
+
+    // --- DNS ---
+    if(state.activeTool === "dns"){
+      const domain = st.vhost || target;
+      if(ts.dig){
+        cmds.push({ title:"dig A", meta:"DNS", cmd:`dig A ${domain}` });
+        cmds.push({ title:"dig NS", meta:"DNS", cmd:`dig NS ${domain}` });
+        cmds.push({ title:"dig MX", meta:"DNS", cmd:`dig MX ${domain}` });
+        cmds.push({ title:"Zone transfer attempt", meta:"DNS", cmd:`dig axfr ${domain} @ns1.${domain}` });
+      }
+      if(ts.dnsrecon){
+        cmds.push({ title:"dnsrecon", meta:"DNS", cmd:`dnsrecon -d ${domain} -t std` });
+      }
+      if(ts.sublist3r){
+        cmds.push({ title:"sublist3r", meta:"OSINT", cmd:`sublist3r -d ${domain}` });
+      }
+    }
+
+    return cmds;
+  }
+
+  // ---------- Render Commands ----------
+  function renderCommands(){
+    const list = buildCommands();
+    const root = $("commands");
+    root.innerHTML = "";
+
+    list.forEach((item, idx) => {
+      const box = document.createElement("div");
+      box.className = "cmd";
+
+      const head = document.createElement("div");
+      head.className = "cmdHead";
+
+      const left = document.createElement("div");
+      left.className = "left";
+
+      const title = document.createElement("div");
+      title.style.fontWeight = "700";
+      title.style.fontSize = "12.5px";
+      title.textContent = item.title;
+
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = item.meta || "";
+
+      left.appendChild(title);
+      if(item.meta) left.appendChild(badge);
+
+      const btns = document.createElement("div");
+      btns.style.display = "flex";
+      btns.style.gap = "8px";
+
+      const copyBtn = document.createElement("button");
+      copyBtn.className = "good";
+      copyBtn.textContent = "Copy";
+      copyBtn.onclick = () => copyToClipboard(item.cmd);
+
+      const copyLineBtn = document.createElement("button");
+      copyLineBtn.textContent = "Copy (1-line)";
+      copyLineBtn.onclick = () => copyToClipboard(item.cmd.replace(/\s*\n\s*/g, " ").trim());
+
+      btns.appendChild(copyBtn);
+      btns.appendChild(copyLineBtn);
+
+      head.appendChild(left);
+      head.appendChild(btns);
+
+      const pre = document.createElement("pre");
+      pre.textContent = item.cmd;
+
+      box.appendChild(head);
+      box.appendChild(pre);
+      root.appendChild(box);
+    });
+  }
+
+  // ---------- Presets ----------
+  function applyPreset(kind){
+    const st = getInputs();
+    if(kind === "web"){
+      $("proto").value = "http";
+      $("portWeb").value = 80;
+      state.activeTool = "nmap";
+      state.toolState.nmap.scanType = "default";
+      state.toolState.nmap.scripts = true;
+      state.toolState.nmap.vuln = false;
+      state.toolState.web.nikto = false;
+      state.toolState.ffuf.mode = "dir";
+    } else if(kind === "smb"){
+      state.activeTool = "smb";
+      // nmap focus SMB
+      state.toolState.smb.enum4 = true;
+      state.toolState.smb.smbclient = true;
+      state.toolState.smb.crackmapexec = false;
+    } else if(kind === "ad"){
+      // lightweight: DNS/LDAP-ish (user can add their own)
+      state.activeTool = "dns";
+      $("vhost").value = $("vhost").value || "domain.local";
+    }
+    renderAll();
+    showToast("Preset angewendet");
+  }
+
+  function resetAll(){
+    $("target").value = "10.10.10.10";
+    $("proto").value = "http";
+    $("portWeb").value = 80;
+    $("wordlist").value = "/usr/share/wordlists/dirb/common.txt";
+    $("threads").value = 50;
+    $("exts").value = "php,txt,html";
+    $("statusFilter").value = "200,204,301,302,307,401,403";
+    $("vhost").value = "";
+    $("sudo").checked = false;
+    $("aggressive").checked = true;
+    $("saveFiles").checked = true;
+    $("useUrl").checked = true;
+
+    // reset tool state quickly
+    state.activeTool = "nmap";
+    state.toolState = {
+      nmap: { scanType:"default", udp:false, topPorts:true, scripts:true, vuln:false },
+      web:  { whatweb:true, nikto:false, curl:true, headers:false, robots:true },
+      gobuster: { mode:"dir", dns:false, useExt:true, addSlash:false, ua:true },
+      ffuf: { mode:"dir", vhost:false, rec:true, match:"status", follow:false, ac:false },
+      ferox: { depth:2, recurse:true, autoB:true, extractLinks:true },
+      smb: { enum4:true, smbclient:true, crackmapexec:false, sharesOnly:false },
+      snmp: { snmpwalk:true, community:"public", v2c:true },
+      ftp: { nmapScripts:true, hydra:false, user:"anonymous", pass:"anonymous" },
+      ssh: { nmapScripts:true, hydra:false, user:"root" },
+      dns: { dig:true, dnsrecon:false, sublist3r:false },
+    };
+
+    renderAll();
+    showToast("Reset ✓");
+  }
+
+  // ---------- Render All ----------
+  function renderAll(){
+    renderTabs();
+    renderOptions();
+    renderCommands();
+  }
+
+  // ---------- Wire inputs ----------
+  ["target","proto","portWeb","wordlist","threads","exts","statusFilter","vhost","sudo","aggressive","saveFiles","useUrl"]
+    .forEach(id => {
+      const el = $(id);
+      const ev = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" : "input";
+      el.addEventListener(ev, () => {
+        renderCommands();
+      });
+    });
+
+  $("presetWeb").onclick = () => applyPreset("web");
+  $("presetSMB").onclick = () => applyPreset("smb");
+  $("presetAD").onclick = () => applyPreset("ad");
+  $("resetAll").onclick = resetAll;
+
+  // initial
+  renderAll();
+})();
+</script>
+</body>
+</html>
